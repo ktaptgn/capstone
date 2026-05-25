@@ -14,16 +14,27 @@ env/
 # Frontend tooling caches
 node_modules/
 dist/
+dist-ssr/
 build/
 .next/
+*.local
 npm-debug.log*
 yarn-error.log*
+
+# UI app local dependencies and builds
+ui/**/node_modules/
+ui/**/dist/
+ui/**/dist-ssr/
+ui/**/public/c5_1/*.json
+!ui/**/public/c5_1/.gitkeep
 
 # Generated C5.1 simulation outputs
 outputs/c5_1/logs/*
 outputs/c5_1/summary/*
+outputs/c5_1/work_orders/*
 !outputs/c5_1/logs/.gitkeep
 !outputs/c5_1/summary/.gitkeep
+!outputs/c5_1/work_orders/.gitkeep
 
 # Local secrets and machine-specific files
 .env

@@ -6,8 +6,12 @@
 *.md text eol=lf
 *.py text eol=lf
 *.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
 *.css text eol=lf
 *.html text eol=lf
+*.svg text eol=lf
 *.json text eol=lf
 *.yaml text eol=lf
 *.yml text eol=lf
@@ -19,4 +23,5 @@ requirements.txt text eol=lf
 *.jpg binary
 *.jpeg binary
 *.gif binary
+*.glb binary
 *.pdf binary

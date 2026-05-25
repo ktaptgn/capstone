@@ -1,0 +1,133 @@
+{
+  "T07": {
+    "truckId": "T07",
+    "components": [
+      {
+        "id": "front_left_tire",
+        "name": "Front Left Tire",
+        "position": "FL",
+        "healthIndex": 32,
+        "status": "critical"
+      },
+      {
+        "id": "front_right_tire",
+        "name": "Front Right Tire",
+        "position": "FR",
+        "healthIndex": 58,
+        "status": "warning"
+      },
+      {
+        "id": "rear_left_tire_set",
+        "name": "Rear Left Tire Set",
+        "position": "RL",
+        "healthIndex": 74,
+        "status": "watch"
+      },
+      {
+        "id": "rear_right_tire_set",
+        "name": "Rear Right Tire Set",
+        "position": "RR",
+        "healthIndex": 81,
+        "status": "normal"
+      }
+    ],
+    "otherComponents": [
+      {
+        "id": "drive_unit",
+        "name": "Drive Unit",
+        "healthIndex": 76,
+        "status": "watch"
+      },
+      {
+        "id": "brake_axle",
+        "name": "Brake / Axle",
+        "healthIndex": 68,
+        "status": "watch"
+      },
+      {
+        "id": "engine",
+        "name": "Engine",
+        "healthIndex": 55,
+        "status": "warning"
+      },
+      {
+        "id": "hydraulic_system",
+        "name": "Hydraulic System",
+        "healthIndex": 82,
+        "status": "normal"
+      },
+      {
+        "id": "suspension",
+        "name": "Suspension",
+        "healthIndex": 70,
+        "status": "watch"
+      }
+    ]
+  },
+  "T03": {
+    "truckId": "T03",
+    "components": [
+      {
+        "id": "front_left_tire",
+        "name": "Front Left Tire",
+        "position": "FL",
+        "healthIndex": 64,
+        "status": "watch"
+      },
+      {
+        "id": "front_right_tire",
+        "name": "Front Right Tire",
+        "position": "FR",
+        "healthIndex": 71,
+        "status": "watch"
+      },
+      {
+        "id": "rear_left_tire_set",
+        "name": "Rear Left Tire Set",
+        "position": "RL",
+        "healthIndex": 66,
+        "status": "watch"
+      },
+      {
+        "id": "rear_right_tire_set",
+        "name": "Rear Right Tire Set",
+        "position": "RR",
+        "healthIndex": 60,
+        "status": "watch"
+      }
+    ]
+  },
+  "T15": {
+    "truckId": "T15",
+    "components": [
+      {
+        "id": "front_left_tire",
+        "name": "Front Left Tire",
+        "position": "FL",
+        "healthIndex": 48,
+        "status": "warning"
+      },
+      {
+        "id": "front_right_tire",
+        "name": "Front Right Tire",
+        "position": "FR",
+        "healthIndex": 52,
+        "status": "warning"
+      },
+      {
+        "id": "rear_left_tire_set",
+        "name": "Rear Left Tire Set",
+        "position": "RL",
+        "healthIndex": 40,
+        "status": "warning"
+      },
+      {
+        "id": "rear_right_tire_set",
+        "name": "Rear Right Tire Set",
+        "position": "RR",
+        "healthIndex": 44,
+        "status": "warning"
+      }
+    ]
+  }
+}
