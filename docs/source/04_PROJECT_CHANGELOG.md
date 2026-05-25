@@ -46,6 +46,14 @@ This changelog tracks the official direction changes for C5.1.
 - Added the simulation visualization MVP as a log replay tool only, without dashboard, PM app, integration, RL, or Drop Zone features.
 - Added tests for config loading, cost model behavior, policy interface consistency, policy sweep output, and log schema validation.
 
+## 2026-05-25 / Existing UI Draft Import
+
+- Imported the existing operator dashboard and PM worker app drafts into `ui/operator_dashboard` and `ui/pm_worker_app`.
+- Added file-based work order export and UI snapshot export scripts.
+- Added `public/c5_1` snapshot folders for each UI app, with generated JSON snapshots excluded from Git.
+- Updated the imported UI data loading path to prefer official C5.1 snapshots and fall back to existing mock data.
+- Kept RL training and Drop Zone implementation out of the official repository.
+
 ---
 
 ## Current Official Version

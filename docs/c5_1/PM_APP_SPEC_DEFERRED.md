@@ -2,7 +2,7 @@
 
 ## Status
 
-Deferred until separate user instruction.
+Activated by separate user instruction on 2026-05-25 as an imported mobile web UI draft.
 
 ## Planned Role
 
@@ -17,6 +17,8 @@ Planned screens:
 - PM Request Response
 - Limited Chatbot
 
-## Do Not Implement Now
+## C5.1 Boundary
 
-This file is only a future specification placeholder.
+The PM worker app is a file-based work order consumption layer. It reads generated C5.1 work order and log snapshots from `public/c5_1/`.
+
+It must not run the C5.1 simulation, add native Android build files, add RL training, or implement Drop Zone scenarios.

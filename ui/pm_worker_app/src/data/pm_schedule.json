@@ -1,0 +1,74 @@
+{
+  "todayPM": [
+    {
+      "truckId": "T07",
+      "priority": "high",
+      "priorityLabel": "High",
+      "pmDue": "Now",
+      "estimatedDuration": "2h",
+      "reason": "Low HI / PM overdue",
+      "showStart": true,
+      "inProgress": false
+    },
+    {
+      "truckId": "T03",
+      "priority": "medium",
+      "priorityLabel": "Medium",
+      "pmDue": "4h",
+      "estimatedDuration": "1h 30m",
+      "reason": "Preventive PM recommended",
+      "showStart": false,
+      "inProgress": false
+    },
+    {
+      "truckId": "T15",
+      "priority": "in-progress",
+      "priorityLabel": "In Progress",
+      "pmDue": "Started",
+      "estimatedDuration": "1h 45m",
+      "reason": "Scheduled inspection",
+      "showStart": false,
+      "inProgress": true
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "inProgress": 1,
+    "critical": 1
+  },
+  "thisWeekPM": [
+    { "day": "Mon", "trucks": ["T07", "T03"], "isToday": false },
+    { "day": "Tue", "trucks": ["T12"], "isToday": false },
+    { "day": "Wed", "trucks": ["T08", "T18"], "isToday": false },
+    { "day": "Thu", "trucks": [], "isToday": false },
+    { "day": "Fri", "trucks": ["T21"], "isToday": false },
+    { "day": "Sat", "trucks": [], "isToday": false },
+    { "day": "Sun", "trucks": ["T15", "T03", "T07", "T12"], "isToday": true }
+  ],
+  "regularSchedule": [
+    {
+      "label": "Tire Pressure Check",
+      "cycle": "Weekly",
+      "next": "Every Monday",
+      "truckCount": "25 trucks"
+    },
+    {
+      "label": "Brake Inspection",
+      "cycle": "Bi-weekly",
+      "next": "Next: May 26",
+      "truckCount": "12 trucks"
+    },
+    {
+      "label": "Full PM Service",
+      "cycle": "Monthly",
+      "next": "Next: Jun 01",
+      "truckCount": "8 trucks"
+    }
+  ],
+  "plannedToday": [
+    { "time": "14:00", "truckId": "T03", "type": "Preventive PM" },
+    { "time": "16:30", "truckId": "T12", "type": "Inspection" },
+    { "time": "18:00", "truckId": "T18", "type": "Tire Check" },
+    { "time": "19:30", "truckId": "T21", "type": "Brake Inspection" }
+  ]
+}
