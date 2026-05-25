@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Reserved Work Order Schema",
+  "description": "Reserved for future dashboard-app integration. Do not implement integration in C5.1 core.",
+  "type": "object",
+  "properties": {
+    "work_order_id": {
+      "type": "string"
+    },
+    "source_policy": {
+      "type": "string"
+    },
+    "truck_id": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "estimated_duration_hours": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string"
+    }
+  }
+}

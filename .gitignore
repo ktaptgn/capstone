@@ -1,0 +1,35 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+pytest-cache-files-*/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+
+# Frontend tooling caches
+node_modules/
+dist/
+build/
+.next/
+npm-debug.log*
+yarn-error.log*
+
+# Generated C5.1 simulation outputs
+outputs/c5_1/logs/*
+outputs/c5_1/summary/*
+!outputs/c5_1/logs/.gitkeep
+!outputs/c5_1/summary/.gitkeep
+
+# Local secrets and machine-specific files
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

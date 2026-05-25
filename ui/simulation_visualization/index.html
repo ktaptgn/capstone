@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>C5.1 Simulation Replay</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <section class="toolbar" aria-label="Replay controls">
+        <div>
+          <h1>C5.1 Simulation Replay</h1>
+          <p id="policyLabel">Load a policy log JSON file.</p>
+        </div>
+        <label class="file-control">
+          <span>Log JSON</span>
+          <input id="logInput" type="file" accept="application/json,.json" />
+        </label>
+        <button id="playButton" type="button">Play</button>
+        <button id="pauseButton" type="button">Pause</button>
+        <input id="frameSlider" type="range" min="0" max="0" value="0" />
+      </section>
+
+      <section class="kpis" aria-label="Replay KPIs">
+        <div>
+          <span>Daily Demand</span>
+          <strong id="dailyDemand">0</strong>
+        </div>
+        <div>
+          <span>Completed Loads</span>
+          <strong id="completedLoads">0</strong>
+        </div>
+        <div>
+          <span>Demand Fulfillment</span>
+          <strong id="fulfillment">0%</strong>
+        </div>
+        <div>
+          <span>Available Trucks</span>
+          <strong id="availableTrucks">0</strong>
+        </div>
+        <div>
+          <span>PM Cost</span>
+          <strong id="pmCost">0</strong>
+        </div>
+      </section>
+
+      <section class="map" aria-label="Mine node map">
+        <div class="node shovel">Shovel</div>
+        <div class="node crusher crusher-one">Crusher 1</div>
+        <div class="node crusher crusher-two">Crusher 2</div>
+        <div class="node pm">PM Bay</div>
+        <div class="road"></div>
+        <div id="truckLayer" class="truck-layer"></div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
