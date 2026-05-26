@@ -32,9 +32,11 @@ ui/**/public/c5_1/*.json
 outputs/c5_1/logs/*
 outputs/c5_1/summary/*
 outputs/c5_1/work_orders/*
+outputs/c5_1/analysis/*
 !outputs/c5_1/logs/.gitkeep
 !outputs/c5_1/summary/.gitkeep
 !outputs/c5_1/work_orders/.gitkeep
+!outputs/c5_1/analysis/.gitkeep
 
 # Local secrets and machine-specific files
 .env

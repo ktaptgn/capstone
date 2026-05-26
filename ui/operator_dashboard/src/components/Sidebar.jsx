@@ -1,10 +1,11 @@
-import { LayoutGrid, Truck, BarChart3, Settings, Clock } from 'lucide-react';
+import { LayoutGrid, Truck, BarChart3, Settings, Clock, LineChart } from 'lucide-react';
 
 const navItems = [
-  { id: 'overview', label: 'Operation Overview', icon: LayoutGrid },
-  { id: 'fleet', label: 'Fleet & PM Status', icon: Truck },
-  { id: 'policy', label: 'Policy Comparison', icon: BarChart3 },
-  { id: 'scenario', label: 'Scenario / What-if', icon: Settings },
+  { id: 'overview', label: '전체 현황', icon: LayoutGrid },
+  { id: 'fleet', label: 'Fleet 및 PM 상태', icon: Truck },
+  { id: 'policy', label: '정책 비교', icon: BarChart3 },
+  { id: 'analysis', label: '휴리스틱 분석', icon: LineChart },
+  { id: 'scenario', label: '시나리오 재생', icon: Settings },
 ];
 
 export default function Sidebar({ activePage, onNavigate }) {
@@ -22,13 +23,13 @@ export default function Sidebar({ activePage, onNavigate }) {
         </div>
         <div>
           <div style={{ fontSize: 14, fontWeight: 700, color: '#7C2D12' }}>C5 Mine PM</div>
-          <div style={{ fontSize: 11, color: '#64748B' }}>Control Tower</div>
+          <div style={{ fontSize: 11, color: '#64748B' }}>관제 대시보드</div>
         </div>
       </div>
 
       <div style={{ padding: '0 12px' }}>
         <div style={{ fontSize: 10, fontWeight: 600, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1, padding: '16px 8px 8px' }}>
-          Navigation
+          메뉴
         </div>
         {navItems.map(item => {
           const active = activePage === item.id;
@@ -61,9 +62,9 @@ export default function Sidebar({ activePage, onNavigate }) {
         <div style={{
           background: '#F3E7E2', borderRadius: 10, padding: 14,
         }}>
-          <div style={{ fontSize: 10, fontWeight: 600, color: '#94A3B8', textTransform: 'uppercase' }}>Active Policy</div>
+          <div style={{ fontSize: 10, fontWeight: 600, color: '#94A3B8', textTransform: 'uppercase' }}>현재 추천 정책</div>
           <div style={{ fontSize: 13, fontWeight: 700, color: '#7C2D12', marginTop: 4 }}>H3 Cost-weighted</div>
-          <div style={{ fontSize: 11, color: '#64748B', marginTop: 2 }}>Balanced cost optimization</div>
+          <div style={{ fontSize: 11, color: '#64748B', marginTop: 2 }}>현재 KPI 가중치 기준</div>
         </div>
       </div>
     </aside>
