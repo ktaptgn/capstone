@@ -47,7 +47,7 @@ export default function PolicyPage() {
       <Card style={{ padding: 20, borderLeft: '4px solid #16A34A' }}>
         <SectionHeader title="공식 C5.1 정책 비교" />
         <div style={{ fontSize: 13, color: '#334155' }}>
-          현재 KPI 기준 추천 정책: <strong>{recommended.id}</strong>. 불러온 C5.1 요약에서 total_cost가 가장 낮은 정책이며, 전역 최적해 주장이 아닙니다.
+          현재 KPI 기준 추천 정책: <strong>{recommended.id}</strong>. 불러온 C5.1 요약에서 total_cost가 가장 낮은 정책이며, 모든 경우의 최선임을 보장한다는 주장이 아닙니다.
         </div>
         <div style={{ fontSize: 11, color: '#64748B', marginTop: 4 }}>
           데이터 출처: {usingSnapshot ? '/c5_1/policy_comparison.json' : '임시 fallback 데이터'}

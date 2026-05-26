@@ -33,7 +33,7 @@ function generateBotResponse(input: string, selectedPolicy: PolicyId, policyCont
   const lower = input.toLowerCase();
 
   if (!truckId) {
-    return 'PM Bot은 예상 PM 시점, 예상 소요시간, PM 선정 이유만 답변합니다.\n\n예: "T07 PM 시점", "T03 소요시간", "T07 PM 이유"';
+    return 'PM 도움말은 예상 PM 시점, 예상 소요시간, PM 선정 이유만 답변합니다.\n\n예: "T07 PM 시점", "T03 소요시간", "T07 PM 이유"';
   }
 
   const chatData = chatbotResponses[truckId];
@@ -42,9 +42,9 @@ function generateBotResponse(input: string, selectedPolicy: PolicyId, policyCont
   if (lower.includes('reason') || lower.includes('이유') || lower.includes('why')) {
     if (chatData) {
       const r = chatData.queries.policyReason.answer;
-      return `${r.title}\n\nExpected PM: ${r.expectedPm}\nEstimated Duration: ${r.estimatedDuration}\n\nPolicy Reason:\n${r.reasons.map(s => `• ${s}`).join('\n')}\n\n[Policy: ${selectedPolicy}]`;
+      return `${r.title}\n\n예상 PM: ${r.expectedPm}\n예상 소요시간: ${r.estimatedDuration}\n\nPM 선정 이유:\n${r.reasons.map(s => `• ${s}`).join('\n')}\n\n[Policy: ${selectedPolicy}]`;
     }
-    return `${truckId} PM 판단 결과\n\nExpected PM: ${derived.expectedPmTime}\nEstimated Duration: ${derived.estimatedDuration}\n\nReason: ${derived.reason}\n\n[Policy: ${selectedPolicy}]`;
+    return `${truckId} PM 판단 결과\n\n예상 PM: ${derived.expectedPmTime}\n예상 소요시간: ${derived.estimatedDuration}\n\nPM 선정 이유: ${derived.reason}\n\n[Policy: ${selectedPolicy}]`;
   }
 
   if (lower.includes('duration') || lower.includes('소요') || lower.includes('시간') || lower.includes('how long')) {
@@ -57,12 +57,12 @@ function generateBotResponse(input: string, selectedPolicy: PolicyId, policyCont
     return `${truckId} 예상 PM 시점: ${answer}\n\n[Policy: ${selectedPolicy}]`;
   }
 
-  return 'PM Bot은 예상 PM 시점, 예상 소요시간, PM 선정 이유만 답변합니다.\n\n예: "T07 PM 시점", "T03 소요시간", "T07 PM 이유"';
+  return 'PM 도움말은 예상 PM 시점, 예상 소요시간, PM 선정 이유만 답변합니다.\n\n예: "T07 PM 시점", "T03 소요시간", "T07 PM 이유"';
 }
 
 export default function PMBotSheet({ open, onClose, selectedPolicy, policyContext }: PMBotSheetProps) {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'bot', text: 'PM Bot입니다. 트럭 PM 시점, 소요시간, PM 선정 이유를 질문해 주세요.' },
+    { role: 'bot', text: 'PM 도움말입니다. 트럭 PM 시점, 소요시간, PM 선정 이유를 질문해 주세요.' },
   ]);
   const [input, setInput] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -94,7 +94,7 @@ export default function PMBotSheet({ open, onClose, selectedPolicy, policyContex
             <div className="w-7 h-7 rounded-full bg-sanguine flex items-center justify-center">
               <Bot size={14} className="text-white" />
             </div>
-            <span className="text-sm font-semibold text-text-main">PM Bot</span>
+            <span className="text-sm font-semibold text-text-main">PM 도움말</span>
             <span className="text-[9px] bg-sanguine-soft text-sanguine px-1.5 py-0.5 rounded-full">{selectedPolicy}</span>
           </div>
           <button onClick={onClose} className="p-1">
@@ -148,7 +148,7 @@ export default function PMBotSheet({ open, onClose, selectedPolicy, policyContex
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleSend()}
-            placeholder="T07 PM 시점은?"
+            placeholder="정해진 PM 질문만 입력"
             className="flex-1 text-sm bg-gray-50 rounded-full px-4 py-2 outline-none border border-border focus:border-sanguine"
           />
           <button

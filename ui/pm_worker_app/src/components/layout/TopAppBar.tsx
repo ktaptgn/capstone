@@ -10,7 +10,7 @@ export default function TopAppBar({ unreadAlerts, onAlertClick }: TopAppBarProps
     <div className="bg-sanguine text-white px-4 py-3 flex items-center justify-between">
       <div className="flex items-center gap-3">
         <div>
-          <div className="text-xs opacity-80">Shift A</div>
+          <div className="text-xs opacity-80">근무조 A</div>
           <div className="text-sm font-semibold">2026.05.18</div>
         </div>
       </div>

@@ -28,7 +28,7 @@ export default function AlertsScreen({ alerts }: AlertsScreenProps) {
 
   return (
     <div className="flex-1 overflow-y-auto pb-4 space-y-2 px-4">
-      <h2 className="text-sm font-semibold text-text-main">Alerts</h2>
+      <h2 className="text-sm font-semibold text-text-main">알림</h2>
       {sorted.map(alert => (
         <div
           key={alert.id}

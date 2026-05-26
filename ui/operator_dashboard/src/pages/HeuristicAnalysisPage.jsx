@@ -116,9 +116,9 @@ function RecommendedPanel({ recommended, seedCount }) {
         }}>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <AlertTriangle size={16} />
-            <span>주의</span>
-          </div>
-          <div style={{ marginTop: 6 }}>전역 최적해가 아님</div>
+              <span>주의</span>
+            </div>
+          <div style={{ marginTop: 6 }}>수학적 전체 최적 보장 아님</div>
         </div>
       </div>
     </Card>

@@ -68,6 +68,14 @@ This changelog tracks the official direction changes for C5.1.
 - Added a Korean `휴리스틱 분석` operator dashboard view for recommended policy, KPI winners, H0 improvement, seed stability, trade-off notes, missing KPI warnings, and analysis limitations.
 - Added dashboard analysis contract tests and kept generated JSON snapshots, RL/PPO, and Drop Zone work out of the committed source.
 
+## 2026-05-26 / C5.1 Presentation Package
+
+- Added presentation runbook for C5.1 execution and UI demonstration.
+- Added screenshot guide for operator dashboard and PM worker app.
+- Added final result summary explaining H3 recommendation under current KPI weighting.
+- Added slide copy blocks for capstone presentation.
+- Clarified that H3 is not a global optimum and RL remains deferred to a separate repository.
+
 ---
 
 ## Current Official Version

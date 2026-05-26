@@ -8,10 +8,10 @@ interface BottomNavigationProps {
 }
 
 const tabs: { id: TabId; label: string; Icon: typeof ClipboardList }[] = [
-  { id: 'today', label: 'Today PM', Icon: ClipboardList },
-  { id: 'fleet', label: 'Fleet', Icon: Truck },
-  { id: 'records', label: 'Records', Icon: FileText },
-  { id: 'alerts', label: 'Alerts', Icon: Bell },
+  { id: 'today', label: '오늘 PM', Icon: ClipboardList },
+  { id: 'fleet', label: 'Truck 상세', Icon: Truck },
+  { id: 'records', label: '작업 기록', Icon: FileText },
+  { id: 'alerts', label: '알림', Icon: Bell },
 ];
 
 export default function BottomNavigation({ activeTab, onTabChange }: BottomNavigationProps) {

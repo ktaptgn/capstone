@@ -22,7 +22,7 @@ export default function TodayPMScreen({ tasks, summary, pmSchedule, selectedPoli
       <PolicySelector selectedPolicy={selectedPolicy} onPolicyChange={onPolicyChange} />
 
       <div className="px-4 space-y-2.5">
-        <h3 className="text-sm font-semibold text-text-main">Priority PM</h3>
+        <h3 className="text-sm font-semibold text-text-main">우선순위 PM 대상</h3>
         {tasks.map(task => (
           <PMTaskCard key={task.truckId} task={task} />
         ))}

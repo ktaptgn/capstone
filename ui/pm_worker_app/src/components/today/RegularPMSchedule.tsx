@@ -12,7 +12,7 @@ export default function RegularPMSchedule({ regularSchedule, thisWeekPM }: Regul
       <div className="bg-white rounded-xl p-3 shadow-sm border border-border">
         <h3 className="text-sm font-semibold text-text-main mb-3 flex items-center gap-1.5">
           <Calendar size={14} className="text-sanguine" />
-          This Week PM
+          이번 주 PM
         </h3>
         <div className="flex justify-between">
           {thisWeekPM.map(day => (
@@ -39,7 +39,7 @@ export default function RegularPMSchedule({ regularSchedule, thisWeekPM }: Regul
       <div className="bg-white rounded-xl p-3 shadow-sm border border-border">
         <h3 className="text-sm font-semibold text-text-main mb-3 flex items-center gap-1.5">
           <RotateCcw size={14} className="text-sanguine" />
-          Regular PM Schedule
+          정기 PM 일정
         </h3>
         <div className="space-y-2.5">
           {regularSchedule.map(item => (

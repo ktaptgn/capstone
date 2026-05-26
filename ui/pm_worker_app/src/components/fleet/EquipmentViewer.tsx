@@ -60,13 +60,13 @@ export default function EquipmentViewer({ tires }: EquipmentViewerProps) {
   return (
     <div className="bg-white rounded-xl p-3 shadow-sm border border-border">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold text-text-main">Equipment Viewer</h3>
+        <h3 className="text-sm font-semibold text-text-main">장비 상태 보기</h3>
         {hasTires && (
           <button
             onClick={() => setViewMode(v => v === '3d' ? '2d' : '3d')}
             className="text-[10px] px-2 py-0.5 rounded-full border border-border text-text-sub hover:bg-gray-50 transition-colors"
           >
-            {viewMode === '3d' ? '2D View' : '3D View'}
+            {viewMode === '3d' ? '2D 보기' : '3D 보기'}
           </button>
         )}
       </div>
@@ -79,10 +79,10 @@ export default function EquipmentViewer({ tires }: EquipmentViewerProps) {
 
       <div className="flex justify-center gap-3 mt-2">
         {[
-          { label: 'Critical', color: '#DC2626' },
-          { label: 'Warning', color: '#F59E0B' },
-          { label: 'Watch', color: '#F97316' },
-          { label: 'Normal', color: '#16A34A' },
+          { label: '긴급', color: '#DC2626' },
+          { label: '주의', color: '#F59E0B' },
+          { label: '관찰', color: '#F97316' },
+          { label: '정상', color: '#16A34A' },
         ].map(item => (
           <div key={item.label} className="flex items-center gap-1">
             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
