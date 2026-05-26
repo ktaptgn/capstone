@@ -2,10 +2,11 @@ import { Bell, Download, Thermometer } from 'lucide-react';
 import { dashboardKpis } from '../data/dashboardKpis';
 
 const pageNames = {
-  overview: 'Operation Overview',
-  fleet: 'Fleet & PM Status',
-  policy: 'Policy Comparison',
-  scenario: 'Scenario / What-if',
+  overview: '전체 현황',
+  fleet: 'Fleet 및 PM 상태',
+  policy: '정책 비교',
+  analysis: '휴리스틱 분석',
+  scenario: '시나리오 재생',
 };
 
 export default function Header({ activePage }) {
@@ -24,7 +25,7 @@ export default function Header({ activePage }) {
           fontSize: 11, fontWeight: 600, color: '#8A4931',
           background: '#F3E7E2', padding: '4px 10px', borderRadius: 6,
         }}>
-          Shift {d.shift}
+          근무조 {d.shift}
         </span>
         <span style={{ fontSize: 12, color: '#64748B' }}>{d.date}</span>
         <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#64748B' }}>
@@ -50,7 +51,7 @@ export default function Header({ activePage }) {
           fontSize: 12, color: '#334155', cursor: 'pointer',
           fontFamily: 'inherit',
         }}>
-          <Download size={14} /> Export
+          <Download size={14} /> 내보내기
         </button>
       </div>
     </header>

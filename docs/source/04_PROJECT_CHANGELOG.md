@@ -61,6 +61,13 @@ This changelog tracks the official direction changes for C5.1.
 - Added tests and a fixture to validate analysis output generation without modifying policy logic.
 - Kept this task limited to analysis; no H0-H4 policy logic, dashboard behavior, PM app behavior, RL, or Drop Zone implementation was changed.
 
+## 2026-05-26 / Dashboard Heuristic Analysis Visualization
+
+- Added `dashboard_analysis.json` export from the C5.1 heuristic analysis pipeline for operator dashboard consumption.
+- Updated UI snapshot export to copy the dashboard analysis JSON only into the operator dashboard public snapshot directory.
+- Added a Korean `휴리스틱 분석` operator dashboard view for recommended policy, KPI winners, H0 improvement, seed stability, trade-off notes, missing KPI warnings, and analysis limitations.
+- Added dashboard analysis contract tests and kept generated JSON snapshots, RL/PPO, and Drop Zone work out of the committed source.
+
 ---
 
 ## Current Official Version

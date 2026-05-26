@@ -9,13 +9,14 @@ export async function loadJson(path) {
 }
 
 export async function loadDashboardSnapshots() {
-  const [policyComparison, sampleLog, workOrders] = await Promise.all([
+  const [policyComparison, sampleLog, workOrders, dashboardAnalysis] = await Promise.all([
     loadJson('/c5_1/policy_comparison.json'),
     loadJson('/c5_1/sample_log.json'),
     loadJson('/c5_1/work_orders.json'),
+    loadJson('/c5_1/dashboard_analysis.json'),
   ]);
 
-  return { policyComparison, sampleLog, workOrders };
+  return { policyComparison, sampleLog, workOrders, dashboardAnalysis };
 }
 
 function average(values) {
@@ -51,9 +52,9 @@ export function mapPolicyComparison(rows, fallbackPolicies) {
       unmetDemand: Number(average(items.map(item => item.unmet_demand)).toFixed(0)),
       active: totalCost === bestCost,
       planned: false,
-      useCase: fallback.useCase || 'Official C5.1 policy sweep result',
-      strength: fallback.strength || 'Generated from official C5.1 KPI summary',
-      weakness: fallback.weakness || 'Interpret against scenario assumptions only',
+      useCase: fallback.useCase || '공식 C5.1 정책 sweep 결과',
+      strength: fallback.strength || '공식 C5.1 KPI 요약에서 생성됨',
+      weakness: fallback.weakness || '현재 시나리오 가정 기준으로만 해석',
     };
   });
 }

@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SUMMARY_DIR = ROOT / "outputs" / "c5_1" / "summary"
 LOG_DIR = ROOT / "outputs" / "c5_1" / "logs"
 WORK_ORDER_DIR = ROOT / "outputs" / "c5_1" / "work_orders"
+ANALYSIS_DIR = ROOT / "outputs" / "c5_1" / "analysis"
 OPERATOR_SNAPSHOT_DIR = ROOT / "ui" / "operator_dashboard" / "public" / "c5_1"
 PM_SNAPSHOT_DIR = ROOT / "ui" / "pm_worker_app" / "public" / "c5_1"
 
@@ -56,6 +57,12 @@ def export_ui_snapshots() -> None:
         SUMMARY_DIR / "policy_comparison.json",
         OPERATOR_SNAPSHOT_DIR / "policy_comparison.json",
     )
+
+    analysis_json = ANALYSIS_DIR / "dashboard_analysis.json"
+    if analysis_json.exists():
+        _copy_if_exists(analysis_json, OPERATOR_SNAPSHOT_DIR / "dashboard_analysis.json")
+    else:
+        print(f"warning: dashboard analysis JSON missing, skipping operator snapshot: {analysis_json}")
 
     sample_log = _sample_log()
     if sample_log:

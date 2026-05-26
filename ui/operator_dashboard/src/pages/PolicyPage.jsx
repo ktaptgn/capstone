@@ -45,23 +45,23 @@ export default function PolicyPage() {
   return (
     <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 20 }}>
       <Card style={{ padding: 20, borderLeft: '4px solid #16A34A' }}>
-        <SectionHeader title="Official C5.1 Policy Comparison" />
+        <SectionHeader title="공식 C5.1 정책 비교" />
         <div style={{ fontSize: 13, color: '#334155' }}>
-          Recommended by current KPI: <strong>{recommended.id}</strong>. This is the lowest total_cost in the loaded C5.1 summary, not a global optimum claim.
+          현재 KPI 기준 추천 정책: <strong>{recommended.id}</strong>. 불러온 C5.1 요약에서 total_cost가 가장 낮은 정책이며, 전역 최적해 주장이 아닙니다.
         </div>
         <div style={{ fontSize: 11, color: '#64748B', marginTop: 4 }}>
-          Data source: {usingSnapshot ? '/c5_1/policy_comparison.json' : 'mock fallback data'}
+          데이터 출처: {usingSnapshot ? '/c5_1/policy_comparison.json' : '임시 fallback 데이터'}
         </div>
       </Card>
 
       <Card style={{ padding: 20 }}>
-        <SectionHeader title="Policy KPI Table" />
+        <SectionHeader title="정책 KPI 표" />
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
             <thead>
               <tr style={{ borderBottom: '2px solid #E2E8F0' }}>
-                {['Policy', 'Demand %', 'PM Cost', 'Queue Time', 'Unmet Demand', 'Completed Loads', 'Total Cost', 'Status'].map(header => (
-                  <th key={header} style={{ padding: '10px 12px', textAlign: header === 'Policy' ? 'left' : 'right', color: '#94A3B8', fontSize: 10, fontWeight: 600, textTransform: 'uppercase' }}>{header}</th>
+                {['정책', '수요 충족률', 'PM 비용', '대기시간', '미충족 수요', '완료 운반량', '총 운영비용', '상태'].map(header => (
+                  <th key={header} style={{ padding: '10px 12px', textAlign: header === '정책' ? 'left' : 'right', color: '#94A3B8', fontSize: 10, fontWeight: 600 }}>{header}</th>
                 ))}
               </tr>
             </thead>
@@ -78,9 +78,9 @@ export default function PolicyPage() {
                     <td style={{ padding: '10px 12px', textAlign: 'right' }}>{p.pmCost}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right' }}>{p.downtime}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right' }}>{p.unmetDemand ?? p.failures}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right' }}>{p.completedLoads ?? 'n/a'}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right' }}>{p.completedLoads ?? '데이터 없음'}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right' }}>{p.totalCost}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right' }}>{active && <StatusBadge status="active" label="Recommended" />}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right' }}>{active && <StatusBadge status="active" label="추천" />}</td>
                   </tr>
                 );
               })}
@@ -91,7 +91,7 @@ export default function PolicyPage() {
 
       <div style={{ display: 'flex', gap: 20 }}>
         <Card style={{ padding: 16, flex: 1 }}>
-          <SectionHeader title="Total Cost" />
+          <SectionHeader title="총 운영비용" />
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={costChartData} layout="vertical" margin={{ left: 10, right: 30 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" horizontal={false} />
@@ -106,12 +106,12 @@ export default function PolicyPage() {
         </Card>
 
         <Card style={{ padding: 16, flex: 1 }}>
-          <SectionHeader title="PM Cost vs Demand Fulfillment" />
+          <SectionHeader title="PM 비용 vs 수요 충족률" />
           <ResponsiveContainer width="100%" height={240}>
             <ScatterChart margin={{ top: 10, right: 20, bottom: 10, left: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
-              <XAxis type="number" dataKey="x" name="PM Cost" tick={{ fontSize: 10, fill: '#94A3B8' }} />
-              <YAxis type="number" dataKey="y" name="Demand %" tick={{ fontSize: 10, fill: '#94A3B8' }} />
+              <XAxis type="number" dataKey="x" name="PM 비용" tick={{ fontSize: 10, fill: '#94A3B8' }} />
+              <YAxis type="number" dataKey="y" name="수요 충족률" tick={{ fontSize: 10, fill: '#94A3B8' }} />
               <ZAxis type="number" dataKey="z" range={[80, 200]} />
               <ReferenceArea x1={0} x2={Math.max(...scatterData.map(d => d.x))} y1={90} y2={100} fill="#16A34A" fillOpacity={0.06} stroke="#16A34A" strokeOpacity={0.2} strokeDasharray="4 2" />
               <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #E2E8F0' }} />
@@ -126,7 +126,7 @@ export default function PolicyPage() {
       </div>
 
       <div>
-        <SectionHeader title="Policy Notes" />
+        <SectionHeader title="정책 해석 메모" />
         <div style={{ display: 'flex', gap: 16 }}>
           {policies.map(p => (
             <Card key={p.id} style={{ flex: 1, padding: 16, borderTop: `3px solid ${p.color}` }}>

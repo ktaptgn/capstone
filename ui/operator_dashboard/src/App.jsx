@@ -5,6 +5,7 @@ import OverviewPage from './pages/OverviewPage';
 import FleetPage from './pages/FleetPage';
 import PolicyPage from './pages/PolicyPage';
 import ScenarioPage from './pages/ScenarioPage';
+import HeuristicAnalysisPage from './pages/HeuristicAnalysisPage';
 import C5OpsAssistant from './components/C5OpsAssistant';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       case 'overview': return <OverviewPage />;
       case 'fleet': return <FleetPage />;
       case 'policy': return <PolicyPage />;
+      case 'analysis': return <HeuristicAnalysisPage />;
       case 'scenario': return <ScenarioPage />;
       default: return <OverviewPage />;
     }

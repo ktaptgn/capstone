@@ -7,6 +7,7 @@ import math
 import statistics
 import sys
 from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -76,6 +77,31 @@ COMPOSITE_WEIGHTS = {
     "queue_time": 0.10,
     "average_available_trucks": 0.10,
 }
+
+KPI_LABELS_KO = {
+    "total_cost": "총 운영비용",
+    "pm_cost": "PM 비용",
+    "unmet_demand": "미충족 수요",
+    "demand_fulfillment_rate": "수요 충족률",
+    "completed_loads": "완료 운반량",
+    "average_available_trucks": "가용 트럭 수",
+    "total_downtime": "총 다운타임",
+    "pm_count": "PM 횟수",
+    "failure_count": "고장 횟수",
+    "average_tire_hi": "Tire HI",
+    "average_truck_hi": "Truck HI",
+    "queue_time": "대기시간",
+}
+
+DASHBOARD_BEST_KPIS = [
+    "total_cost",
+    "demand_fulfillment_rate",
+    "unmet_demand",
+    "queue_time",
+    "average_available_trucks",
+    "pm_cost",
+    "total_downtime",
+]
 
 
 def parse_args() -> argparse.Namespace:
@@ -324,6 +350,11 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writerows(rows)
 
 
+def write_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def md_table(rows: list[dict[str, Any]], columns: list[str], max_rows: int | None = None) -> str:
     selected = rows[:max_rows] if max_rows else rows
     lines = [
@@ -362,6 +393,124 @@ def best_policies(means: dict[str, dict[str, float]], kpi: str) -> list[str]:
 
 def policy_set_label(policy_ids: list[str]) -> str:
     return " / ".join(policy_ids)
+
+
+def direction_label(kpi: str) -> str:
+    return "higher_is_better" if KPI_DIRECTIONS[kpi] == "higher" else "lower_is_better"
+
+
+def best_value(means: dict[str, dict[str, float]], kpi: str) -> float | None:
+    values = [metrics[kpi] for metrics in means.values() if kpi in metrics]
+    if not values:
+        return None
+    return max(values) if KPI_DIRECTIONS[kpi] == "higher" else min(values)
+
+
+def dashboard_stability_label(policy_id: str, stability_rows: list[dict[str, Any]]) -> str:
+    if stability_rows and policy_id == stability_rows[0]["policy_id"]:
+        return "총 운영비용 기준 가장 안정적"
+    row = next((item for item in stability_rows if item["policy_id"] == policy_id), {})
+    labels = {
+        "strong_and_stable": "강하고 안정적",
+        "strong_but_variable": "성과는 좋지만 변동성 있음",
+        "consistently_weak": "일관되지만 성과 약함",
+        "weak_and_variable": "성과 약하고 변동성 있음",
+    }
+    return labels.get(row.get("stability_label"), "해석 필요")
+
+
+def create_dashboard_analysis(
+    rows: list[dict[str, Any]],
+    means: dict[str, dict[str, float]],
+    improvement_rows: list[dict[str, Any]],
+    ranking_rows: list[dict[str, Any]],
+    stability_rows: list[dict[str, Any]],
+    missing: list[str],
+) -> dict[str, Any]:
+    recommended = ranking_rows[0]
+    best_by_kpi = []
+    for kpi in DASHBOARD_BEST_KPIS:
+        policies = best_policies(means, kpi)
+        if not policies:
+            continue
+        best_by_kpi.append(
+            {
+                "kpi": kpi,
+                "label_ko": KPI_LABELS_KO[kpi],
+                "best_policy": policy_set_label(policies),
+                "best_policies": policies,
+                "is_tie": len(policies) > 1,
+                "value": round(float(best_value(means, kpi)), 6),
+                "direction": direction_label(kpi),
+            }
+        )
+
+    h0_improvement = []
+    for row in improvement_rows:
+        h0_improvement.append(
+            {
+                "policy_id": row["policy_id"],
+                "total_cost_improvement_pct": row.get("total_cost_improvement_pct", ""),
+                "demand_fulfillment_delta": row.get("demand_fulfillment_delta", ""),
+                "queue_time_reduction_pct": row.get("queue_time_improvement_pct", ""),
+                "downtime_reduction_pct": row.get("total_downtime_improvement_pct", ""),
+            }
+        )
+
+    stability = []
+    for row in stability_rows:
+        policy_id = row["policy_id"]
+        stability.append(
+            {
+                "policy_id": policy_id,
+                "total_cost_mean": row.get("total_cost_mean", ""),
+                "total_cost_std": row.get("total_cost_std", ""),
+                "demand_fulfillment_rate_mean": round(means.get(policy_id, {}).get("demand_fulfillment_rate", float("nan")), 6),
+                "demand_fulfillment_rate_std": row.get("demand_fulfillment_rate_std", ""),
+                "stability_label": row.get("stability_label", ""),
+                "stability_label_ko": dashboard_stability_label(policy_id, stability_rows),
+            }
+        )
+
+    queue_best = next((item for item in best_by_kpi if item["kpi"] == "queue_time"), {})
+    stable_policy = stability_rows[0]["policy_id"] if stability_rows else ""
+    return {
+        "generated_at": datetime.now().replace(microsecond=0).isoformat(),
+        "baseline_policy": "H0",
+        "seed_count": len({row.get("seed") for row in rows if row.get("seed") not in (None, "")}),
+        "recommended_policy": {
+            "policy_id": recommended["policy_id"],
+            "weighted_rank_score": recommended["composite_score"],
+            "basis": "current weighted KPI rank score",
+            "basis_ko": "현재 KPI 가중 순위 점수",
+            "warning": "This is not a global optimum.",
+            "warning_ko": "전역 최적해가 아닙니다.",
+        },
+        "best_by_kpi": best_by_kpi,
+        "h0_improvement": h0_improvement,
+        "stability": stability,
+        "tradeoff_notes_ko": [
+            f"현재 C5.1 KPI 가중치 기준 추천 정책은 {recommended['policy_id']}입니다.",
+            f"{queue_best.get('best_policy', '데이터 없음')}는 대기시간 기준에서 가장 우수하거나 공동 1위입니다.",
+            f"{stable_policy}는 총 운영비용 표준편차 기준으로 가장 안정적입니다." if stable_policy else "Seed 안정성 데이터가 없습니다.",
+            "추천 정책은 전역 최적해가 아니라 현재 C5.1 가정과 가중치 기준의 표시용 판단입니다.",
+        ],
+        "missing_kpis": [
+            {
+                "kpi": kpi,
+                "label_ko": KPI_LABELS_KO.get(kpi, kpi),
+                "reason_ko": "현재 생성된 C5.1 결과 데이터에 포함되지 않았습니다.",
+            }
+            for kpi in missing
+        ],
+        "limitations_ko": [
+            "현재 비교는 3개 seed 기준의 1차 비교입니다.",
+            "비용 값은 정규화된 값입니다.",
+            "현재 C5.1 가정과 설정에 의존합니다.",
+            "강화학습 비교는 별도 RL Lab에서 후속 진행됩니다.",
+            "Drop Zone은 H0~H4 비교에 포함되지 않습니다.",
+        ],
+    }
 
 
 def policy_interpretation(policy_id: str, means: dict[str, dict[str, float]], ranking_rows: list[dict[str, Any]]) -> dict[str, str]:
@@ -655,12 +804,14 @@ def main() -> None:
     stability_rows = stability_table(grouped, means)
     tradeoff_notes = create_tradeoff_notes(means, ranking_rows)
     missing = missing_kpis(means)
+    dashboard_analysis = create_dashboard_analysis(rows, means, improvement_rows, ranking_rows, stability_rows, missing)
 
     write_csv(out_dir / "policy_kpi_summary.csv", kpi_rows)
     write_csv(out_dir / "h0_improvement_table.csv", improvement_rows)
     write_csv(out_dir / "policy_ranking_table.csv", ranking_rows)
     write_csv(out_dir / "policy_stability_table.csv", stability_rows)
     (out_dir / "policy_tradeoff_notes.md").write_text(tradeoff_notes, encoding="utf-8")
+    write_json(out_dir / "dashboard_analysis.json", dashboard_analysis)
 
     create_report(Path(args.report), summary_path, json_note, kpi_rows, means, improvement_rows, ranking_rows, stability_rows, tradeoff_notes, missing)
     create_presentation_summary(Path(args.presentation), means, ranking_rows)

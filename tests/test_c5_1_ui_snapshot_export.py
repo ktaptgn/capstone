@@ -1,4 +1,6 @@
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
@@ -24,10 +26,33 @@ def test_work_order_export_and_schema_validation():
 
 
 def test_ui_snapshot_export_creates_app_public_snapshots():
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "analyze_c5_1_heuristics.py"),
+            "--summary",
+            str(ROOT / "tests" / "fixtures" / "policy_comparison_missing_failure_sample.csv"),
+            "--out-dir",
+            str(ROOT / "outputs" / "c5_1" / "analysis"),
+            "--report",
+            str(ROOT / "outputs" / "c5_1" / "analysis" / "pytest_report.md"),
+            "--presentation",
+            str(ROOT / "outputs" / "c5_1" / "analysis" / "pytest_presentation.md"),
+            "--dashboard",
+            str(ROOT / "outputs" / "c5_1" / "analysis" / "pytest_dashboard.md"),
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+
     export_ui_snapshots()
 
     expected = [
         ROOT / "ui" / "operator_dashboard" / "public" / "c5_1" / "policy_comparison.json",
+        ROOT / "ui" / "operator_dashboard" / "public" / "c5_1" / "dashboard_analysis.json",
         ROOT / "ui" / "operator_dashboard" / "public" / "c5_1" / "sample_log.json",
         ROOT / "ui" / "operator_dashboard" / "public" / "c5_1" / "work_orders.json",
         ROOT / "ui" / "pm_worker_app" / "public" / "c5_1" / "work_orders.json",
@@ -37,3 +62,8 @@ def test_ui_snapshot_export_creates_app_public_snapshots():
 
     for path in expected:
         assert path.exists()
+
+    copied_analysis = json.loads(
+        (ROOT / "ui" / "operator_dashboard" / "public" / "c5_1" / "dashboard_analysis.json").read_text(encoding="utf-8")
+    )
+    assert copied_analysis["recommended_policy"]
