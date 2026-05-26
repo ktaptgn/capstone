@@ -7,7 +7,14 @@ interface PMTaskCardProps {
 }
 
 export default function PMTaskCard({ task }: PMTaskCardProps) {
-  const priorityLabel = task.priority === 'in-progress' ? 'In Progress' : task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
+  const priorityLabels: Record<string, string> = {
+    critical: '긴급',
+    high: '높음',
+    medium: '보통',
+    low: '낮음',
+    'in-progress': '진행 중',
+  };
+  const priorityLabel = priorityLabels[task.priority] ?? task.priority;
 
   return (
     <div className="bg-white rounded-xl p-3 shadow-sm border border-border">
@@ -33,10 +40,10 @@ export default function PMTaskCard({ task }: PMTaskCardProps) {
       <div className="flex items-center gap-3 text-[11px] text-text-sub">
         <div className="flex items-center gap-1">
           <Clock size={12} />
-          <span>PM Due: {task.pmDue}</span>
+          <span>PM 예정: {task.pmDue}</span>
         </div>
         <span>·</span>
-        <span>Est. {task.estimatedDuration}</span>
+        <span>예상 소요시간 {task.estimatedDuration}</span>
       </div>
       <div className="mt-1.5 text-[11px] text-text-sub">{task.reason}</div>
     </div>

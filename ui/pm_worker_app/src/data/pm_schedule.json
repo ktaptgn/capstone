@@ -3,30 +3,30 @@
     {
       "truckId": "T07",
       "priority": "high",
-      "priorityLabel": "High",
-      "pmDue": "Now",
+      "priorityLabel": "높음",
+      "pmDue": "즉시",
       "estimatedDuration": "2h",
-      "reason": "Low HI / PM overdue",
+      "reason": "낮은 HI / PM 지연",
       "showStart": true,
       "inProgress": false
     },
     {
       "truckId": "T03",
       "priority": "medium",
-      "priorityLabel": "Medium",
+      "priorityLabel": "보통",
       "pmDue": "4h",
       "estimatedDuration": "1h 30m",
-      "reason": "Preventive PM recommended",
+      "reason": "예방 PM 권장",
       "showStart": false,
       "inProgress": false
     },
     {
       "truckId": "T15",
       "priority": "in-progress",
-      "priorityLabel": "In Progress",
-      "pmDue": "Started",
+      "priorityLabel": "진행 중",
+      "pmDue": "시작됨",
       "estimatedDuration": "1h 45m",
-      "reason": "Scheduled inspection",
+      "reason": "예정된 점검",
       "showStart": false,
       "inProgress": true
     }
@@ -37,38 +37,38 @@
     "critical": 1
   },
   "thisWeekPM": [
-    { "day": "Mon", "trucks": ["T07", "T03"], "isToday": false },
-    { "day": "Tue", "trucks": ["T12"], "isToday": false },
-    { "day": "Wed", "trucks": ["T08", "T18"], "isToday": false },
-    { "day": "Thu", "trucks": [], "isToday": false },
-    { "day": "Fri", "trucks": ["T21"], "isToday": false },
-    { "day": "Sat", "trucks": [], "isToday": false },
-    { "day": "Sun", "trucks": ["T15", "T03", "T07", "T12"], "isToday": true }
+    { "day": "월", "trucks": ["T07", "T03"], "isToday": false },
+    { "day": "화", "trucks": ["T12"], "isToday": false },
+    { "day": "수", "trucks": ["T08", "T18"], "isToday": false },
+    { "day": "목", "trucks": [], "isToday": false },
+    { "day": "금", "trucks": ["T21"], "isToday": false },
+    { "day": "토", "trucks": [], "isToday": false },
+    { "day": "일", "trucks": ["T15", "T03", "T07", "T12"], "isToday": true }
   ],
   "regularSchedule": [
     {
-      "label": "Tire Pressure Check",
-      "cycle": "Weekly",
-      "next": "Every Monday",
-      "truckCount": "25 trucks"
+      "label": "타이어 압력 점검",
+      "cycle": "매주",
+      "next": "매주 월요일",
+      "truckCount": "25대"
     },
     {
-      "label": "Brake Inspection",
-      "cycle": "Bi-weekly",
-      "next": "Next: May 26",
-      "truckCount": "12 trucks"
+      "label": "브레이크 점검",
+      "cycle": "격주",
+      "next": "다음: 5월 26일",
+      "truckCount": "12대"
     },
     {
-      "label": "Full PM Service",
-      "cycle": "Monthly",
-      "next": "Next: Jun 01",
-      "truckCount": "8 trucks"
+      "label": "전체 PM 서비스",
+      "cycle": "매월",
+      "next": "다음: 6월 1일",
+      "truckCount": "8대"
     }
   ],
   "plannedToday": [
-    { "time": "14:00", "truckId": "T03", "type": "Preventive PM" },
-    { "time": "16:30", "truckId": "T12", "type": "Inspection" },
-    { "time": "18:00", "truckId": "T18", "type": "Tire Check" },
-    { "time": "19:30", "truckId": "T21", "type": "Brake Inspection" }
+    { "time": "14:00", "truckId": "T03", "type": "예방 PM" },
+    { "time": "16:30", "truckId": "T12", "type": "점검" },
+    { "time": "18:00", "truckId": "T18", "type": "타이어 점검" },
+    { "time": "19:30", "truckId": "T21", "type": "브레이크 점검" }
   ]
 }

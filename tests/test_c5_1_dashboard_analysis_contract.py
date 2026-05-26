@@ -43,7 +43,7 @@ def test_dashboard_analysis_json_contract():
     assert payload["baseline_policy"] == "H0"
     assert payload["seed_count"] == 2
     assert payload["recommended_policy"]["policy_id"]
-    assert payload["recommended_policy"]["warning_ko"] == "전역 최적해가 아닙니다."
+    assert payload["recommended_policy"]["warning_ko"] == "수학적으로 모든 경우의 최선임을 보장하지 않습니다."
     assert payload["best_by_kpi"]
     assert payload["h0_improvement"]
     assert payload["stability"]

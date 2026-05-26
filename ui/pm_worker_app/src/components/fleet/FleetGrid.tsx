@@ -10,7 +10,7 @@ interface FleetGridProps {
 export default function FleetGrid({ trucks, selectedTruckId, onSelectTruck }: FleetGridProps) {
   return (
     <div className="bg-white rounded-xl p-3 shadow-sm border border-border">
-      <h3 className="text-sm font-semibold text-text-main mb-2">Fleet Overview</h3>
+      <h3 className="text-sm font-semibold text-text-main mb-2">Truck 현황</h3>
       <div className="grid grid-cols-5 gap-1.5">
         {trucks.map(truck => {
           const selected = truck.id === selectedTruckId;
