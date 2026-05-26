@@ -54,6 +54,13 @@ This changelog tracks the official direction changes for C5.1.
 - Updated the imported UI data loading path to prefer official C5.1 snapshots and fall back to existing mock data.
 - Kept RL training and Drop Zone implementation out of the official repository.
 
+## 2026-05-25 / Heuristic Comparison Analysis
+
+- Added a C5.1 heuristic analysis script for H0-H4 KPI aggregation, H0 baseline improvement, ranking, stability, and trade-off outputs.
+- Added report-ready Markdown documents for heuristic comparison analysis, presentation summary, and dashboard analysis mapping.
+- Added tests and a fixture to validate analysis output generation without modifying policy logic.
+- Kept this task limited to analysis; no H0-H4 policy logic, dashboard behavior, PM app behavior, RL, or Drop Zone implementation was changed.
+
 ---
 
 ## Current Official Version
