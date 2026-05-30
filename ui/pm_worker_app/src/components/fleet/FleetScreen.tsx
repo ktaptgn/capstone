@@ -6,7 +6,7 @@ import ExpectedPMCard from './ExpectedPMCard';
 import PreviousPMCard from './PreviousPMCard';
 import type { Truck, ComponentHealth, DerivedExpectedPM, PolicyId } from '../../policies/types';
 import type { PolicyContext } from '../../policies/types';
-import { deriveExpectedPMFromContext } from '../../selectors/dataLoader';
+import { deriveExpectedPMFromContext, getComponentHealthForTruck } from '../../selectors/dataLoader';
 
 interface FleetScreenProps {
   trucks: Truck[];
@@ -19,8 +19,8 @@ interface FleetScreenProps {
 export default function FleetScreen({ trucks, componentHealth, workRecordsPreviousPM, selectedPolicy, policyContext }: FleetScreenProps) {
   const [selectedTruckId, setSelectedTruckId] = useState('T07');
   const selectedTruck = trucks.find(t => t.id === selectedTruckId);
-  const health = componentHealth[selectedTruckId];
-  const tires = health?.components ?? [];
+  const health = getComponentHealthForTruck(selectedTruckId, trucks, componentHealth);
+  const tires = health.components;
   const previousPM = workRecordsPreviousPM[selectedTruckId] ?? [];
   const expectedPM: DerivedExpectedPM = deriveExpectedPMFromContext(selectedTruckId, policyContext, selectedPolicy);
 

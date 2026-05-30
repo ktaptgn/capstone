@@ -39,9 +39,7 @@ function SVGFallback({ tires }: { tires: TireComponent[] }) {
         <rect x={90} y={30} width={100} height={140} rx={8} fill="#F3E7E2" stroke="#8A4931" strokeWidth={1.5} opacity={0.6} />
         <rect x={105} y={15} width={70} height={30} rx={5} fill="#F3E7E2" stroke="#8A4931" strokeWidth={1.5} opacity={0.6} />
         <path d="M95 55 L185 55 L190 165 L85 165 Z" fill="none" stroke="#8A4931" strokeWidth={1} opacity={0.3} strokeDasharray="4 2" />
-        <text x={140} y={115} textAnchor="middle" fill="#8A4931" fontSize={10} fontWeight="600" opacity={0.5}>
-          797F
-        </text>
+        <text x={140} y={115} textAnchor="middle" fill="#8A4931" fontSize={10} fontWeight="600" opacity={0.5}>797F</text>
         {renderTire(fl, 55, 50)}
         {renderTire(fr, 225, 50)}
         {renderTire(rl, 55, 155)}
@@ -52,26 +50,40 @@ function SVGFallback({ tires }: { tires: TireComponent[] }) {
 }
 
 export default function EquipmentViewer({ tires }: EquipmentViewerProps) {
-  const [viewMode, setViewMode] = useState<'3d' | '2d'>('3d');
-  const handleWebGLError = useCallback(() => setViewMode('2d'), []);
-
-  const hasTires = tires.length > 0;
+  const [mode, setMode] = useState<'3d' | '2d'>('3d');
+  const [webGLAvailable, setWebGLAvailable] = useState(true);
+  const handleWebGLError = useCallback(() => { setWebGLAvailable(false); setMode('2d'); }, []);
 
   return (
     <div className="bg-white rounded-xl p-3 shadow-sm border border-border">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold text-text-main">장비 상태 보기</h3>
-        {hasTires && (
+        {/* 2D / 3D toggle */}
+        <div className="flex items-center border border-border rounded-lg overflow-hidden">
           <button
-            onClick={() => setViewMode(v => v === '3d' ? '2d' : '3d')}
-            className="text-[10px] px-2 py-0.5 rounded-full border border-border text-text-sub hover:bg-gray-50 transition-colors"
+            onClick={() => { setMode('3d'); setWebGLAvailable(true); }}
+            className={`text-[10px] font-bold px-2.5 py-1 transition-colors ${
+              mode === '3d'
+                ? 'bg-sanguine text-white'
+                : 'bg-gray-50 text-text-sub hover:bg-gray-100'
+            }`}
           >
-            {viewMode === '3d' ? '2D 보기' : '3D 보기'}
+            3D
           </button>
-        )}
+          <button
+            onClick={() => setMode('2d')}
+            className={`text-[10px] font-bold px-2.5 py-1 transition-colors ${
+              mode === '2d'
+                ? 'bg-sanguine text-white'
+                : 'bg-gray-50 text-text-sub hover:bg-gray-100'
+            }`}
+          >
+            2D
+          </button>
+        </div>
       </div>
 
-      {viewMode === '3d' && hasTires ? (
+      {mode === '3d' && webGLAvailable && tires.length > 0 ? (
         <TruckModel3D tires={tires} onError={handleWebGLError} />
       ) : (
         <SVGFallback tires={tires} />

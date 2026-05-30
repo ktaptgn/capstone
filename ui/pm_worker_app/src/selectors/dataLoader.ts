@@ -11,6 +11,70 @@ export const trucks: Truck[] = trucksData as Truck[];
 
 export const componentHealth: Record<string, ComponentHealth> = componentHealthData as Record<string, ComponentHealth>;
 
+// --- Per-truck component health derivation ---------------------------------
+// Only a few trucks ship with explicit tire/component health data, but every
+// truck in the fleet must render its 2D + 3D HI views. For trucks without
+// explicit data we derive a deterministic per-component breakdown from the
+// truck's overall healthIndex so the same truck always shows the same values.
+
+const TIRE_DEFS = [
+  { id: 'front_left_tire', name: 'Front Left Tire', position: 'FL' },
+  { id: 'front_right_tire', name: 'Front Right Tire', position: 'FR' },
+  { id: 'rear_left_tire_set', name: 'Rear Left Tire Set', position: 'RL' },
+  { id: 'rear_right_tire_set', name: 'Rear Right Tire Set', position: 'RR' },
+] as const;
+
+const OTHER_DEFS = [
+  { id: 'drive_unit', name: 'Drive Unit' },
+  { id: 'brake_axle', name: 'Brake / Axle' },
+  { id: 'engine', name: 'Engine' },
+  { id: 'hydraulic_system', name: 'Hydraulic System' },
+  { id: 'suspension', name: 'Suspension' },
+] as const;
+
+function hiStatus(hi: number): string {
+  if (hi < 40) return 'critical';
+  if (hi < 60) return 'warning';
+  if (hi < 75) return 'watch';
+  return 'normal';
+}
+
+function clampHI(n: number): number {
+  return Math.max(5, Math.min(99, Math.round(n)));
+}
+
+function deriveComponentHealth(truckId: string, baseHI: number): ComponentHealth {
+  // Deterministic pseudo-random offsets seeded by the truck id.
+  let seed = 0;
+  for (const ch of truckId) seed = (seed * 31 + ch.charCodeAt(0)) >>> 0;
+  const jitter = (i: number, spread: number) => {
+    const x = Math.sin(seed + i * 97.13) * 10000;
+    return (x - Math.floor(x) - 0.5) * spread;
+  };
+  const components = TIRE_DEFS.map((d, i) => {
+    const hi = clampHI(baseHI + jitter(i, 30));
+    return { ...d, healthIndex: hi, status: hiStatus(hi) };
+  });
+  const otherComponents = OTHER_DEFS.map((d, i) => {
+    const hi = clampHI(baseHI + jitter(i + 10, 24));
+    return { ...d, healthIndex: hi, status: hiStatus(hi) };
+  });
+  return { truckId, components, otherComponents };
+}
+
+// Returns explicit component health when available, otherwise a deterministic
+// derivation from the truck's overall healthIndex. Guarantees 4 tire entries.
+export function getComponentHealthForTruck(
+  truckId: string,
+  truckList: Truck[],
+  componentHealthMap: Record<string, ComponentHealth>,
+): ComponentHealth {
+  const existing = componentHealthMap[truckId];
+  if (existing && existing.components && existing.components.length >= 4) return existing;
+  const truck = truckList.find(t => t.id === truckId);
+  return deriveComponentHealth(truckId, truck?.healthIndex ?? 70);
+}
+
 const rawSchedule = pmScheduleData as PMSchedule;
 export const pmSchedule: PMSchedule = {
   ...rawSchedule,
@@ -137,9 +201,21 @@ function buildOfficialContext(workOrders: WorkOrder[], records: LogRecord[]): Po
     inProgress: order.status === 'IN_PROGRESS',
   }));
 
+  // Merge official trucks with static 25-truck data so all trucks always appear
+  const officialIds = new Set(officialTrucks.map(t => t.id));
+  const mergedTrucks = [
+    ...officialTrucks,
+    ...trucks.filter(t => !officialIds.has(t.id)),
+  ].sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
+
+  const mergedComponentHealth = { ...componentHealth };
+  for (const [key, val] of Object.entries(officialComponentHealth)) {
+    mergedComponentHealth[key] = val;
+  }
+
   return {
-    trucks: officialTrucks.length ? officialTrucks : trucks,
-    componentHealth: Object.keys(officialComponentHealth).length ? officialComponentHealth : componentHealth,
+    trucks: mergedTrucks.length ? mergedTrucks : trucks,
+    componentHealth: Object.keys(mergedComponentHealth).length ? mergedComponentHealth : componentHealth,
     pmSchedule: {
       ...pmSchedule,
       todayPM,

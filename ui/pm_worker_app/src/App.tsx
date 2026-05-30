@@ -15,6 +15,7 @@ function App() {
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyId>('h3_cost_weighted');
   const [policyContext, setPolicyContext] = useState(buildPolicyContext());
   const [botOpen, setBotOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     loadOfficialPolicyContext().then(context => {
@@ -55,9 +56,14 @@ function App() {
     }
   };
 
+  // Toggle dark class on body for CSS overrides
+  useEffect(() => {
+    document.body.classList.toggle('dark', darkMode);
+  }, [darkMode]);
+
   return (
-    <div className="flex flex-col h-[844px] relative">
-      <TopAppBar unreadAlerts={unreadAlerts} onAlertClick={() => setActiveTab(activeTab === 'alerts' ? 'today' : 'alerts')} />
+    <div className={`flex flex-col h-[844px] relative ${darkMode ? 'dark-app' : ''}`}>
+      <TopAppBar unreadAlerts={unreadAlerts} onAlertClick={() => setActiveTab(activeTab === 'alerts' ? 'today' : 'alerts')} darkMode={darkMode} onDarkModeToggle={() => setDarkMode(d => !d)} />
       {renderScreen()}
       <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
       <PMBotButton onClick={() => setBotOpen(true)} />
