@@ -1,8 +1,8 @@
 export default function KpiCard({ label, value, sublabel, color, icon, definition }) {
   return (
     <div style={{
-      background: '#fff', border: '1px solid #E2E8F0', borderRadius: 12,
-      boxShadow: '0 1px 3px rgba(0,0,0,0.04)', padding: '16px 20px',
+      background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 12,
+      boxShadow: 'var(--shadow)', padding: '16px 20px',
       flex: 1, minWidth: 0,
     }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
@@ -17,14 +17,14 @@ export default function KpiCard({ label, value, sublabel, color, icon, definitio
           </div>
         )}
         <div style={{ minWidth: 0 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
             {label}
           </div>
-          <div style={{ fontSize: 24, fontWeight: 700, color: color || '#1E293B', marginTop: 2 }}>
+          <div style={{ fontSize: 24, fontWeight: 700, color: color || 'var(--text-main)', marginTop: 2 }}>
             {value}
           </div>
-          {sublabel && <div style={{ fontSize: 11, color: '#64748B', marginTop: 2 }}>{sublabel}</div>}
-          {definition && <div style={{ fontSize: 9, color: '#94A3B8', marginTop: 4 }}>{definition}</div>}
+          {sublabel && <div style={{ fontSize: 11, color: 'var(--text-sub)', marginTop: 2 }}>{sublabel}</div>}
+          {definition && <div style={{ fontSize: 9, color: 'var(--text-muted)', marginTop: 4 }}>{definition}</div>}
         </div>
       </div>
     </div>

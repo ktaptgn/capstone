@@ -76,6 +76,26 @@ This changelog tracks the official direction changes for C5.1.
 - Added slide copy blocks for capstone presentation.
 - Clarified that H3 is not a global optimum and RL remains deferred to a separate repository.
 
+## 2026-05-27 / 3D Operation Map MVP
+
+- Added a C5 virtual mine 3D operation map data source for the operator dashboard draft.
+- Implemented a React Three Fiber MVP with procedural terrain, cube facilities, hemisphere trucks, route tubes, queue areas, overlays, legend, and camera presets.
+- Connected the existing Mine Operation Map card to a 2D/3D toggle while keeping the map as a result visualization layer.
+- Kept external GLB models, external GIS/map services, RL, Drop Zone, and production dashboard workflows out of this implementation.
+
+## 2026-05-29 / Dashboard ↔ PM App Real-Time PM Order Sync
+
+- Added a backend-free shared sync bus (`pmSyncBus`) using BroadcastChannel + localStorage so PM work-order request/approve/hold/reject states stay in sync across browser tabs on the same origin.
+- Wired the dashboard 긴급 PM 배차 modal to publish real work orders and added a live "실시간 PM 작업 지시" panel where the operator sees and acts on PM-worker decisions in real time.
+- Replaced the PM worker app's local mock-order state with the shared bus (seeded once when empty) so worker decisions reflect back to the dashboard instantly.
+- Added a zero-dependency `serve_demo.mjs` that serves both single-file builds from one origin (Dashboard `/`, PM app `/pm`), since BroadcastChannel/localStorage sync requires a shared origin.
+
+## 2026-05-29 / All-Truck 2D + 3D HI Views
+
+- Fixed the PM app fleet view so all 25 trucks render both the 2D and 3D HI models on selection (previously only the 3 trucks with explicit component-health data showed tire HI).
+- Added `getComponentHealthForTruck` which returns explicit component health when present, otherwise a deterministic per-tire/per-component breakdown derived from the truck's overall healthIndex (stable per truck).
+- Wired `FleetScreen` to the new helper so the existing 2D/3D toggle works for every truck.
+
 ---
 
 ## Current Official Version

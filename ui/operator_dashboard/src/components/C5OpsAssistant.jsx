@@ -73,16 +73,16 @@ function buildActionsResponse() {
 function KpiMessage({ data }) {
   return (
     <div>
-      <div style={{ fontWeight: 700, fontSize: 13, color: '#7C2D12', marginBottom: 8 }}>[{data.title}]</div>
+      <div style={{ fontWeight: 700, fontSize: 13, color: '#8A4931', marginBottom: 8 }}>[{data.title}]</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         {data.rows.map((r, i) => (
-          <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '3px 0', borderBottom: '1px solid #F1F5F9' }}>
-            <span style={{ color: '#64748B' }}>{r.label}</span>
-            <span style={{ fontWeight: 600, color: r.color || '#1E293B' }}>{r.value}</span>
+          <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '3px 0', borderBottom: '1px solid var(--divider)' }}>
+            <span style={{ color: 'var(--text-sub)' }}>{r.label}</span>
+            <span style={{ fontWeight: 600, color: r.color || 'var(--text-main)' }}>{r.value}</span>
           </div>
         ))}
       </div>
-      <div style={{ fontSize: 10, color: '#94A3B8', marginTop: 8, fontStyle: 'italic' }}>{data.footer}</div>
+      <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 8, fontStyle: 'italic' }}>{data.footer}</div>
     </div>
   );
 }
@@ -90,48 +90,47 @@ function KpiMessage({ data }) {
 function PolicyMessage({ data }) {
   return (
     <div>
-      <div style={{ fontWeight: 700, fontSize: 13, color: '#7C2D12', marginBottom: 8 }}>[{data.title}]</div>
-      <div style={{ background: '#F3E7E2', borderRadius: 8, padding: 10, marginBottom: 8 }}>
-        <div style={{ fontSize: 11, color: '#94A3B8', fontWeight: 600 }}>현재 추천 정책</div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#7C2D12', marginTop: 2 }}>{data.recommendation.id} {data.recommendation.name}</div>
+      <div style={{ fontWeight: 700, fontSize: 13, color: '#8A4931', marginBottom: 8 }}>[{data.title}]</div>
+      <div style={{ background: 'var(--primary-soft)', borderRadius: 8, padding: 10, marginBottom: 8 }}>
+        <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>현재 추천 정책</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#8A4931', marginTop: 2 }}>{data.recommendation.id} {data.recommendation.name}</div>
         <div style={{ marginTop: 6 }}>
           {data.recommendation.reasons.map((r, i) => (
-            <div key={i} style={{ fontSize: 11, color: '#334155', paddingLeft: 8, position: 'relative' }}>
+            <div key={i} style={{ fontSize: 11, color: 'var(--text-body)', paddingLeft: 8, position: 'relative' }}>
               <span style={{ position: 'absolute', left: 0 }}>-</span> {r}
             </div>
           ))}
         </div>
       </div>
-      <div style={{ fontSize: 12, fontWeight: 600, color: '#1E293B', marginBottom: 4 }}>정책별 요약:</div>
+      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-main)', marginBottom: 4 }}>정책별 요약:</div>
       {data.summaries.map(s => (
-        <div key={s.id} style={{ fontSize: 11, color: '#334155', padding: '2px 0' }}>
-          <span style={{ fontWeight: 600, color: s.active ? '#8A4931' : '#334155' }}>{s.id}</span>: {s.text}
+        <div key={s.id} style={{ fontSize: 11, color: 'var(--text-body)', padding: '2px 0' }}>
+          <span style={{ fontWeight: 600, color: s.active ? '#8A4931' : 'var(--text-body)' }}>{s.id}</span>: {s.text}
         </div>
       ))}
-      <div style={{ fontSize: 10, color: '#94A3B8', marginTop: 8, fontStyle: 'italic' }}>{data.footer}</div>
+      <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 8, fontStyle: 'italic' }}>{data.footer}</div>
     </div>
   );
 }
 
 function ActionsMessage({ data }) {
   const rankColors = ['#DC2626', '#F59E0B', '#6B7280'];
-  const rankBgs = ['#FEF2F2', '#FFFBEB', '#F9FAFB'];
   return (
     <div>
-      <div style={{ fontWeight: 700, fontSize: 13, color: '#7C2D12', marginBottom: 8 }}>[{data.title}]</div>
+      <div style={{ fontWeight: 700, fontSize: 13, color: '#8A4931', marginBottom: 8 }}>[{data.title}]</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {data.actions.map((a, i) => (
-          <div key={a.rank} style={{ background: rankBgs[i], borderRadius: 8, padding: 10, borderLeft: `3px solid ${rankColors[i]}` }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: '#1E293B' }}>
+          <div key={a.rank} style={{ background: 'var(--bg-page)', borderRadius: 8, padding: 10, borderLeft: `3px solid ${rankColors[i]}` }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-main)' }}>
               {a.rank}. {a.action}
             </div>
             {a.details.map((d, j) => (
-              <div key={j} style={{ fontSize: 11, color: '#64748B', paddingLeft: 14, marginTop: 2 }}>- {d}</div>
+              <div key={j} style={{ fontSize: 11, color: 'var(--text-sub)', paddingLeft: 14, marginTop: 2 }}>- {d}</div>
             ))}
           </div>
         ))}
       </div>
-      <div style={{ fontSize: 10, color: '#94A3B8', marginTop: 8, fontStyle: 'italic' }}>{data.footer}</div>
+      <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 8, fontStyle: 'italic' }}>{data.footer}</div>
     </div>
   );
 }
@@ -139,10 +138,10 @@ function ActionsMessage({ data }) {
 function UnknownMessage() {
   return (
     <div>
-      <div style={{ fontSize: 12, color: '#334155', marginBottom: 4 }}>
+      <div style={{ fontSize: 12, color: 'var(--text-body)', marginBottom: 4 }}>
         이 Assistant는 현재 <strong>KPI 요약</strong>, <strong>정책 비교 요약</strong>, <strong>운영자 우선 조치 3개</strong>만 답변합니다.
       </div>
-      <div style={{ fontSize: 11, color: '#94A3B8', fontStyle: 'italic' }}>
+      <div style={{ fontSize: 11, color: 'var(--text-muted)', fontStyle: 'italic' }}>
         This assistant only supports KPI summary, policy comparison, and priority actions.
       </div>
     </div>
@@ -217,7 +216,7 @@ export default function C5OpsAssistant() {
         <div style={{
           position: 'fixed', bottom: 0, right: 0, zIndex: 1000,
           width: 400, maxWidth: '34vw', height: '100vh',
-          background: '#fff', borderLeft: '1px solid #E2E8F0',
+          background: 'var(--bg-card)', borderLeft: '1px solid var(--border)',
           boxShadow: '-4px 0 24px rgba(0,0,0,0.08)',
           display: 'flex', flexDirection: 'column',
           animation: 'slideIn 0.25s ease-out',
@@ -254,7 +253,7 @@ export default function C5OpsAssistant() {
           <div style={{
             flex: 1, overflow: 'auto', padding: 16,
             display: 'flex', flexDirection: 'column', gap: 12,
-            background: '#F8FAFC',
+            background: 'var(--bg-page)',
           }}>
             {/* Welcome */}
             {messages.length === 0 && (
@@ -266,13 +265,13 @@ export default function C5OpsAssistant() {
                 }}>
                   <Bot size={28} color="#8A4931" />
                 </div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: '#1E293B', marginBottom: 4 }}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-main)', marginBottom: 4 }}>
                   C5 Ops Assistant
                 </div>
-                <div style={{ fontSize: 12, color: '#64748B', marginBottom: 4 }}>
+                <div style={{ fontSize: 12, color: 'var(--text-sub)', marginBottom: 4 }}>
                   Ask about KPI summary, policy comparison, or priority actions.
                 </div>
-                <div style={{ fontSize: 11, color: '#94A3B8' }}>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
                   KPI 요약, 정책 비교, 우선 조치만 답변합니다.
                 </div>
               </div>
@@ -295,11 +294,11 @@ export default function C5OpsAssistant() {
                 )}
                 <div style={{
                   maxWidth: '85%', padding: '10px 14px', borderRadius: 12,
-                  background: msg.role === 'user' ? '#8A4931' : '#fff',
-                  color: msg.role === 'user' ? '#fff' : '#334155',
+                  background: msg.role === 'user' ? '#8A4931' : 'var(--bg-card)',
+                  color: msg.role === 'user' ? '#fff' : 'var(--text-body)',
                   fontSize: 12, lineHeight: 1.5,
-                  border: msg.role === 'assistant' ? '1px solid #E2E8F0' : 'none',
-                  boxShadow: msg.role === 'assistant' ? '0 1px 3px rgba(0,0,0,0.04)' : 'none',
+                  border: msg.role === 'assistant' ? '1px solid var(--border)' : 'none',
+                  boxShadow: msg.role === 'assistant' ? 'var(--shadow)' : 'none',
                 }}>
                   {msg.role === 'user' ? msg.text : <AssistantMessage intent={msg.intent} />}
                 </div>
@@ -319,20 +318,18 @@ export default function C5OpsAssistant() {
 
           {/* Quick Chips */}
           <div style={{
-            padding: '8px 16px', borderTop: '1px solid #F1F5F9',
-            display: 'flex', gap: 6, flexWrap: 'wrap', background: '#fff',
+            padding: '8px 16px', borderTop: '1px solid var(--divider)',
+            display: 'flex', gap: 6, flexWrap: 'wrap', background: 'var(--bg-card)',
           }}>
             {CHIPS.map(chip => (
               <button key={chip.intent} onClick={() => handleSend(chip.label, chip.intent)} style={{
                 padding: '6px 12px', borderRadius: 16,
-                border: '1px solid #E7D0C6', background: '#FDF8F6',
+                border: '1px solid var(--border)', background: 'var(--primary-soft)',
                 fontSize: 11, fontWeight: 600, color: '#8A4931',
                 cursor: 'pointer', whiteSpace: 'nowrap',
                 fontFamily: 'inherit',
                 transition: 'background 0.15s',
               }}
-              onMouseEnter={e => e.currentTarget.style.background = '#F3E7E2'}
-              onMouseLeave={e => e.currentTarget.style.background = '#FDF8F6'}
               >
                 {chip.label}
               </button>
@@ -341,7 +338,7 @@ export default function C5OpsAssistant() {
 
           {/* Input */}
           <div style={{
-            padding: '12px 16px', borderTop: '1px solid #E2E8F0', background: '#fff',
+            padding: '12px 16px', borderTop: '1px solid var(--border)', background: 'var(--bg-card)',
             display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0,
           }}>
             <input
@@ -351,17 +348,17 @@ export default function C5OpsAssistant() {
               placeholder="질문을 입력하세요..."
               style={{
                 flex: 1, padding: '10px 14px', borderRadius: 8,
-                border: '1px solid #E2E8F0', fontSize: 12,
+                border: '1px solid var(--border)', fontSize: 12,
                 outline: 'none', fontFamily: 'inherit',
-                background: '#F8FAFC',
+                background: 'var(--bg-page)', color: 'var(--text-body)',
               }}
               onFocus={e => e.currentTarget.style.borderColor = '#8A4931'}
-              onBlur={e => e.currentTarget.style.borderColor = '#E2E8F0'}
+              onBlur={e => e.currentTarget.style.borderColor = 'var(--border)'}
             />
             <button onClick={() => handleSend()} style={{
               width: 38, height: 38, borderRadius: 8, border: 'none',
-              background: input.trim() ? '#8A4931' : '#E2E8F0',
-              color: input.trim() ? '#fff' : '#94A3B8',
+              background: input.trim() ? '#8A4931' : 'var(--divider)',
+              color: input.trim() ? '#fff' : 'var(--text-muted)',
               cursor: input.trim() ? 'pointer' : 'default',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'background 0.15s',
