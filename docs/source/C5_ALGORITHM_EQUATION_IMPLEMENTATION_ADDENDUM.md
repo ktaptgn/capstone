@@ -13,8 +13,8 @@ RL is deferred until the heuristic comparison foundation is stable.
 
 | Policy | Name | Main Decision |
 |---|---|---|
-| H0 | Baseline | Existing/simple dispatch and PM due rule |
-| H1 | Bottleneck Dispatch | Select destination by bottleneck/queue/processing rate |
+| H0 | Periodic PM Baseline | Perform pure calendar-periodic PM |
+| H1 | Due / Health PM | Apply the former H0 PM due and HI rule |
 | H2 | PM Risk Priority | Decide PM by HI, tire HI, PM due, and operating pressure |
 | H3 | Cost Unit Value | Choose action by expected value and cost |
 | H4 | Flow / Backpressure | Dispatch by whole-system flow pressure |
@@ -24,35 +24,34 @@ RL is deferred until the heuristic comparison foundation is stable.
 ## H0. Baseline
 
 ```text
-IF pm_due <= 0:
-    send truck to PM
+IF truck calendar PM slot is due:
+    send truck to PM_VEHICLE
 ELSE:
-    use existing/basic dispatch rule
+    use first-truck/basic dispatch rule
 ```
 
 ---
 
-## H1. Bottleneck Dispatch
+## H1. Due / Health PM
 
 ```text
-Score(destination)
-= processing_rate_score
-- queue_penalty
-- travel_time_penalty
-- idle_wait_penalty
+IF pm_due <= threshold OR Truck HI <= threshold OR Tire HI <= threshold:
+    send truck to matching PM
+ELSE:
+    use existing/basic dispatch rule
 ```
 
 Decision:
 
 ```text
-select destination with maximum Score(destination)
+apply the first matching due/health decision
 ```
 
 Purpose:
 
-- reduce waiting
-- reduce idle time
-- avoid sending trucks to nodes that cannot process them
+- react to PM due time and equipment condition
+- preserve the former H0 rule as the first heuristic above the periodic baseline
+- keep the rule simple and interpretable
 
 ---
 

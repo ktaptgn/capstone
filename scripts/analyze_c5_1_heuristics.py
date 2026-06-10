@@ -20,8 +20,8 @@ DEFAULT_DASHBOARD = ROOT / "docs" / "c5_1" / "C5_1_DASHBOARD_ANALYSIS_MAPPING.md
 PM_ACTIONS = {"PM_TIRE", "PM_VEHICLE", "PM_VEHICLE_BALANCED", "PM_VEHICLE_FAST_EXPENSIVE", "PM_VEHICLE_SLOW_CHEAP"}
 
 POLICY_NAMES = {
-    "H0": "Baseline",
-    "H1": "Bottleneck Dispatch",
+    "H0": "Periodic PM Baseline",
+    "H1": "Due / Health PM",
     "H2": "PM Risk Priority",
     "H3": "Cost Unit Value",
     "H4": "Flow / Backpressure",
@@ -524,18 +524,18 @@ def policy_interpretation(policy_id: str, means: dict[str, dict[str, float]], ra
         weak = [max(rank_pairs, key=lambda item: int(item[1]))[0]]
 
     use_cases = {
-        "H0": "Baseline reference for judging improvement and fairness.",
-        "H1": "Use when preserving availability and holding queue pressure matters more than demand completion.",
+        "H0": "Pure periodic PM baseline for judging improvement and fairness.",
+        "H1": "Use when a simple PM due/HI-aware rule is sufficient without queue or cost optimization.",
         "H2": "Use when PM risk control is preferred but production shortfall must remain visible.",
         "H3": "Use for the current balanced recommendation because it minimizes total cost while keeping demand fulfillment high.",
-        "H4": "Use when flow/backpressure behavior is the focus; current implementation mirrors H1 on the observed KPI set.",
+        "H4": "Use when flow/backpressure behavior is the focus.",
     }
     risks = {
-        "H0": "Not optimized; useful as a control, not a recommendation.",
-        "H1": "Large unmet demand in the current run despite low PM cost and strong availability.",
+        "H0": "Ignores actual truck condition and demand; useful as a control, not a recommendation.",
+        "H1": "Does not optimize PM timing against queue pressure or operating cost.",
         "H2": "Middle performance can be hard to justify unless risk control is the presentation focus.",
         "H3": "Higher PM cost and queue time than some alternatives; recommendation should not be framed as global optimum.",
-        "H4": "Same observed results as H1 in the current environment, so it needs clearer scenario differentiation later.",
+        "H4": "Backpressure thresholds remain sensitive to the queue-state resolution.",
     }
     return {
         "strong": ", ".join(strong),

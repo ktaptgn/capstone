@@ -40,9 +40,11 @@ def test_work_order_export_and_schema_validation():
 def test_ui_snapshot_export_creates_app_public_snapshots():
     analysis_source = ROOT / "outputs" / "c5_1" / "analysis" / "dashboard_analysis.json"
     analysis_snapshot = ROOT / "ui" / "operator_dashboard" / "public" / "c5_1" / "dashboard_analysis.json"
+    bundled_analysis_snapshot = ROOT / "ui" / "operator_dashboard" / "src" / "data" / "dashboardAnalysisSnapshot.json"
     backups = {
         analysis_source: _read_optional(analysis_source),
         analysis_snapshot: _read_optional(analysis_snapshot),
+        bundled_analysis_snapshot: _read_optional(bundled_analysis_snapshot),
     }
 
     try:
@@ -73,6 +75,7 @@ def test_ui_snapshot_export_creates_app_public_snapshots():
         expected = [
             ROOT / "ui" / "operator_dashboard" / "public" / "c5_1" / "policy_comparison.json",
             analysis_snapshot,
+            bundled_analysis_snapshot,
             ROOT / "ui" / "operator_dashboard" / "public" / "c5_1" / "sample_log.json",
             ROOT / "ui" / "operator_dashboard" / "public" / "c5_1" / "work_orders.json",
             ROOT / "ui" / "pm_worker_app" / "public" / "c5_1" / "work_orders.json",

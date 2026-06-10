@@ -1,0 +1,6 @@
+policy_id,total_cost_improvement_pct,pm_cost_improvement_pct,unmet_demand_improvement_pct,demand_fulfillment_delta,completed_loads_delta,available_trucks_delta,total_downtime_improvement_pct,pm_count_improvement_pct,average_tire_hi_improvement_pct,average_truck_hi_improvement_pct,queue_time_improvement_pct
+H1,-279.982188,61.472,-850.910834,-0.448845,-2958.333333,0.0,61.493333,61.44,-11.066994,-2.063326,2.714687
+H2,-79.666833,22.688,-250.71908,-0.132267,-871.666667,0.0,22.72,22.64,-3.50094,-2.620478,-2.080237
+H3,7.204125,-16.32,44.582934,0.023514,155.0,0.0,-14.506667,-19.04,1.434951,0.592121,-19.729313
+H4,-279.982188,61.472,-850.910834,-0.448845,-2958.333333,0.0,61.493333,61.44,-11.066994,-2.063326,2.714687
+H_TIME,45.106242,37.504,65.100671,0.034341,226.333333,0.0,30.56,47.92,-90.604606,1.218031,-11.855096
