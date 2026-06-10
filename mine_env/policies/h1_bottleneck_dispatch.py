@@ -3,13 +3,15 @@ from __future__ import annotations
 from mine_env.policies.base_policy import BasePolicy
 
 
-class H1BottleneckDispatchPolicy(BasePolicy):
-    policy_id = "H1"
+class LegacyBottleneckDispatchPolicy(BasePolicy):
+    """Excluded legacy policy retained for traceability only."""
+
+    policy_id = "H1_LEGACY_EXCLUDED"
 
     def decide(self, state: dict) -> dict:
         trucks = self._candidate_trucks(state)
         if not trucks:
-            raise ValueError("H1 received no candidate trucks")
+            raise ValueError("H1_LEGACY_EXCLUDED received no candidate trucks")
 
         queue_time = float(state["queue_time"])
         pressure = self._demand_pressure(state)
