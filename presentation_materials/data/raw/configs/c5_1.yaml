@@ -1,0 +1,63 @@
+simulation:
+  version: C5.1
+  horizon_days: 365
+  hours_per_day: 24
+  seed_control: true
+  internal_unit: normalized
+  reporting_unit: real_value_converted
+
+mine:
+  scale: 0.1
+  truck_count: 8
+  truck_avg_payload_ton: 350
+  crushers: 2
+  use_post_crusher_process: false
+  use_recovery_rate: false
+  use_drop_zone: false
+
+fleet:
+  initial_truck_hi: 0.92
+  initial_tire_hi: 0.88
+  initial_hi_jitter: 0.04
+  truck_hi_loss_per_load: 0.006
+  tire_hi_loss_per_load: 0.008
+  standby_hi_recovery: 0.002
+  pm_due_start_hours: 72
+  pm_due_loss_per_load: 3
+  pm_due_recovery_hours: 96
+  min_operating_hi: 0.45
+  min_operating_tire_hi: 0.40
+
+demand:
+  daily_loads: 18
+  daily_variation_loads: 3
+  ore_grade: 0.008
+
+operations:
+  max_loads_per_truck_per_day: 3
+  base_queue_time_hours: 1.0
+  queue_time_per_load_hours: 0.18
+  bottleneck_queue_threshold_hours: 2.4
+  target_queue_time_hours: 1.8
+  high_demand_pressure: 0.70
+  pm_due_threshold_hours: 12
+  pm_risk_threshold: 0.68
+  cost_value_threshold: 0.15
+  backpressure_queue_threshold_hours: 2.2
+  report_value_multiplier: 1000
+
+policies:
+  enabled:
+    - H0
+    - H1
+    - H2
+    - H3
+    - H4
+  rl_enabled: false
+
+production:
+  copper_output_formula: ore_ton * grade
+
+outputs:
+  log_dir: outputs/c5_1/logs
+  summary_dir: outputs/c5_1/summary

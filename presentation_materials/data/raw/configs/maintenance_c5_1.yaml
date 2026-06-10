@@ -1,0 +1,23 @@
+maintenance:
+  actions:
+    NO_PM:
+      duration_hours: 0
+      cost_multiplier: 0.0
+
+    PM_TIRE:
+      duration_hours: 2
+      cost_multiplier: 1.0
+
+    PM_VEHICLE_BALANCED:
+      duration_hours: 4
+      cost_multiplier: 1.5
+
+    PM_VEHICLE_FAST_EXPENSIVE:
+      duration_hours: 2
+      cost_multiplier: 2.0
+
+    PM_VEHICLE_SLOW_CHEAP:
+      duration_hours: 8
+      cost_multiplier: 0.8
+
+  pm_bay_capacity: 2

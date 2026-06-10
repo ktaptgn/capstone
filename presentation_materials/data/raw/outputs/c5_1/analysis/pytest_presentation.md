@@ -11,9 +11,9 @@
 | Total cost | H3 | lower is better; leading/tied policy set: H3. |
 | Demand fulfillment | H3 | higher is better; leading/tied policy set: H3. |
 | Unmet demand | H3 | lower is better; leading/tied policy set: H3. |
-| Queue time | H0 | lower is better; leading/tied policy set: H0. |
-| PM cost | H4 | lower is better; leading/tied policy set: H4. |
-| Available trucks | H0 / H1 / H2 / H3 / H4 | higher is better; leading/tied policy set: H0 / H1 / H2 / H3 / H4. |
+| Queue time | H2 | lower is better; leading/tied policy set: H2. |
+| PM cost | H2 | lower is better; leading/tied policy set: H2. |
+| Available trucks | H2 | higher is better; leading/tied policy set: H2. |
 
 ## Recommended Policy for Presentation
 
