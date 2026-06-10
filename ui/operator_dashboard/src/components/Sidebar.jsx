@@ -1,4 +1,4 @@
-import { LayoutGrid, Truck, BarChart3, Settings, Clock, LineChart, ClipboardList } from 'lucide-react';
+import { LayoutGrid, Truck, BarChart3, Settings, Clock, LineChart, ClipboardList, Share2, BookOpen, Radio } from 'lucide-react';
 
 const navItems = [
   { id: 'overview', label: '전체 현황', icon: LayoutGrid },
@@ -6,7 +6,10 @@ const navItems = [
   { id: 'policy', label: '정책 비교', icon: BarChart3 },
   { id: 'decisions', label: '정책 결정 내역', icon: ClipboardList },
   { id: 'analysis', label: '휴리스틱 분석', icon: LineChart },
+  { id: 'story', label: '스토리 모드', icon: BookOpen },
+  { id: 'realtime', label: '실시간 시뮬레이션', icon: Radio },
   { id: 'scenario', label: '시나리오 재생', icon: Settings },
+  { id: 'transfer', label: '산업 확장성', icon: Share2 },
 ];
 
 export default function Sidebar({ activePage, onNavigate }) {

@@ -7,6 +7,9 @@ import PolicyPage from './pages/PolicyPage';
 import ScenarioPage from './pages/ScenarioPage';
 import HeuristicAnalysisPage from './pages/HeuristicAnalysisPage';
 import PolicyDecisionPage from './pages/PolicyDecisionPage';
+import CrossIndustryPage from './pages/CrossIndustryPage';
+import StoryModePage from './pages/StoryModePage';
+import RealtimeSimPage from './pages/RealtimeSimPage';
 import C5OpsAssistant from './components/C5OpsAssistant';
 import { dashboardKpis } from './data/dashboardKpis';
 
@@ -16,6 +19,19 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [simDate, setSimDate] = useState(new Date());
   const [isLive, setIsLive] = useState(true);
+
+  /* ── Simulation transport (play/pause/step/reset) ── */
+  const [playing, setPlaying] = useState(true);
+  const [resetNonce, setResetNonce] = useState(0);
+  const [stepPulse, setStepPulse] = useState(false);
+  // Effective animation speed fed to the maps. Paused → 0; a Step briefly
+  // pulses the speed so trucks advance one short increment.
+  const effectiveSpeed = playing ? timeSpeed : (stepPulse ? Math.max(timeSpeed, 2) : 0);
+
+  const handlePlayPause = () => setPlaying(p => !p);
+  const handleSpeedChange = (s) => { setTimeSpeed(s); setPlaying(true); };
+  const handleStep = () => { setStepPulse(true); setTimeout(() => setStepPulse(false), 160); };
+  const handleReset = () => { setResetNonce(n => n + 1); setTimeSpeed(1); setPlaying(true); };
 
   /* ── Decision log (lifted from DecisionPanel) ── */
   const [decisionLog, setDecisionLog] = useState([]);
@@ -54,13 +70,16 @@ function App() {
 
   const renderPage = () => {
     switch (page) {
-      case 'overview': return <OverviewPage timeSpeed={timeSpeed} onDecision={handleDecision} simDate={simDate} isLive={isLive} />;
+      case 'overview': return <OverviewPage timeSpeed={effectiveSpeed} resetNonce={resetNonce} onDecision={handleDecision} simDate={simDate} isLive={isLive} />;
       case 'fleet': return <FleetPage />;
       case 'policy': return <PolicyPage />;
       case 'decisions': return <PolicyDecisionPage decisionLog={decisionLog} onAddReport={handleAddReport} />;
       case 'analysis': return <HeuristicAnalysisPage />;
+      case 'story': return <StoryModePage />;
+      case 'realtime': return <RealtimeSimPage />;
       case 'scenario': return <ScenarioPage />;
-      default: return <OverviewPage timeSpeed={timeSpeed} onDecision={handleDecision} simDate={simDate} isLive={isLive} />;
+      case 'transfer': return <CrossIndustryPage />;
+      default: return <OverviewPage timeSpeed={effectiveSpeed} resetNonce={resetNonce} onDecision={handleDecision} simDate={simDate} isLive={isLive} />;
     }
   };
 
@@ -78,6 +97,11 @@ function App() {
           onSimDateChange={setSimDate}
           isLive={isLive}
           onSetLive={setIsLive}
+          playing={playing}
+          onPlayPause={handlePlayPause}
+          onStep={handleStep}
+          onSpeedChange={handleSpeedChange}
+          onReset={handleReset}
         />
         <main style={{ flex: 1, overflow: 'auto' }}>
           {renderPage()}

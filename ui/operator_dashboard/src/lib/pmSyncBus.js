@@ -12,8 +12,10 @@
 const CHANNEL = 'c5-pm-orders';
 const STORAGE_KEY = 'c5_pm_orders_v1';
 
-// status: 'requested' | 'approved' | 'hold' | 'rejected'
+// Operator decisions: 'requested' | 'approved' | 'hold' | 'rejected'
+// Field-worker lifecycle: 'accepted' | 'in_progress' | 'completed' | 'delayed' | 'rejected'
 // origin / decidedBy: 'dashboard' | 'pm'
+// recommendedAction: 'Inspect' | 'Repair' | 'Replace' | 'Cooldown' | 'Hold'
 
 const subscribers = new Set();
 
@@ -81,6 +83,13 @@ export function publishOrder(order) {
     decidedBy: order.decidedBy || null,
     decidedAt: order.decidedAt || null,
     report: order.report || null,
+    truckHI: order.truckHI ?? null,
+    tireHI: order.tireHI ?? null,
+    minTireHI: order.minTireHI ?? null,
+    riskScore: order.riskScore ?? null,
+    recommendedAction: order.recommendedAction ?? null,
+    policy: order.policy ?? null,
+    operatorMessage: order.operatorMessage ?? null,
     createdAt: now,
     updatedAt: now,
   };

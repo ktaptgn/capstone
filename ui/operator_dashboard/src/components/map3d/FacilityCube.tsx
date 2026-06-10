@@ -55,14 +55,15 @@ export default function FacilityCube({ facility }: FacilityCubeProps) {
       </mesh>
 
       {/* Facility cube */}
-      <mesh position={[0, cubeSize / 2, 0]}>
+      <mesh position={[0, cubeSize / 2, 0]} castShadow receiveShadow>
         <boxGeometry args={[cubeSize, cubeSize, cubeSize]} />
         <meshStandardMaterial
           color={bodyColor}
-          roughness={0.78}
-          metalness={0.02}
+          roughness={0.55}
+          metalness={0.18}
+          envMapIntensity={0.6}
           emissive={accentColor}
-          emissiveIntensity={0.02}
+          emissiveIntensity={0.025}
         />
         <Edges color={accentColor} />
       </mesh>

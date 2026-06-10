@@ -112,3 +112,38 @@ export function getQueueRatioColor(ratio: number): string {
   if (ratio <= 0.75) return '#F97316';
   return '#EF4444';
 }
+
+/** Human-readable destination label from a target node id. */
+export function getDestinationLabel(node?: string): string {
+  if (!node) return '—';
+  if (node.startsWith('crusher_')) return `Crusher ${node.split('_')[1]}`;
+  if (node.startsWith('shovel_')) return `Shovel ${node.split('_')[1].toUpperCase()}`;
+  if (node === 'pm_bay') return 'PM Bay';
+  if (node === 'standby') return 'Standby';
+  if (node === 'cooldown') return 'Cooldown';
+  return node;
+}
+
+export type CargoState = 'loaded' | 'empty' | 'pm' | 'standby';
+
+/**
+ * Derive a truck's load state. Trucks hauling to a crusher are loaded with ore;
+ * trucks returning to a shovel are empty; PM-bound / in-PM are 'pm'.
+ */
+export function getCargoState(truck: { target_node?: string; truck_state?: string }): CargoState {
+  const st = String(truck.truck_state || '').toUpperCase();
+  if (st === 'STANDBY') return 'standby';
+  if (st === 'IN_PROGRESS') return 'pm';
+  const node = truck.target_node || '';
+  if (node === 'pm_bay') return 'pm';
+  if (node.startsWith('crusher_')) return 'loaded';
+  if (node.startsWith('shovel_')) return 'empty';
+  return 'empty';
+}
+
+export const CARGO_META: Record<CargoState, { label: string; color: string }> = {
+  loaded: { label: '적재', color: '#3A2E25' },
+  empty: { label: '공차', color: '#CBD5E1' },
+  pm: { label: 'PM', color: '#7C3AED' },
+  standby: { label: '대기', color: '#3B82F6' },
+};

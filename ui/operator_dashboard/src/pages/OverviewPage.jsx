@@ -12,6 +12,11 @@ import { generateDaySnapshot } from '../data/simulationData';
 import { alerts, recommendedActions } from '../data/alerts';
 import { usePmOrders } from '../lib/usePmOrders';
 import { publishOrder, decideOrder } from '../lib/pmSyncBus';
+import DecisionRecommendationPanel from '../components/DecisionRecommendationPanel';
+import { HeuristicExplainModal } from '../components/HeuristicExplainTable';
+import MapInsightsPanel from '../components/MapInsightsPanel';
+import ScenarioToggle from '../components/ScenarioToggle';
+import { OVERVIEW_SCENARIOS } from '../data/overviewScenarios';
 const statusBarColors = { running: '#16A34A', standby: '#6B7280', pm: '#7C3AED', warning: '#F59E0B', critical: '#DC2626' };
 
 const TRUCK_IDS = Array.from({ length: 25 }, (_, i) => `T${String(i + 1).padStart(2, '0')}`);
@@ -25,10 +30,14 @@ const PM_TYPES = [
 ];
 
 const PM_STATUS_CFG = {
-  requested: { label: '요청', color: '#2563EB', bg: '#EFF6FF' },
-  approved:  { label: '승인', color: '#16A34A', bg: '#DCFCE7' },
-  hold:      { label: '보류', color: '#D97706', bg: '#FEF3C7' },
-  rejected:  { label: '거절', color: '#DC2626', bg: '#FEE2E2' },
+  requested:   { label: '요청', color: '#2563EB', bg: '#EFF6FF' },
+  approved:    { label: '승인·전송', color: '#16A34A', bg: '#DCFCE7' },
+  accepted:    { label: '접수됨', color: '#0891B2', bg: '#ECFEFF' },
+  in_progress: { label: '작업 중', color: '#7C3AED', bg: '#F5F3FF' },
+  completed:   { label: '완료', color: '#16A34A', bg: '#DCFCE7' },
+  delayed:     { label: '지연', color: '#D97706', bg: '#FEF3C7' },
+  hold:        { label: '보류', color: '#D97706', bg: '#FEF3C7' },
+  rejected:    { label: '거절', color: '#DC2626', bg: '#FEE2E2' },
 };
 
 function PMWorkOrderLive({ orders }) {
@@ -461,7 +470,7 @@ function PMBayMini({ data }) {
   );
 }
 
-export default function OverviewPage({ timeSpeed = 1, onDecision, simDate, isLive }) {
+export default function OverviewPage({ timeSpeed = 1, resetNonce = 0, onDecision, simDate, isLive }) {
   // Use simulation snapshot for selected date, or live dashboardKpis
   const d = useMemo(() => {
     if (isLive || !simDate) return dashboardKpis;
@@ -492,46 +501,60 @@ export default function OverviewPage({ timeSpeed = 1, onDecision, simDate, isLiv
 
   const statusBarData = d.truckStatusDistribution;
   const totalTrucks = Object.values(statusBarData).reduce((a, b) => a + b, 0);
+  const [heuristicsOpen, setHeuristicsOpen] = useState(false);
+
+  // Scenario toggle: overrides headline KPIs + injects map warnings
+  const [scenarioId, setScenarioId] = useState('normal');
+  const scenario = OVERVIEW_SCENARIOS.find(s => s.id === scenarioId) || OVERVIEW_SCENARIOS[0];
+  const dd = { ...d, ...scenario.kpi };
 
   return (
     <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {/* Scenario toggle */}
+      <ScenarioToggle scenarioId={scenarioId} onChange={setScenarioId} />
+
       {/* KPI Row */}
       <div style={{ display: 'flex', gap: 16 }}>
-        <KpiCard label="Demand Fulfillment" value={`${d.demandFulfillment}%`} sublabel={`${d.completedLoads} / ${d.dailyDemand} loads`} color="#8A4931" icon={<Target size={20} />} definition="Completed loads / daily demand target" />
-        <KpiCard label="Available Trucks" value={d.availableTrucks} sublabel={`of ${d.totalTrucks} total`} color="#16A34A" icon={<Truck size={20} />} definition="Trucks not in PM or standby" />
-        <KpiCard label="Trucks in PM" value={d.trucksInPM} sublabel={`${d.activePM} active + ${d.queuedPM} queued`} color="#7C3AED" icon={<Wrench size={20} />} definition="Trucks currently in PM bay or queue" />
-        <KpiCard label="PM Cost" value={`₩${d.pmCostMKRW}M`} sublabel="Today shift total" icon={<DollarSign size={20} />} definition="Today shift maintenance cost" />
-        <KpiCard label="Risk Trucks" value={d.riskTrucks} sublabel="HI below 60%" color="#DC2626" icon={<AlertTriangle size={20} />} definition="Trucks with Health Index below 60%" />
+        <KpiCard label="Demand Fulfillment" value={`${dd.demandFulfillment}%`} sublabel={`${dd.completedLoads} / ${dd.dailyDemand} loads`} color="#8A4931" icon={<Target size={20} />} definition="Completed loads / daily demand target" />
+        <KpiCard label="Available Trucks" value={dd.availableTrucks} sublabel={`of ${dd.totalTrucks} total`} color="#16A34A" icon={<Truck size={20} />} definition="Trucks not in PM or standby" />
+        <KpiCard label="Trucks in PM" value={dd.trucksInPM} sublabel={`${dd.activePM} active + ${dd.queuedPM} queued`} color="#7C3AED" icon={<Wrench size={20} />} definition="Trucks currently in PM bay or queue" />
+        <KpiCard label="PM Cost" value={`₩${dd.pmCostMKRW}M`} sublabel="Today shift total" icon={<DollarSign size={20} />} definition="Today shift maintenance cost" />
+        <KpiCard label="Risk Trucks" value={dd.riskTrucks} sublabel="HI below 60%" color="#DC2626" icon={<AlertTriangle size={20} />} definition="Trucks with Health Index below 60%" />
       </div>
 
-      {/* Main content: Map + Decision panel */}
-      <div style={{ display: 'flex', gap: 20 }}>
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <MineMap timeSpeed={timeSpeed} />
-          <div style={{ display: 'flex', gap: 16 }}>
-            <div style={{ flex: 1 }}>
-              <Card style={{ padding: 16, height: '100%' }}>
-                <SectionHeader title="Demand vs Completed (Cumulative)" />
-                <ResponsiveContainer width="100%" height={200}>
-                  <ComposedChart data={demandChartData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
-                    <XAxis dataKey="hour" tick={{ fontSize: 10, fill: '#94A3B8' }} />
-                    <YAxis tick={{ fontSize: 10, fill: '#94A3B8' }} domain={[0, 110]} />
-                    <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid var(--border)' }} />
-                    <Area type="monotone" dataKey="demand" stroke="#94A3B8" strokeDasharray="6 3" fill="none" name="Demand" />
-                    <Area type="monotone" dataKey="completed" stroke="#8A4931" fill="#8A4931" fillOpacity={0.06} strokeWidth={2} name="Completed" dot={{ r: 3, fill: '#8A4931' }} />
-                  </ComposedChart>
-                </ResponsiveContainer>
-              </Card>
-            </div>
-            <div style={{ width: 240, display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <TruckStatusBar statusBarData={statusBarData} totalTrucks={totalTrucks} />
-              <PMBayMini data={d} />
-            </div>
-          </div>
+      {/* Decision Recommendation — what decision, which heuristic, why, how to act */}
+      <DecisionRecommendationPanel onDecision={onDecision} onShowHeuristics={() => setHeuristicsOpen(true)} />
+      <HeuristicExplainModal open={heuristicsOpen} onClose={() => setHeuristicsOpen(false)} />
+
+      {/* Main content: tall 3D map + status cards + Decision panel — equal height */}
+      <div style={{ display: 'flex', gap: 20, alignItems: 'stretch' }}>
+        {/* 3D map fills the row height (matches the Decision panel) and is narrower */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <MineMap key={`map-${resetNonce}`} timeSpeed={timeSpeed} fill />
+        </div>
+        {/* Status cards sit beside the map, narrowing it */}
+        <div style={{ width: 250, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <TruckStatusBar statusBarData={statusBarData} totalTrucks={totalTrucks} />
+          <PMBayMini data={d} />
         </div>
         <DecisionPanel onDecision={onDecision} />
       </div>
+
+      {/* Secondary content: demand chart + route insights, full width */}
+      <Card style={{ padding: 16 }}>
+        <SectionHeader title="Demand vs Completed (Cumulative)" />
+        <ResponsiveContainer width="100%" height={200}>
+          <ComposedChart data={demandChartData} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
+            <XAxis dataKey="hour" tick={{ fontSize: 10, fill: '#94A3B8' }} />
+            <YAxis tick={{ fontSize: 10, fill: '#94A3B8' }} domain={[0, 110]} />
+            <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid var(--border)' }} />
+            <Area type="monotone" dataKey="demand" stroke="#94A3B8" strokeDasharray="6 3" fill="none" name="Demand" />
+            <Area type="monotone" dataKey="completed" stroke="#8A4931" fill="#8A4931" fillOpacity={0.06} strokeWidth={2} name="Completed" dot={{ r: 3, fill: '#8A4931' }} />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </Card>
+      <MapInsightsPanel scenarioWarnings={scenario.warnings} />
     </div>
   );
 }

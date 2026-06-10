@@ -5,6 +5,7 @@ import Card from '../components/Card';
 import SectionHeader from '../components/SectionHeader';
 import StatusBadge from '../components/StatusBadge';
 import { loadDashboardSnapshots } from '../data/c5Snapshots';
+import { HeuristicExplainTable } from '../components/HeuristicExplainTable';
 
 const DATA_NONE = '데이터 없음';
 const policyColors = {
@@ -169,7 +170,7 @@ function ImprovementTable({ rows }) {
 
   return (
     <Card style={{ padding: 20 }}>
-      <SectionHeader title="H0 대비 개선율" />
+      <SectionHeader title="H0 순수 주기 PM 대비 개선율" />
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(360px, 1fr) minmax(320px, 0.9fr)', gap: 18, alignItems: 'stretch' }}>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
@@ -355,6 +356,12 @@ export default function HeuristicAnalysisPage() {
   return (
     <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 20 }}>
       <RecommendedPanel recommended={content.recommended} seedCount={analysis.seed_count} />
+      <Card style={{ padding: 20 }}>
+        <SectionHeader title="H0–H4 휴리스틱 설명" />
+        <div style={{ marginTop: 12 }}>
+          <HeuristicExplainTable />
+        </div>
+      </Card>
       <BestByKpi items={content.bestByKpi} />
       <ImprovementTable rows={content.improvement} />
       <StabilityTable rows={content.stability} />

@@ -12,8 +12,21 @@
 const CHANNEL = 'c5-pm-orders';
 const STORAGE_KEY = 'c5_pm_orders_v1';
 
-export type OrderStatus = 'requested' | 'approved' | 'hold' | 'rejected';
+// Operator-side decisions: requested → approved / hold / rejected.
+// Field-worker lifecycle (after approval): accepted → in_progress → completed,
+// plus delayed / rejected.
+export type OrderStatus =
+  | 'requested'
+  | 'approved'
+  | 'hold'
+  | 'rejected'
+  | 'accepted'
+  | 'in_progress'
+  | 'completed'
+  | 'delayed';
 export type Party = 'dashboard' | 'pm';
+
+export type RecommendedAction = 'Inspect' | 'Repair' | 'Replace' | 'Cooldown' | 'Hold';
 
 export interface PMWorkOrder {
   id: string;
@@ -28,6 +41,14 @@ export interface PMWorkOrder {
   decidedBy: Party | null;
   decidedAt: string | null;
   report: string | null;
+  // Decision context carried from the dashboard recommendation:
+  truckHI?: number | null;
+  tireHI?: number | null;
+  minTireHI?: number | null;
+  riskScore?: number | null;
+  recommendedAction?: RecommendedAction | null;
+  policy?: string | null;
+  operatorMessage?: string | null;
   createdAt: number;
   updatedAt: number;
 }
@@ -94,6 +115,15 @@ export interface NewOrderInput {
   estimatedDuration?: string;
   status?: OrderStatus;
   origin?: Party;
+  decidedBy?: Party | null;
+  decidedAt?: string | null;
+  truckHI?: number | null;
+  tireHI?: number | null;
+  minTireHI?: number | null;
+  riskScore?: number | null;
+  recommendedAction?: RecommendedAction | null;
+  policy?: string | null;
+  operatorMessage?: string | null;
 }
 
 export function publishOrder(order: NewOrderInput): PMWorkOrder {
@@ -109,9 +139,15 @@ export function publishOrder(order: NewOrderInput): PMWorkOrder {
     estimatedDuration: order.estimatedDuration || '-',
     status: order.status || 'requested',
     origin: order.origin || 'pm',
-    decidedBy: null,
-    decidedAt: null,
+    decidedBy: order.decidedBy ?? null,
+    decidedAt: order.decidedAt ?? null,
     report: null,
+    truckHI: order.truckHI ?? null,
+    tireHI: order.tireHI ?? null,
+    minTireHI: order.minTireHI ?? null,
+    riskScore: order.riskScore ?? null,
+    recommendedAction: order.recommendedAction ?? null,
+    policy: order.policy ?? null,
     createdAt: now,
     updatedAt: now,
   };
@@ -149,13 +185,34 @@ export function seedOrdersIfEmpty(seedOrders: NewOrderInput[]): void {
     estimatedDuration: o.estimatedDuration || '-',
     status: o.status || 'requested',
     origin: o.origin || 'dashboard',
-    decidedBy: null,
-    decidedAt: null,
+    decidedBy: o.decidedBy ?? null,
+    decidedAt: o.decidedAt ?? null,
     report: null,
+    truckHI: o.truckHI ?? null,
+    tireHI: o.tireHI ?? null,
+    minTireHI: o.minTireHI ?? null,
+    riskScore: o.riskScore ?? null,
+    recommendedAction: o.recommendedAction ?? null,
+    policy: o.policy ?? null,
+    operatorMessage: o.operatorMessage ?? null,
     createdAt: now - (seedOrders.length - i),
     updatedAt: now - (seedOrders.length - i),
   }));
   commit(entries);
+}
+
+// Field-worker lifecycle transition. Maps a worker action to the next status.
+export type WorkerAction = 'accept' | 'start' | 'complete' | 'delay' | 'reject';
+const WORKER_ACTION_STATUS: Record<WorkerAction, OrderStatus> = {
+  accept: 'accepted',
+  start: 'in_progress',
+  complete: 'completed',
+  delay: 'delayed',
+  reject: 'rejected',
+};
+
+export function workerAction(orderId: string, action: WorkerAction): void {
+  decideOrder(orderId, WORKER_ACTION_STATUS[action], 'pm');
 }
 
 export function clearOrders(): void {
