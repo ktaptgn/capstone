@@ -96,6 +96,42 @@ This changelog tracks the official direction changes for C5.1.
 - Added `getComponentHealthForTruck` which returns explicit component health when present, otherwise a deterministic per-tire/per-component breakdown derived from the truck's overall healthIndex (stable per truck).
 - Wired `FleetScreen` to the new helper so the existing 2D/3D toggle works for every truck.
 
+## 2026-06-04 / Decision Visibility Overhaul (Dashboard + PM App)
+
+Reframed the UI around operational decision-making per professor feedback (what decision / which heuristic / why / how the operator acts).
+
+- **P0 Decision Recommendation panel** (operator dashboard Overview): recommended policy (H0–H4, H3 best), per-truck recommendations with Truck HI / Tire HI / min tire HI / risk score / expected PM duration / recommended action (Inspect·Repair·Replace·Cooldown·Hold) / reason, and Approve PM / Hold / Reject / Send Message actions.
+- **P0 H0–H4 explanation table** (analysis page + modal): one-line definition, decision rule, expected benefit, weakness, representative KPI per heuristic.
+- **P0 dashboard→PM lifecycle**: extended `pmSyncBus` with HI fields + worker lifecycle (Accept/Start/Complete/Delay/Reject). Operator Approve creates a field work-order card; worker actions reflect back to the dashboard live, real-time.
+- **P0 map overlays**: each truck shows ID → destination (Shovel/Crusher/PM Bay/Standby/Cooldown), loaded/empty state (ore block vs default; PM-bound purple), health color + numeric HI, and a direction arrow — in both 2D and 3D.
+- **P1 simulation controls**: Reset / Play-Pause / Step / Speed x1·x2·x4 in the header, driving the map animation for presentation recording.
+- **P1 PM Decision Gate** on the PM Bay access road (2D + 3D), plus a Route Pressure & Warnings panel (traffic intensity, road wear index, collision/congestion + warning icons).
+- **P2 scenario toggle** (Normal / High Demand / Road Risk / PM Bay Bottleneck / Tire Failure Event) updating KPI cards + map warnings, and a Cross-industry Transfer page (helicopter, wind turbine, nuclear, ship/offshore, forestry) framing the system as a proxy DES decision-support model — explicitly not a real Escondida digital twin.
+
+## 2026-06-08 / Capstone Presentation Materials Pack
+
+- Added `presentation_materials/` as a structured presentation production pack, not a PowerPoint deck.
+- Copied current C5.1 source documents, configs, official policy summaries, analysis outputs, work-order samples, and replay logs into `presentation_materials/data/raw/`.
+- Generated slide outline, speaker notes, source manifest, presentation-ready tables, generated CSV summaries, and chart images for KPI comparison, CU cost breakdown, PM timing, virtual mine flow, system architecture, and heuristic concept mapping.
+- Used `outputs/c5_1/summary/policy_comparison.csv` as the official numeric comparison source and documented conflicts with smaller-scale secondary analysis tables.
+- Preserved C5.1 framing as a proxy DES with CU-based marginal cost; no RL, Drop Zone, operator dashboard, PM app, or dashboard-app integration work was added.
+
+## 2026-06-08 / Time-Periodic PM Comparison Experiment
+
+- Defined `H_TIME` as a non-optimized PM due-time comparison policy that triggers `PM_VEHICLE` from `pm_due_hours <= pm_due_threshold_hours`.
+- Added `H_PERIODIC`, a pure calendar-periodic PM baseline that triggers `PM_VEHICLE` on a fixed truck schedule every `periodic_pm_interval_days`.
+- Kept default C5.1 enabled policies as H0-H4, while allowing explicit sweeps that compare `H_PERIODIC`, `H_TIME`, and H0-H4 under the same seed and demand scenario.
+- Added tests for the `H_TIME` / `H_PERIODIC` policy contracts and generated separate experiment output sets under `outputs/c5_1/time_pm_comparison/` and `outputs/c5_1/periodic_pm_comparison/`.
+
+## 2026-06-10 / Policy Baseline Reassignment and Dashboard Analysis Fallback
+
+- Reassigned the former `H_PERIODIC` pure calendar-periodic PM policy as the official `H0` baseline.
+- Reassigned the former H0 PM due/Truck HI/Tire HI rule as the new `H1`.
+- Excluded the former H1 bottleneck-dispatch policy from the runnable policy registry while retaining its source for traceability.
+- Audited H0-H4 policy/config code for half-year or 180-day large-scale periodic truck PM. No such rule was present, so no half-year PM logic was removed.
+- Added a bundled `dashboardAnalysisSnapshot.json` fallback so the operator dashboard `휴리스틱 분석` tab renders when the single-file HTML is opened or shared without a JSON-serving web server.
+- Allowed the generated operator dashboard HTML in `html_build/` and `demo_package/` to be tracked for GitHub sharing, while keeping other distribution artifacts ignored.
+
 ---
 
 ## Current Official Version

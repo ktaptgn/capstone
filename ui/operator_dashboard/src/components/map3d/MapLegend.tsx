@@ -10,7 +10,9 @@ const LEGEND_ITEMS: Array<{
   { label: 'Queue Low', color: '#3B82F6', shape: 'ring' },
   { label: 'Queue High', color: '#EF4444', shape: 'ring' },
   { label: 'High Risk Route', color: '#DC2626', shape: 'line' },
-  { label: 'PM In Progress', color: '#7C3AED', shape: 'circle' },
+  { label: '적재 Loaded', color: '#3A2E25', shape: 'square' },
+  { label: '공차 Empty', color: '#CBD5E1', shape: 'square' },
+  { label: 'PM-bound', color: '#7C3AED', shape: 'circle' },
 ];
 
 export default function MapLegend() {

@@ -41,6 +41,7 @@ operations:
   target_queue_time_hours: 1.8
   high_demand_pressure: 0.70
   pm_due_threshold_hours: 12
+  periodic_pm_interval_days: 3
   pm_risk_threshold: 0.68
   cost_value_threshold: 0.15
   backpressure_queue_threshold_hours: 2.2

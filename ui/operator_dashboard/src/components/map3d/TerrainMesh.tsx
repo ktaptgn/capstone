@@ -1,82 +1,36 @@
 import { useMemo } from 'react';
+import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import type { C5OperationMap3DData, TerrainHeightRegion } from './map3dTypes';
+import type { C5OperationMap3DData } from './map3dTypes';
+import { getDetailTextures } from './proceduralTextures';
+import { TERRAIN_EXTEND as EXTEND, noise2D, elevationAt } from './terrainElevation';
 
+/* Sandy-khaki desert palette (replaces the old reddish clay tones) */
 const palette = {
-  base: '#B35F44',
-  slope: '#9E4935',
-  shadow: '#4D221B',
-  highlight: '#D07E61',
-  mountain: '#6B4F3A',   // rocky brown for high peaks
-  ridge: '#8B7355',      // lighter ridge color
+  base: '#C2B280',       // sand / khaki
+  slope: '#A6976A',      // shaded khaki slope
+  shadow: '#5F5639',     // deep crevice shadow
+  highlight: '#DACEA2',  // sun-bleached sand
+  mountain: '#8B7E5A',   // khaki-brown peaks
+  ridge: '#AEA078',      // lighter ridge
 };
 
 type TerrainMeshProps = {
   data: C5OperationMap3DData;
 };
 
-const EXTEND = 400;
-
-/** Simple pseudo-noise for mountain variation */
-function noise2D(x: number, z: number): number {
-  const s1 = Math.sin(x * 0.017 + z * 0.023) * 0.5;
-  const s2 = Math.sin(x * 0.031 - z * 0.019) * 0.3;
-  const s3 = Math.sin(x * 0.053 + z * 0.047) * 0.2;
-  return s1 + s2 + s3;
-}
-
-function elevationAt(
-  x: number,
-  z: number,
-  regions: TerrainHeightRegion[],
-  elevationScale: number,
-  baseHeight: number,
-  bw: number,
-  bd: number,
-): number {
-  if (x < 0 || x > bw || z < 0 || z > bd) {
-    // Distance from nearest boundary point
-    const cx = Math.max(0, Math.min(bw, x));
-    const cz = Math.max(0, Math.min(bd, z));
-    const dist = Math.sqrt((x - cx) ** 2 + (z - cz) ** 2);
-    const edgeH = elevationAt(cx, cz, regions, elevationScale, baseHeight, bw, bd);
-
-    // Mountains rise with distance from mine boundary → basin formation
-    const riseT = Math.min(dist / 280, 1);          // 0 at boundary → 1 at EXTEND
-    const riseCurve = riseT * riseT * (3 - 2 * riseT); // smooth hermite
-    const peakHeight = 90 + 50 * noise2D(x, z);     // varied mountain peaks
-    const ridgeNoise = 15 * noise2D(x * 1.8, z * 1.8); // secondary ridgeline noise
-    const mountainH = riseCurve * peakHeight + ridgeNoise * riseT;
-
-    // Blend from edge height to mountain height
-    const blendT = Math.min(dist / 40, 1);
-    return edgeH * (1 - blendT) + mountainH * blendT;
-  }
-
-  return regions.reduce((h, r) => {
-    const dx = x - r.center.x;
-    const dz = z - r.center.z;
-    const d = Math.sqrt(dx * dx + dz * dz);
-    const rad = r.radius ?? 95;
-    const fall = Math.max(0, 1 - d / Math.max(rad, 1));
-    const wf = fall * fall;
-
-    if (typeof r.height === 'number') {
-      const c = baseHeight + r.height * wf;
-      return Math.abs(c - baseHeight) > Math.abs(h - baseHeight) ? c : h;
-    }
-    return h + (r.elevation ?? 0) * wf * elevationScale;
-  }, baseHeight);
-}
-
 export default function TerrainMesh({ data }: TerrainMeshProps) {
+  const gl = useThree((s) => s.gl);
+  const detail = getDetailTextures(gl);
+
   const terrainGeo = useMemo(() => {
     const bw = data.scene.bounds.width;
     const bd = data.scene.bounds.height;
     const totalW = bw + EXTEND * 2;
     const totalD = bd + EXTEND * 2;
-    const seg = 80;
+    const seg = 100;
     const positions: number[] = [];
+    const uvs: number[] = [];
     const indices: number[] = [];
     const regions = data.terrain?.height_regions || [];
     const elScale = data.scene.elevationScale ?? 0.18;
@@ -88,6 +42,8 @@ export default function TerrainMesh({ data }: TerrainMeshProps) {
         const x = -EXTEND + (xi / seg) * totalW;
         const z = -EXTEND + (zi / seg) * totalD;
         positions.push(x, elevationAt(x, z, regions, elScale, baseH, bw, bd), z);
+        // Planar UVs across the whole terrain (texture .repeat tiles the detail)
+        uvs.push((x + EXTEND) / totalW, (z + EXTEND) / totalD);
       }
     }
 
@@ -101,6 +57,7 @@ export default function TerrainMesh({ data }: TerrainMeshProps) {
 
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
     geo.setIndex(indices);
     geo.computeVertexNormals();
 
@@ -137,6 +94,11 @@ export default function TerrainMesh({ data }: TerrainMeshProps) {
         if (sf > 0.25) c.lerp(slopeC, Math.min((sf - 0.25) * 2, 1));
         if (hr > 0.4) c.lerp(highC, (hr - 0.4) * 0.7);
         if (hr < 0.1) c.lerp(shadowC, (0.1 - hr) * 3);
+        // Organic multi-scale color mottling so the flat ground reads as sandy
+        // rock rather than a uniform clay slab.
+        const n = noise2D(px * 0.6, pz * 0.6) + 0.5 * noise2D(px * 1.7, pz * 1.7);
+        if (n > 0) c.lerp(shadowC, Math.min(n * 0.1, 0.16));
+        else c.lerp(highC, Math.min(-n * 0.08, 0.12));
       }
       colors.push(c.r, c.g, c.b);
     }
@@ -215,12 +177,21 @@ export default function TerrainMesh({ data }: TerrainMeshProps) {
 
   return (
     <group>
-      <mesh geometry={terrainGeo}>
-        <meshStandardMaterial vertexColors roughness={0.92} metalness={0} />
+      <mesh geometry={terrainGeo} receiveShadow castShadow>
+        <meshStandardMaterial
+          vertexColors
+          roughness={1}
+          metalness={0}
+          bumpMap={detail.terrainBump}
+          bumpScale={2.2}
+          roughnessMap={detail.terrainRough}
+          envMapIntensity={0.3}
+          dithering
+        />
       </mesh>
       <primitive object={boundaryLine} />
       <lineSegments geometry={gridGeo}>
-        <lineBasicMaterial color="#FFFFFF" opacity={0.08} transparent />
+        <lineBasicMaterial color="#DCE7F5" opacity={0.06} transparent />
       </lineSegments>
     </group>
   );

@@ -4,8 +4,8 @@ import { facilities, routes, truckMarkers } from '../data/mineMap';
 import C5OperationMap3D from './map3d/C5OperationMap3D';
 
 /* ── Colors matching 3D map ── */
-const TERRAIN_BG = '#B35F44';
-const ROAD_COLOR = '#36454F';
+const TERRAIN_BG = '#C2B280';   // sandy khaki
+const ROAD_COLOR = '#46331F';   // dark brown
 const GRID_COLOR = '#ffffff18';
 
 const statusColors = {
@@ -16,6 +16,31 @@ const statusColors = {
 const facilityHeaderColors = {
   shovel: '#16A34A', crusher: '#2563EB', pm_bay: '#7C3AED',
   standby: '#6B7280', dispatch: '#8A4931',
+};
+
+/* ── Load state visuals + per-truck destination/HI (2D) ── */
+const CARGO_2D = {
+  loaded:  { label: '적재', fill: '#3A2E25', text: '#fff' },
+  empty:   { label: '공차', fill: '#FFFFFF', text: '#334155' },
+  pm:      { label: 'PM',  fill: '#7C3AED', text: '#fff' },
+  standby: { label: '대기', fill: '#3B82F6', text: '#fff' },
+};
+const TRUCK_META = {
+  T01: { destId: 'crusher_1', cargo: 'loaded', hi: 88 },
+  T02: { destId: 'crusher_2', cargo: 'loaded', hi: 79 },
+  T05: { destId: 'crusher_2', cargo: 'loaded', hi: 72 },
+  T09: { destId: 'pm_bay',    cargo: 'pm',     hi: 66 },
+  T13: { destId: 'crusher_1', cargo: 'loaded', hi: 74 },
+  T03: { destId: 'shovel_a',  cargo: 'empty',  hi: 58 },
+  T07: { destId: 'pm_bay',    cargo: 'pm',     hi: 41 },
+  T12: { destId: 'standby',   cargo: 'standby',hi: 69 },
+  T15: { destId: 'pm_bay',    cargo: 'pm',     hi: 63 },
+};
+const FAC_BY_ID = Object.fromEntries(facilities.map(f => [f.id, f]));
+const DEST_LABEL = {
+  crusher_1: 'Crusher 1', crusher_2: 'Crusher 2',
+  shovel_a: 'Shovel A', shovel_b: 'Shovel B', shovel_c: 'Shovel C',
+  pm_bay: 'PM Bay', standby: 'Standby', cooldown: 'Cooldown',
 };
 
 /* ── 2D route interpolation ── */
@@ -156,15 +181,50 @@ function Map2DSVG({ truckPositions }) {
         );
       })}
 
+      {/* PM Decision Gate on the PM Bay access road */}
+      <g>
+        <line x1={494} y1={92} x2={506} y2={78} stroke="#7C3AED" strokeWidth={3} strokeLinecap="round" />
+        <circle cx={494} cy={92} r={2.6} fill="#7C3AED" />
+        <circle cx={506} cy={78} r={2.6} fill="#7C3AED" />
+        <rect x={476} y={62} width={56} height={11} rx={3} fill="#7C3AED" />
+        <text x={504} y={70.5} textAnchor="middle" fontSize={7} fill="#fff" fontWeight={700}>PM Gate</text>
+      </g>
+
       {truckPositions.map(t => {
         const col = statusColors[t.status] || '#6B7280';
+        const meta = TRUCK_META[t.truckId] || { destId: 'standby', cargo: 'empty', hi: null };
+        const cargo = CARGO_2D[meta.cargo] || CARGO_2D.empty;
+        const dest = FAC_BY_ID[meta.destId];
+        const destName = DEST_LABEL[meta.destId] || '';
+        // Direction arrow: point from truck toward its destination facility
+        const angleDeg = dest ? (Math.atan2(dest.y - t.y, dest.x - t.x) * 180) / Math.PI : 0;
         return (
           <g key={t.truckId}>
-            <circle cx={t.x} cy={t.y} r={10} fill="rgba(255,255,255,0.9)" stroke={col} strokeWidth={2.5} />
-            <circle cx={t.x + 5} cy={t.y - 5} r={3} fill={col} />
-            <text x={t.x} y={t.y + 3} textAnchor="middle" fontSize={6} fill={col} fontWeight={700}>
+            {/* destination label above */}
+            <g transform={`translate(${t.x}, ${t.y - 15})`}>
+              <rect x={-26} y={-9} width={52} height={12} rx={3} fill="rgba(15,23,42,0.82)" />
+              <text x={0} y={0} textAnchor="middle" fontSize={7} fill="#fff" fontWeight={700}>
+                {t.truckId} →{destName.replace('Crusher', 'C').replace('Shovel', 'S')}
+              </text>
+            </g>
+            {/* direction arrow toward destination */}
+            {meta.cargo !== 'standby' && (
+              <g transform={`rotate(${angleDeg} ${t.x} ${t.y})`}>
+                <polygon points={`${t.x + 13},${t.y - 3} ${t.x + 19},${t.y} ${t.x + 13},${t.y + 3}`} fill={col} />
+              </g>
+            )}
+            {/* truck marker: outer ring = health, inner fill = load state */}
+            <circle cx={t.x} cy={t.y} r={9} fill={cargo.fill} stroke={col} strokeWidth={2.5} />
+            <text x={t.x} y={t.y + 2.5} textAnchor="middle" fontSize={6.5} fill={cargo.text} fontWeight={700}>
               {t.truckId}
             </text>
+            {/* HI badge */}
+            {meta.hi != null && (
+              <g transform={`translate(${t.x + 11}, ${t.y + 9})`}>
+                <rect x={-2} y={-6} width={24} height={11} rx={3} fill="#fff" stroke={col} strokeWidth={0.7} />
+                <text x={10} y={2} textAnchor="middle" fontSize={7} fill={col} fontWeight={700}>{meta.hi}%</text>
+              </g>
+            )}
           </g>
         );
       })}
@@ -255,7 +315,7 @@ function WeatherPanel({ onClose }) {
   );
 }
 
-export default function MineMap({ timeSpeed = 1 }) {
+export default function MineMap({ timeSpeed = 1, fill = false }) {
   const [mapMode, setMapMode] = useState('3d');
   const [showWeather, setShowWeather] = useState(false);
   const [truckPositions, setTruckPositions] = useState(() =>
@@ -312,7 +372,7 @@ export default function MineMap({ timeSpeed = 1 }) {
   ];
 
   return (
-    <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 12, boxShadow: 'var(--shadow)', padding: 16, overflow: 'hidden', position: 'relative' }}>
+    <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 12, boxShadow: 'var(--shadow)', padding: 16, overflow: 'hidden', position: 'relative', ...(fill ? { height: '100%', display: 'flex', flexDirection: 'column' } : null) }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-main)' }}>Mine Operation Map</h3>
@@ -343,9 +403,9 @@ export default function MineMap({ timeSpeed = 1 }) {
       </div>
 
       {mapMode === '3d' ? (
-        <C5OperationMap3D timeSpeed={timeSpeed} />
+        <C5OperationMap3D timeSpeed={timeSpeed} fill={fill} />
       ) : (
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative', ...(fill ? { flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' } : null) }}>
           <Map2DSVG truckPositions={truckPositions} />
 
           {/* Satellite mode: weather button */}
@@ -370,10 +430,16 @@ export default function MineMap({ timeSpeed = 1 }) {
             <WeatherPanel onClose={() => setShowWeather(false)} />
           )}
 
-          <div style={{ display: 'flex', gap: 16, marginTop: 10, justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: 16, marginTop: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
             {[['Running','#22C55E'],['Warning','#F97316'],['Critical','#EF4444'],['PM','#7C3AED'],['Standby','#3B82F6']].map(([label, color]) => (
               <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--text-sub)' }}>
                 <span style={{ width: 8, height: 8, borderRadius: '50%', background: color }} /> {label}
+              </div>
+            ))}
+            <span style={{ width: 1, height: 12, background: 'var(--border)' }} />
+            {[['적재(loaded)','#3A2E25', true],['공차(empty)','#FFFFFF', false],['→ 목적지','transparent', false]].map(([label, fill, dark]) => (
+              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--text-sub)' }}>
+                <span style={{ width: 8, height: 8, borderRadius: 2, background: fill, border: dark ? 'none' : '1.5px solid #94A3B8' }} /> {label}
               </div>
             ))}
           </div>

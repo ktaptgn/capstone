@@ -1,18 +1,32 @@
 import { useMemo, useRef, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import operationMapData from '../../data/c5_operation_map_3d.json';
 import CameraPresets, { SceneCameraController } from './CameraPresets';
-import DispatchCompass from './DispatchCompass';
 import FacilityCube from './FacilityCube';
+import PMDecisionGate from './PMDecisionGate';
 import MapLegend from './MapLegend';
+import { getRouteMidpoint } from './map3dUtils';
 import MapOverlayLabel from './MapOverlayLabel';
 import QueueArea from './QueueArea';
 import RouteLine from './RouteLine';
 import TerrainMesh from './TerrainMesh';
 import TruckFleet from './TruckFleet';
+import SceneLighting from './SceneLighting';
+import PostFX from './PostFX';
+import { sampleElevation, minOperationalElevation } from './terrainElevation';
 import type { C5OperationMap3DData } from './map3dTypes';
+
+/* Clamp the camera so it can never drop below the terrain and look up through
+   the whole map from underground. */
+function CameraFloor({ minY }: { minY: number }) {
+  const camera = useThree((s) => s.camera);
+  useFrame(() => {
+    if (camera.position.y < minY) camera.position.y = minY;
+  });
+  return null;
+}
 
 const DISPATCH_AREA_IDS = new Set(['dispatch', 'service_zone', 'standby']);
 
@@ -90,16 +104,18 @@ function SkyDome({ timeSpeed = 1 }: { timeSpeed: number }) {
   return (
     <mesh ref={meshRef} position={[330, -50, 140]}>
       <sphereGeometry args={[800, 32, 24]} />
-      <meshBasicMaterial vertexColors side={THREE.BackSide} />
+      <meshBasicMaterial vertexColors side={THREE.BackSide} fog={false} />
     </mesh>
   );
 }
 
 type C5OperationMap3DProps = {
   timeSpeed?: number;
+  /** When true, the map fills its parent's height instead of a fixed 388px. */
+  fill?: boolean;
 };
 
-export default function C5OperationMap3D({ timeSpeed = 1 }: C5OperationMap3DProps) {
+export default function C5OperationMap3D({ timeSpeed = 1, fill = false }: C5OperationMap3DProps) {
   const data = operationMapData as C5OperationMap3DData;
   const [activePresetId, setActivePresetId] = useState(
     data.camera?.presets?.[0]?.id || 'overview',
@@ -117,7 +133,16 @@ export default function C5OperationMap3D({ timeSpeed = 1 }: C5OperationMap3DProp
     };
   }, [data.camera]);
 
-  const dispatchFacility = data.facilities.find((f) => f.id === 'dispatch');
+  // PM Decision Gate position: on the PM Bay access road (or near the bay).
+  const pmGatePos = useMemo<[number, number, number]>(() => {
+    const pmRoute = data.routes.find((r) => r.id === 'branch_pm_bay');
+    if (pmRoute && pmRoute.points?.length) {
+      const m = getRouteMidpoint(pmRoute);
+      return [m.x, m.y, m.z];
+    }
+    const bay = data.facilities.find((f) => f.id === 'pm_bay');
+    return bay ? [bay.position.x - 24, bay.position.y, bay.position.z + 24] : [500, 10, 80];
+  }, [data.routes, data.facilities]);
 
   // Pre-build CatmullRomCurve3 for each route so trucks can animate along them
   const routeCurves = useMemo(() => {
@@ -127,7 +152,7 @@ export default function C5OperationMap3D({ timeSpeed = 1 }: C5OperationMap3DProp
       if (!route.points || route.points.length < 2) continue;
       routeById.set(route.id, route);
       const pts = route.points.map(
-        (p: {x:number;y:number;z:number}) => new THREE.Vector3(p.x, p.y + 0.5, p.z),
+        (p: {x:number;y:number;z:number}) => new THREE.Vector3(p.x, sampleElevation(data, p.x, p.z), p.z),
       );
       const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.25);
       map.set(route.id, curve);
@@ -149,7 +174,7 @@ export default function C5OperationMap3D({ timeSpeed = 1 }: C5OperationMap3DProp
       for (const [segId, reversed] of def.segs) {
         const route = routeById.get(segId);
         if (!route?.points) continue;
-        let segPts = route.points.map((p: {x:number;y:number;z:number}) => new THREE.Vector3(p.x, p.y + 0.5, p.z));
+        let segPts = route.points.map((p: {x:number;y:number;z:number}) => new THREE.Vector3(p.x, sampleElevation(data, p.x, p.z), p.z));
         if (reversed) segPts = segPts.slice().reverse();
         // Skip first point if overlapping with previous segment's last point
         const start = allPts.length > 0 && segPts.length > 0 && allPts[allPts.length - 1].distanceTo(segPts[0]) < 25 ? 1 : 0;
@@ -161,7 +186,11 @@ export default function C5OperationMap3D({ timeSpeed = 1 }: C5OperationMap3DProp
     }
 
     return map;
-  }, [data.routes]);
+  }, [data]);
+
+  // Terrain height sampler so roads hug the ground; camera floor = lowest ground.
+  const elevation = useMemo(() => (x: number, z: number) => sampleElevation(data, x, z), [data]);
+  const groundFloorY = useMemo(() => minOperationalElevation(data) + 3, [data]);
 
   // Reassign trucks to compound routes for full road traversal
   const mappedTrucks = useMemo(() => {
@@ -198,7 +227,7 @@ export default function C5OperationMap3D({ timeSpeed = 1 }: C5OperationMap3DProp
   }
 
   return (
-    <div>
+    <div style={fill ? { flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' } : undefined}>
       <div
         style={{
           display: 'flex',
@@ -234,35 +263,35 @@ export default function C5OperationMap3D({ timeSpeed = 1 }: C5OperationMap3DProp
 
       <div
         style={{
-          height: 388,
+          ...(fill ? { flex: 1, minHeight: 320 } : { height: 388 }),
           borderRadius: 8,
           overflow: 'hidden',
           border: '1px solid #E2E8F0',
           background: '#EEF2F7',
         }}
       >
-        <Canvas camera={initialCamera} dpr={[1, 1.8]}>
+        <Canvas
+          shadows
+          camera={initialCamera}
+          dpr={[1, 1.6]}
+          gl={{ antialias: false, toneMapping: THREE.NoToneMapping }}
+        >
+          <fog attach="fog" args={['#cabfa3', 380, 1350]} />
           <SkyDome timeSpeed={timeSpeed} />
-          <ambientLight intensity={0.62} />
-          <directionalLight position={[110, 220, 80]} intensity={1.1} />
+          <SceneLighting
+            center={[data.scene.bounds.width / 2, data.scene.bounds.height / 2]}
+            shadowExtent={420}
+          />
           <TerrainMesh data={data} />
           {data.routes.map((route) => (
-            <RouteLine key={route.id} route={route} />
+            <RouteLine key={route.id} route={route} elevation={elevation} />
           ))}
           {data.facilities
             .filter((f) => !DISPATCH_AREA_IDS.has(f.id))
             .map((facility) => (
               <FacilityCube key={facility.id} facility={facility} />
             ))}
-          {dispatchFacility && (
-            <DispatchCompass
-              position={[
-                dispatchFacility.position.x,
-                dispatchFacility.position.y + 1.5,
-                dispatchFacility.position.z,
-              ]}
-            />
-          )}
+          <PMDecisionGate position={pmGatePos} />
           {data.queueAreas.map((area) => (
             <QueueArea key={area.id} area={area} />
           ))}
@@ -283,17 +312,20 @@ export default function C5OperationMap3D({ timeSpeed = 1 }: C5OperationMap3DProp
             zoomSpeed={0.35}
             minDistance={data.camera.minZoom}
             maxDistance={data.camera.maxZoom}
+            maxPolarAngle={Math.PI * 0.49}
             mouseButtons={{
               LEFT: THREE.MOUSE.ROTATE,
               MIDDLE: THREE.MOUSE.DOLLY,
               RIGHT: THREE.MOUSE.PAN,
             }}
           />
+          <CameraFloor minY={groundFloorY} />
           <SceneCameraController
             data={data}
             activePresetId={activePresetId}
             controlsRef={controlsRef}
           />
+          <PostFX />
         </Canvas>
       </div>
       <MapLegend />

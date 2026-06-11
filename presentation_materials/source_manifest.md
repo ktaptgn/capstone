@@ -1,0 +1,50 @@
+# Source Manifest
+
+| File | Original Path | Copied Path | Role | Used In Slide Section | Notes |
+| --- | --- | --- | --- | --- | --- |
+| c5_1.yaml | configs/c5_1.yaml | presentation_materials/data/raw/configs/c5_1.yaml | simulation/config parameter source | 5-6 | Used for spec and CU settings. |
+| cost_model_c5_1.yaml | configs/cost_model_c5_1.yaml | presentation_materials/data/raw/configs/cost_model_c5_1.yaml | simulation/config parameter source | 5-6 | Used for spec and CU settings. |
+| maintenance_c5_1.yaml | configs/maintenance_c5_1.yaml | presentation_materials/data/raw/configs/maintenance_c5_1.yaml | simulation/config parameter source | 5-6 | Used for spec and CU settings. |
+| C5_1_FINAL_RESULT_SUMMARY.md | docs/c5_1/C5_1_FINAL_RESULT_SUMMARY.md | presentation_materials/data/raw/docs/c5_1/C5_1_FINAL_RESULT_SUMMARY.md | C5.1 implementation spec | 3-8 | Used for policy/log/visualization wording. |
+| C5_1_HEURISTIC_COMPARISON_ANALYSIS.md | docs/c5_1/C5_1_HEURISTIC_COMPARISON_ANALYSIS.md | presentation_materials/data/raw/docs/c5_1/C5_1_HEURISTIC_COMPARISON_ANALYSIS.md | C5.1 implementation spec | 3-8 | Used for policy/log/visualization wording. |
+| C5_1_LOG_SCHEMA.md | docs/c5_1/C5_1_LOG_SCHEMA.md | presentation_materials/data/raw/docs/c5_1/C5_1_LOG_SCHEMA.md | C5.1 implementation spec | 3-8 | Used for policy/log/visualization wording. |
+| C5_1_POLICY_SPEC.md | docs/c5_1/C5_1_POLICY_SPEC.md | presentation_materials/data/raw/docs/c5_1/C5_1_POLICY_SPEC.md | C5.1 implementation spec | 3-8 | Used for policy/log/visualization wording. |
+| C5_1_PRESENTATION_RESULT_SUMMARY.md | docs/c5_1/C5_1_PRESENTATION_RESULT_SUMMARY.md | presentation_materials/data/raw/docs/c5_1/C5_1_PRESENTATION_RESULT_SUMMARY.md | C5.1 implementation spec | 3-8 | Used for policy/log/visualization wording. |
+| C5_1_VISUALIZATION_SPEC.md | docs/c5_1/C5_1_VISUALIZATION_SPEC.md | presentation_materials/data/raw/docs/c5_1/C5_1_VISUALIZATION_SPEC.md | C5.1 implementation spec | 3-8 | Used for policy/log/visualization wording. |
+| 03_EVIDENCE_AND_SOURCE_REGISTER.md | docs/source/03_EVIDENCE_AND_SOURCE_REGISTER.md | presentation_materials/data/raw/docs/source/03_EVIDENCE_AND_SOURCE_REGISTER.md | source-of-truth document | 1-15 | Read before generated content. |
+| 04_PROJECT_CHANGELOG.md | docs/source/04_PROJECT_CHANGELOG.md | presentation_materials/data/raw/docs/source/04_PROJECT_CHANGELOG.md | source-of-truth document | 1-15 | Read before generated content. |
+| C5_ALGORITHM_EQUATION_IMPLEMENTATION_ADDENDUM.md | docs/source/C5_ALGORITHM_EQUATION_IMPLEMENTATION_ADDENDUM.md | presentation_materials/data/raw/docs/source/C5_ALGORITHM_EQUATION_IMPLEMENTATION_ADDENDUM.md | source-of-truth document | 1-15 | Read before generated content. |
+| C5_CAPSTONE_AGENT_BRIEF.md | docs/source/C5_CAPSTONE_AGENT_BRIEF.md | presentation_materials/data/raw/docs/source/C5_CAPSTONE_AGENT_BRIEF.md | source-of-truth document | 1-15 | Read before generated content. |
+| C5_COST_AND_DEMAND_MODEL_v2.md | docs/source/C5_COST_AND_DEMAND_MODEL_v2.md | presentation_materials/data/raw/docs/source/C5_COST_AND_DEMAND_MODEL_v2.md | source-of-truth document | 1-15 | Read before generated content. |
+| C5_DOCUMENTATION_INDEX_v2.md | docs/source/C5_DOCUMENTATION_INDEX_v2.md | presentation_materials/data/raw/docs/source/C5_DOCUMENTATION_INDEX_v2.md | source-of-truth document | 1-15 | Read before generated content. |
+| C5_PARAMETER_DEFENSE_TABLE_v2.md | docs/source/C5_PARAMETER_DEFENSE_TABLE_v2.md | presentation_materials/data/raw/docs/source/C5_PARAMETER_DEFENSE_TABLE_v2.md | source-of-truth document | 1-15 | Read before generated content. |
+| C5_PM_BAY_AND_TIME_RISK_DEFENSE.md | docs/source/C5_PM_BAY_AND_TIME_RISK_DEFENSE.md | presentation_materials/data/raw/docs/source/C5_PM_BAY_AND_TIME_RISK_DEFENSE.md | source-of-truth document | 1-15 | Read before generated content. |
+| dashboard_analysis.json | outputs/c5_1/analysis/dashboard_analysis.json | presentation_materials/data/raw/outputs/c5_1/analysis/dashboard_analysis.json | secondary analysis output | 9-11 | Used as interpretation aid; conflicts are warned. |
+| h0_improvement_table.csv | outputs/c5_1/analysis/h0_improvement_table.csv | presentation_materials/data/raw/outputs/c5_1/analysis/h0_improvement_table.csv | secondary analysis output | 9-11 | Used as interpretation aid; conflicts are warned. |
+| policy_kpi_summary.csv | outputs/c5_1/analysis/policy_kpi_summary.csv | presentation_materials/data/raw/outputs/c5_1/analysis/policy_kpi_summary.csv | secondary analysis output | 9-11 | Used as interpretation aid; conflicts are warned. |
+| policy_ranking_table.csv | outputs/c5_1/analysis/policy_ranking_table.csv | presentation_materials/data/raw/outputs/c5_1/analysis/policy_ranking_table.csv | secondary analysis output | 9-11 | Used as interpretation aid; conflicts are warned. |
+| policy_stability_table.csv | outputs/c5_1/analysis/policy_stability_table.csv | presentation_materials/data/raw/outputs/c5_1/analysis/policy_stability_table.csv | secondary analysis output | 9-11 | Used as interpretation aid; conflicts are warned. |
+| policy_tradeoff_notes.md | outputs/c5_1/analysis/policy_tradeoff_notes.md | presentation_materials/data/raw/outputs/c5_1/analysis/policy_tradeoff_notes.md | secondary analysis output | 9-11 | Used as interpretation aid; conflicts are warned. |
+| pytest_dashboard.md | outputs/c5_1/analysis/pytest_dashboard.md | presentation_materials/data/raw/outputs/c5_1/analysis/pytest_dashboard.md | secondary analysis output | 9-11 | Used as interpretation aid; conflicts are warned. |
+| pytest_presentation.md | outputs/c5_1/analysis/pytest_presentation.md | presentation_materials/data/raw/outputs/c5_1/analysis/pytest_presentation.md | secondary analysis output | 9-11 | Used as interpretation aid; conflicts are warned. |
+| pytest_report.md | outputs/c5_1/analysis/pytest_report.md | presentation_materials/data/raw/outputs/c5_1/analysis/pytest_report.md | secondary analysis output | 9-11 | Used as interpretation aid; conflicts are warned. |
+| H0_seed_1.json | outputs/c5_1/logs/H0_seed_1.json | presentation_materials/data/raw/outputs/c5_1/logs/H0_seed_1.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H0_seed_2.json | outputs/c5_1/logs/H0_seed_2.json | presentation_materials/data/raw/outputs/c5_1/logs/H0_seed_2.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H0_seed_3.json | outputs/c5_1/logs/H0_seed_3.json | presentation_materials/data/raw/outputs/c5_1/logs/H0_seed_3.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H1_seed_1.json | outputs/c5_1/logs/H1_seed_1.json | presentation_materials/data/raw/outputs/c5_1/logs/H1_seed_1.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H1_seed_2.json | outputs/c5_1/logs/H1_seed_2.json | presentation_materials/data/raw/outputs/c5_1/logs/H1_seed_2.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H1_seed_3.json | outputs/c5_1/logs/H1_seed_3.json | presentation_materials/data/raw/outputs/c5_1/logs/H1_seed_3.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H2_seed_1.json | outputs/c5_1/logs/H2_seed_1.json | presentation_materials/data/raw/outputs/c5_1/logs/H2_seed_1.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H2_seed_2.json | outputs/c5_1/logs/H2_seed_2.json | presentation_materials/data/raw/outputs/c5_1/logs/H2_seed_2.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H2_seed_3.json | outputs/c5_1/logs/H2_seed_3.json | presentation_materials/data/raw/outputs/c5_1/logs/H2_seed_3.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H3_seed_1.json | outputs/c5_1/logs/H3_seed_1.json | presentation_materials/data/raw/outputs/c5_1/logs/H3_seed_1.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H3_seed_2.json | outputs/c5_1/logs/H3_seed_2.json | presentation_materials/data/raw/outputs/c5_1/logs/H3_seed_2.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H3_seed_3.json | outputs/c5_1/logs/H3_seed_3.json | presentation_materials/data/raw/outputs/c5_1/logs/H3_seed_3.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H4_seed_1.json | outputs/c5_1/logs/H4_seed_1.json | presentation_materials/data/raw/outputs/c5_1/logs/H4_seed_1.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H4_seed_2.json | outputs/c5_1/logs/H4_seed_2.json | presentation_materials/data/raw/outputs/c5_1/logs/H4_seed_2.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| H4_seed_3.json | outputs/c5_1/logs/H4_seed_3.json | presentation_materials/data/raw/outputs/c5_1/logs/H4_seed_3.json | policy replay log | 10 | Used to derive PM count, downtime, and PM timing. |
+| c5_1_policy_report.md | outputs/c5_1/summary/c5_1_policy_report.md | presentation_materials/data/raw/outputs/c5_1/summary/c5_1_policy_report.md | supporting source | N/A | Copied as evidence. |
+| policy_comparison.csv | outputs/c5_1/summary/policy_comparison.csv | presentation_materials/data/raw/outputs/c5_1/summary/policy_comparison.csv | official 365-day policy result source | 9-11 | Preferred numeric result table. |
+| policy_comparison.json | outputs/c5_1/summary/policy_comparison.json | presentation_materials/data/raw/outputs/c5_1/summary/policy_comparison.json | official 365-day policy result source | 9-11 | Preferred numeric result table. |
+| pm_feedback_log.json | outputs/c5_1/work_orders/pm_feedback_log.json | presentation_materials/data/raw/outputs/c5_1/work_orders/pm_feedback_log.json | supporting source | N/A | Copied as evidence. |
+| work_orders_H3_seed1.json | outputs/c5_1/work_orders/work_orders_H3_seed1.json | presentation_materials/data/raw/outputs/c5_1/work_orders/work_orders_H3_seed1.json | supporting source | N/A | Copied as evidence. |

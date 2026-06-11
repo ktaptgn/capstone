@@ -1,0 +1,7 @@
+policy_id,composite_score,total_cost_rank,total_cost,demand_fulfillment_rate_rank,demand_fulfillment_rate,unmet_demand_rank,unmet_demand,total_downtime_rank,total_downtime,queue_time_rank,queue_time,average_available_trucks_rank,average_available_trucks,pm_cost_rank,pm_cost
+H_TIME,0.88,1,1020.281733,1,0.981602,1,121.333333,3,868.0,5,2.546726,1,3.5,3,325.5
+H3,0.66,2,1724.748667,2,0.970774,2,192.666667,6,1431.333333,6,2.726007,1,3.5,6,605.833333
+H0,0.6,3,1858.648,3,0.94726,3,347.666667,5,1250.0,3,2.276808,1,3.5,5,520.833333
+H2,0.46,4,3339.374,4,0.814993,4,1219.333333,4,966.0,4,2.324171,1,3.5,4,402.666667
+H1,0.44,5,7062.531333,5,0.498415,5,3306.0,1,481.333333,1,2.215,1,3.5,1,200.666667
+H4,0.44,5,7062.531333,5,0.498415,5,3306.0,1,481.333333,1,2.215,1,3.5,1,200.666667

@@ -9,6 +9,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from mine_env.config_c5_1 import load_c5_1_config, project_root_from_config
+from mine_env.policies import POLICY_REGISTRY
 from mine_env.simulator_c5_1 import run_policy_sweep
 
 
@@ -26,10 +27,10 @@ def main() -> None:
     config = load_c5_1_config(args.config)
     root = project_root_from_config(args.config)
     policies = args.policies or list(config["policies"]["enabled"])
-    enabled = set(config["policies"]["enabled"])
-    unsupported = [policy for policy in policies if policy not in enabled]
+    supported = set(POLICY_REGISTRY)
+    unsupported = [policy for policy in policies if policy not in supported]
     if unsupported:
-        raise ValueError(f"Policies are not enabled in config: {unsupported}")
+        raise ValueError(f"Unknown C5.1 policies: {unsupported}")
 
     log_dir = root / Path(config["outputs"]["log_dir"])
     summary_dir = root / Path(config["outputs"]["summary_dir"])

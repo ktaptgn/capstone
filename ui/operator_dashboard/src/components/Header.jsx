@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import { Bell, Download, Thermometer, Play, Moon, Sun, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Bell, Download, Thermometer, Moon, Sun, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { generateDaySnapshot, formatDate } from '../data/simulationData';
+import SimulationControls from './SimulationControls';
 
 const pageNames = {
   overview: '전체 현황',
@@ -9,14 +10,8 @@ const pageNames = {
   decisions: '정책 결정 내역',
   analysis: '휴리스틱 분석',
   scenario: '시나리오 재생',
+  transfer: '산업 확장성 (Cross-industry Transfer)',
 };
-
-const TIME_SPEEDS = [
-  { label: '실시간', value: 1 },
-  { label: '2x', value: 2 },
-  { label: '4x', value: 4 },
-  { label: '10x', value: 10 },
-];
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
 const MONTHS_KR = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
@@ -116,8 +111,7 @@ function CalendarPopup({ selectedDate, onSelect, onClose }) {
   );
 }
 
-export default function Header({ activePage, timeSpeed = 1, onTimeSpeedChange, darkMode = false, onDarkModeToggle, simDate, onSimDateChange, isLive, onSetLive }) {
-  const setTimeSpeed = onTimeSpeedChange || (() => {});
+export default function Header({ activePage, timeSpeed = 1, darkMode = false, onDarkModeToggle, simDate, onSimDateChange, isLive, onSetLive, playing = true, onPlayPause, onStep, onSpeedChange, onReset }) {
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   // Use simulation data for the selected date, or live data
@@ -134,7 +128,7 @@ export default function Header({ activePage, timeSpeed = 1, onTimeSpeedChange, d
   const handleLiveClick = () => {
     if (onSetLive) onSetLive(true);
     if (onSimDateChange) onSimDateChange(new Date());
-    setTimeSpeed(1);
+    if (onSpeedChange) onSpeedChange(1);
   };
 
   return (
@@ -147,33 +141,15 @@ export default function Header({ activePage, timeSpeed = 1, onTimeSpeedChange, d
         {pageNames[activePage]}
       </h1>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-        {/* Time acceleration controls */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 2,
-          border: '1px solid var(--border)', borderRadius: 8, padding: 2,
-          background: darkMode ? 'var(--bg-page)' : '#F8FAFC',
-        }}>
-          <Play size={12} style={{ marginLeft: 6, marginRight: 4, color: 'var(--text-sub)' }} />
-          {TIME_SPEEDS.map(speed => {
-            const isActive = speed.value === 1 ? (timeSpeed === 1 && isLive) : timeSpeed === speed.value;
-            return (
-              <button
-                key={speed.value}
-                onClick={() => speed.value === 1 ? handleLiveClick() : setTimeSpeed(speed.value)}
-                style={{
-                  padding: '3px 8px', borderRadius: 6, border: 'none',
-                  fontSize: 10, fontWeight: 700, cursor: 'pointer',
-                  fontFamily: 'inherit',
-                  background: isActive ? '#8A4931' : 'transparent',
-                  color: isActive ? '#fff' : 'var(--text-sub)',
-                  transition: 'all 0.15s',
-                }}
-              >
-                {speed.label}
-              </button>
-            );
-          })}
-        </div>
+        {/* Simulation transport controls (presentation recording) */}
+        <SimulationControls
+          playing={playing}
+          speed={timeSpeed}
+          onPlayPause={onPlayPause}
+          onStep={onStep}
+          onSpeedChange={onSpeedChange}
+          onReset={onReset}
+        />
 
         <span style={{
           fontSize: 11, fontWeight: 600, color: '#8A4931',

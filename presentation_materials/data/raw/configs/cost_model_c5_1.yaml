@@ -1,0 +1,27 @@
+cost_model:
+  unit: normalized_cu
+
+  runtime_fixed_pct:
+    personnel: 13.8
+    royalty: 9.7
+    transport: 6.2
+
+  controllable_variable_pct:
+    raw_materials_consumables: 17.8
+    third_party_goods_supplies: 5.4
+
+  year_end_accounting_pct:
+    depreciation_impairment: 25.0
+    miscellaneous: 5.5
+
+  excluded_or_zero:
+    outsourcing: true
+
+  event_costs:
+    pm_tire: 1.0
+    pm_vehicle_balanced: 1.5
+    pm_vehicle_fast_expensive: 2.0
+    pm_vehicle_slow_cheap: 0.8
+    unmet_demand_penalty_per_load: 2.0
+    downtime_cost_per_hour: 0.5
+    degradation_cost_per_hi_loss: 0.2

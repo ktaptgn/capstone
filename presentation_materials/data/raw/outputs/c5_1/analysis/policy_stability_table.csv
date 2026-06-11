@@ -1,0 +1,6 @@
+policy_id,total_cost_mean,total_cost_std,demand_fulfillment_rate_std,unmet_demand_std,total_downtime_std,queue_time_std,stability_label
+H4,985.0,7.071068,0.003536,3.535534,1.414214,0.035355,strong_and_stable
+H3,910.0,14.142136,0.003536,3.535534,2.12132,0.035355,strong_and_stable
+H1,960.0,14.142136,0.007071,7.071068,1.414214,0.035355,strong_and_stable
+H2,1090.0,14.142136,0.007071,7.071068,1.414214,0.035355,consistently_weak
+H0,1020.0,28.284271,0.007071,7.071068,2.828427,0.070711,weak_and_variable

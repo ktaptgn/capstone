@@ -66,8 +66,8 @@ The project handles the following operational question:
 
 | Policy | Name | Purpose |
 |---|---|---|
-| H0 | Baseline | Existing/simple dispatch and PM due rule |
-| H1 | Bottleneck Dispatch | Reduce queue and processing bottleneck |
+| H0 | Periodic PM Baseline | Pure calendar-periodic PM comparison baseline |
+| H1 | Due / Health PM | Former H0 PM due and HI rule |
 | H2 | PM Risk Priority | Prioritize PM using HI, tire HI, PM due, and operating pressure |
 | H3 | Cost Unit Value | Choose actions by expected value and cost |
 | H4 | Flow / Backpressure | Adjust dispatch using whole-system flow pressure |
