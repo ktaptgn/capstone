@@ -1,0 +1,99 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+
+:root {
+  --primary: #8A4931;
+  --primary-dark: #7C2D12;
+  --primary-soft: #F3E7E2;
+  --primary-hover: #9B5A42;
+
+  --critical: #DC2626;
+  --critical-bg: #FEF2F2;
+  --critical-border: #FECACA;
+  --warning: #F59E0B;
+  --warning-bg: #FFFBEB;
+  --warning-border: #FDE68A;
+  --in-progress: #7C3AED;
+  --in-progress-bg: #F5F3FF;
+  --in-progress-border: #DDD6FE;
+  --available: #16A34A;
+  --available-bg: #F0FDF4;
+  --available-border: #BBF7D0;
+  --standby: #6B7280;
+  --standby-bg: #F9FAFB;
+  --standby-border: #E5E7EB;
+  --info: #2563EB;
+  --info-bg: #EFF6FF;
+  --info-border: #BFDBFE;
+
+  --text-main: #1E293B;
+  --text-body: #334155;
+  --text-sub: #64748B;
+  --text-muted: #94A3B8;
+
+  --bg-page: #F3F6FA;
+  --bg-card: #FFFFFF;
+  --border: #E2E8F0;
+  --divider: #F1F5F9;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.04);
+
+  font-family: 'Pretendard Variable', 'Pretendard', 'Segoe UI', 'Apple SD Gothic Neo', system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-page);
+  color: var(--text-body);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+  border: none;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+
+/* ── Dark mode ── */
+.dark {
+  --text-main: #E2E8F0;
+  --text-body: #CBD5E1;
+  --text-sub: #94A3B8;
+  --text-muted: #64748B;
+
+  --bg-page: #0F172A;
+  --bg-card: #1E293B;
+  --border: #334155;
+  --divider: #1E293B;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3);
+
+  --primary-soft: #3D2520;
+  --primary-hover: #C97A5F;
+
+  --critical-bg: rgba(220,38,38,0.12);
+  --critical-border: #7F1D1D;
+  --warning-bg: rgba(245,158,11,0.12);
+  --warning-border: #78350F;
+  --in-progress-bg: rgba(124,58,237,0.12);
+  --in-progress-border: #4C1D95;
+  --available-bg: rgba(22,163,74,0.12);
+  --available-border: #14532D;
+  --standby-bg: rgba(107,114,128,0.12);
+  --standby-border: #374151;
+  --info-bg: rgba(37,99,235,0.12);
+  --info-border: #1E3A8A;
+}
+
+.dark ::-webkit-scrollbar-thumb { background: #475569; }

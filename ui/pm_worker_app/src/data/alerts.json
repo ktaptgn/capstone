@@ -1,0 +1,56 @@
+[
+  {
+    "id": "alert001",
+    "type": "critical",
+    "title": "PM 지연 — T07",
+    "message": "T07 타이어 PM이 지연되었습니다. Front Left Tire Health Index가 32%까지 낮아져 즉시 PM이 필요합니다.",
+    "timestamp": "2026-05-18T09:30:00",
+    "truckId": "T07",
+    "read": false
+  },
+  {
+    "id": "alert002",
+    "type": "warning",
+    "title": "PM 오늘 이동 — T03",
+    "message": "T03 예방 PM이 오늘 14:00로 이동되었습니다. 타이어 마모가 관찰 기준에 접근했습니다.",
+    "timestamp": "2026-05-18T08:15:00",
+    "truckId": "T03",
+    "read": false
+  },
+  {
+    "id": "alert003",
+    "type": "completed",
+    "title": "PM 완료 — T11",
+    "message": "T11 타이어 점검이 완료되었습니다. 소요시간: 1h 10m. 모든 타이어가 정상 범위입니다.",
+    "timestamp": "2026-05-17T16:30:00",
+    "truckId": "T11",
+    "read": true
+  },
+  {
+    "id": "alert004",
+    "type": "warning",
+    "title": "추가 정비 필요 — T08",
+    "message": "T08 구동부 PM 중 추가 이슈가 확인되었습니다. 수리는 05/19로 예정되었습니다. Health Index: 56%.",
+    "timestamp": "2026-05-15T14:20:00",
+    "truckId": "T08",
+    "read": true
+  },
+  {
+    "id": "alert005",
+    "type": "info",
+    "title": "일정 변경 — T12",
+    "message": "근무조 변경으로 T12 점검이 오늘 16:30으로 조정되었습니다.",
+    "timestamp": "2026-05-18T07:45:00",
+    "truckId": "T12",
+    "read": false
+  },
+  {
+    "id": "alert006",
+    "type": "critical",
+    "title": "HI 기준 미달 — T15",
+    "message": "T15 전체 Health Index가 45%까지 낮아졌습니다. 여러 타이어가 주의 범위이며 11:05에 점검을 시작했습니다.",
+    "timestamp": "2026-05-18T10:50:00",
+    "truckId": "T15",
+    "read": false
+  }
+]

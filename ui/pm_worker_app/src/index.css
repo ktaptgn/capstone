@@ -1,0 +1,98 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@import "tailwindcss";
+
+@theme {
+  --color-sanguine: #8A4931;
+  --color-sanguine-dark: #7C2D12;
+  --color-sanguine-soft: #F3E7E2;
+  --color-surface: #FFFFFF;
+  --color-background: #F8FAFC;
+  --color-text-main: #111827;
+  --color-text-sub: #64748B;
+  --color-border: #E5E7EB;
+  --color-critical: #DC2626;
+  --color-warning: #F59E0B;
+  --color-pm-progress: #7C3AED;
+  --color-success: #16A34A;
+  --color-standby: #6B7280;
+}
+
+body {
+  margin: 0;
+  background: #1e293b;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 16px 0;
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+#root {
+  width: 390px;
+  max-width: 390px;
+  height: 844px;
+  max-height: 844px;
+  background: #F8FAFC;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+/* ── Dark mode overrides ── */
+.dark #root { background: #0F172A; }
+
+.dark .bg-white { background-color: #1E293B !important; }
+.dark .bg-gray-50 { background-color: #1a2332 !important; }
+.dark .bg-gray-100 { background-color: #1E293B !important; }
+.dark .bg-gray-200 { background-color: #334155 !important; }
+.dark .bg-green-50 { background-color: rgba(22,163,74,0.15) !important; }
+.dark .bg-yellow-50 { background-color: rgba(245,158,11,0.15) !important; }
+.dark .bg-purple-50 { background-color: rgba(124,58,237,0.12) !important; }
+.dark .bg-purple-50\/50 { background-color: rgba(124,58,237,0.1) !important; }
+
+.dark .text-text-main { color: #E2E8F0 !important; }
+.dark .text-text-sub { color: #94A3B8 !important; }
+.dark .text-\[\#334155\] { color: #CBD5E1 !important; }
+
+/* Sanguine accent: brighten in dark mode for contrast */
+.dark .text-sanguine { color: #D4845C !important; }
+
+.dark .border-border { border-color: #334155 !important; }
+.dark .border-t { border-color: #334155; }
+.dark .border-b { border-color: #334155; }
+
+.dark .bg-sanguine-soft { background-color: #3D2520 !important; }
+.dark .bg-sanguine\/10 { background-color: rgba(138,73,49,0.2) !important; }
+
+/* Buttons: differentiate from light mode */
+.dark .bg-sanguine {
+  background-color: #A65D3F !important;
+}
+.dark .hover\:bg-sanguine:hover {
+  background-color: #C97A5F !important;
+}
+.dark .bg-sanguine-dark {
+  background-color: #8A4931 !important;
+}
+.dark .hover\:bg-white\/20:hover {
+  background-color: rgba(255,255,255,0.25) !important;
+}
+
+.dark .shadow-sm { box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important; }
+
+/* Input fields */
+.dark input, .dark textarea, .dark select {
+  background-color: #1a2332 !important;
+  color: #E2E8F0 !important;
+  border-color: #334155 !important;
+}
+.dark input::placeholder { color: #64748B !important; }
+
+/* Chatbot: dark mode message bubbles */
+.dark .bg-black\/30 { background-color: rgba(0,0,0,0.55) !important; }
+.dark .rounded-t-2xl.bg-white { background-color: #1E293B !important; }
+
+/* Focus ring: brighter in dark mode */
+.dark .focus\:border-sanguine:focus { border-color: #D4845C !important; }

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "C5.1 Work Order",
+  "description": "File-based PM work order generated from C5.1 simulation logs.",
+  "type": "object",
+  "required": [
+    "work_order_id",
+    "source_policy",
+    "seed",
+    "step_idx",
+    "truck_id",
+    "action",
+    "priority",
+    "reason",
+    "estimated_duration_hours",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "work_order_id": {
+      "type": "string"
+    },
+    "source_policy": {
+      "type": "string"
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "step_idx": {
+      "type": "integer"
+    },
+    "truck_id": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["HIGH", "MEDIUM", "LOW"]
+    },
+    "reason": {
+      "type": "string"
+    },
+    "estimated_duration_hours": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "ACCEPTED",
+        "IN_PROGRESS",
+        "COMPLETED",
+        "REJECTED",
+        "REVIEW_REQUIRED"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "source_log": {
+      "type": "string"
+    }
+  }
+}

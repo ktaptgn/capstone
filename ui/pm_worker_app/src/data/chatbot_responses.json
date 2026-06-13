@@ -1,0 +1,147 @@
+{
+  "T07": {
+    "truckId": "T07",
+    "queries": {
+      "expectedPmTime": {
+        "question": "T07 예상 PM 시점?",
+        "questionEn": "When is T07 PM due?",
+        "answer": "오늘 14:00"
+      },
+      "estimatedDuration": {
+        "question": "T07 PM 소요시간?",
+        "questionEn": "How long is T07 PM?",
+        "answer": "약 2시간"
+      },
+      "policyReason": {
+        "question": "T07이 PM 대상인 이유?",
+        "questionEn": "Why is T07 scheduled for PM?",
+        "answer": {
+          "title": "T07 PM 판단 결과",
+          "expectedPm": "오늘 14:00",
+          "estimatedDuration": "약 2시간",
+          "reasons": [
+            "Front Left Tire HI가 32%로 긴급 상태",
+            "PM 예정 시간이 임박함",
+            "계속 운행 시 타이어 관련 downtime 위험 증가"
+          ]
+        }
+      }
+    }
+  },
+  "T03": {
+    "truckId": "T03",
+    "queries": {
+      "expectedPmTime": {
+        "question": "T03 예상 PM 시점?",
+        "questionEn": "When is T03 PM due?",
+        "answer": "오늘 14:00"
+      },
+      "estimatedDuration": {
+        "question": "T03 PM 소요시간?",
+        "questionEn": "How long is T03 PM?",
+        "answer": "약 1시간 30분"
+      },
+      "policyReason": {
+        "question": "T03이 PM 대상인 이유?",
+        "questionEn": "Why is T03 scheduled for PM?",
+        "answer": {
+          "title": "T03 PM 판단 결과",
+          "expectedPm": "오늘 14:00",
+          "estimatedDuration": "약 1시간 30분",
+          "reasons": [
+            "전체 Tire HI가 관찰 수준으로 하락",
+            "예방 정비 주기 도래",
+            "타이어 마모 패턴 감지됨"
+          ]
+        }
+      }
+    }
+  },
+  "T12": {
+    "truckId": "T12",
+    "queries": {
+      "expectedPmTime": {
+        "question": "T12 예상 PM 시점?",
+        "questionEn": "When is T12 PM due?",
+        "answer": "오늘 16:30"
+      },
+      "estimatedDuration": {
+        "question": "T12 PM 소요시간?",
+        "questionEn": "How long is T12 PM?",
+        "answer": "약 1시간"
+      },
+      "policyReason": {
+        "question": "T12가 PM 대상인 이유?",
+        "questionEn": "Why is T12 scheduled for PM?",
+        "answer": {
+          "title": "T12 PM 판단 결과",
+          "expectedPm": "오늘 16:30",
+          "estimatedDuration": "약 1시간",
+          "reasons": [
+            "정기 검사 일정 도래",
+            "HI 73%로 관찰 범위 진입",
+            "이전 검사 후 2주 경과"
+          ]
+        }
+      }
+    }
+  },
+  "T15": {
+    "truckId": "T15",
+    "queries": {
+      "expectedPmTime": {
+        "question": "T15 예상 PM 시점?",
+        "questionEn": "When is T15 PM due?",
+        "answer": "현재 진행 중 (시작 11:05)"
+      },
+      "estimatedDuration": {
+        "question": "T15 PM 소요시간?",
+        "questionEn": "How long is T15 PM?",
+        "answer": "약 1시간 45분"
+      },
+      "policyReason": {
+        "question": "T15가 PM 대상인 이유?",
+        "questionEn": "Why is T15 scheduled for PM?",
+        "answer": {
+          "title": "T15 PM 판단 결과",
+          "expectedPm": "현재 진행 중",
+          "estimatedDuration": "약 1시간 45분",
+          "reasons": [
+            "전체 HI가 45%로 주의 수준",
+            "다수 타이어가 주의 범위",
+            "정기 검사 일정에 따른 PM 실시"
+          ]
+        }
+      }
+    }
+  },
+  "T18": {
+    "truckId": "T18",
+    "queries": {
+      "expectedPmTime": {
+        "question": "T18 예상 PM 시점?",
+        "questionEn": "When is T18 PM due?",
+        "answer": "오늘 18:00"
+      },
+      "estimatedDuration": {
+        "question": "T18 PM 소요시간?",
+        "questionEn": "How long is T18 PM?",
+        "answer": "약 1시간 15분"
+      },
+      "policyReason": {
+        "question": "T18이 PM 대상인 이유?",
+        "questionEn": "Why is T18 scheduled for PM?",
+        "answer": {
+          "title": "T18 PM 판단 결과",
+          "expectedPm": "오늘 18:00",
+          "estimatedDuration": "약 1시간 15분",
+          "reasons": [
+            "타이어 점검 일정 도래",
+            "HI 69%로 관찰 범위",
+            "최근 운행 거리 증가로 인한 마모 가속"
+          ]
+        }
+      }
+    }
+  }
+}

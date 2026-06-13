@@ -1,0 +1,58 @@
+{
+  "summary": {
+    "last7Days": 12,
+    "inProgress": 2,
+    "plannedToday": 4
+  },
+  "inProgress": [
+    {
+      "truckId": "T07",
+      "pmType": "Tire PM",
+      "startedAt": "10:20",
+      "elapsed": "45m",
+      "progress": 55
+    },
+    {
+      "truckId": "T15",
+      "pmType": "Inspection",
+      "startedAt": "11:05",
+      "elapsed": "20m",
+      "progress": 30
+    }
+  ],
+  "plannedToday": [
+    { "time": "14:00", "truckId": "T03", "type": "Preventive PM" },
+    { "time": "16:30", "truckId": "T12", "type": "Inspection" },
+    { "time": "18:00", "truckId": "T18", "type": "Tire Check" },
+    { "time": "19:30", "truckId": "T21", "type": "Brake Inspection" }
+  ],
+  "last7Days": [
+    { "id": "wr001", "date": "05/17", "truckId": "T11", "type": "Tire Inspection", "result": "completed", "duration": "1h 10m" },
+    { "id": "wr002", "date": "05/16", "truckId": "T04", "type": "Brake Check", "result": "completed", "duration": "50m" },
+    { "id": "wr003", "date": "05/15", "truckId": "T08", "type": "Drive Unit PM", "result": "warning", "duration": "2h 15m", "note": "Additional repair needed" },
+    { "id": "wr004", "date": "05/14", "truckId": "T09", "type": "Full PM Service", "result": "completed", "duration": "3h" },
+    { "id": "wr005", "date": "05/13", "truckId": "T22", "type": "Tire Rotation", "result": "completed", "duration": "1h 30m" },
+    { "id": "wr006", "date": "05/12", "truckId": "T01", "type": "Tire Pressure Check", "result": "completed", "duration": "45m" },
+    { "id": "wr007", "date": "05/12", "truckId": "T16", "type": "Brake Inspection", "result": "completed", "duration": "1h" },
+    { "id": "wr008", "date": "05/11", "truckId": "T07", "type": "Emergency Tire Replace", "result": "completed", "duration": "2h 45m" },
+    { "id": "wr009", "date": "05/11", "truckId": "T20", "type": "Tire Inspection", "result": "completed", "duration": "55m" },
+    { "id": "wr010", "date": "05/11", "truckId": "T03", "type": "Suspension Check", "result": "completed", "duration": "1h 10m" },
+    { "id": "wr011", "date": "05/10", "truckId": "T15", "type": "Full PM Service", "result": "completed", "duration": "3h 15m" },
+    { "id": "wr012", "date": "05/10", "truckId": "T25", "type": "Tire Rotation", "result": "completed", "duration": "1h 20m" }
+  ],
+  "previousPMByTruck": {
+    "T07": [
+      { "date": "05/10", "type": "Tire Inspection", "result": "Completed", "duration": "1h 20m" },
+      { "date": "05/03", "type": "Brake Check", "result": "Completed", "duration": "50m" },
+      { "date": "04/25", "type": "Full PM Service", "result": "Completed", "duration": "3h 10m" }
+    ],
+    "T03": [
+      { "date": "05/11", "type": "Suspension Check", "result": "Completed", "duration": "1h 10m" },
+      { "date": "05/05", "type": "Tire Inspection", "result": "Completed", "duration": "1h" }
+    ],
+    "T15": [
+      { "date": "05/10", "type": "Full PM Service", "result": "Completed", "duration": "3h 15m" },
+      { "date": "05/02", "type": "Brake Inspection", "result": "Completed", "duration": "50m" }
+    ]
+  }
+}

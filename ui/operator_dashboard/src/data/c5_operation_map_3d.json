@@ -1,0 +1,806 @@
+{
+  "map_version": "c5_operation_map_v1",
+  "source_basis": {
+    "base_2d_layout": "mineMap.js",
+    "reference_image": "C5 Escondida-reference 2D virtual mine layout",
+    "coordinate_rule": "3D x = 2D x, 3D z = 2D y, 3D y = parametric elevation"
+  },
+  "scene": {
+    "unit": "meter",
+    "scale": 0.1,
+    "origin": { "x": 0, "y": 0, "z": 0 },
+    "bounds": { "width": 660, "height": 280 },
+    "elevationScale": 12,
+    "baseHeight": 0
+  },
+  "terrain": {
+    "type": "procedural_parametric",
+    "terrain_heightmap": "assets/terrain/c5_parametric_heightmap.png",
+    "terrain_mesh": "assets/terrain/c5_virtual_mine_terrain.glb",
+    "texture": "assets/terrain/c5_desert_topographic_texture.jpg",
+    "size": { "width": 660, "depth": 280 },
+    "maxHeight": 48,
+    "height_regions": [
+      {
+        "id": "shovel_a_pit",
+        "center": { "x": 63, "z": 53 },
+        "height": 41.5,
+        "terrain_type": "open_pit_highwall"
+      },
+      {
+        "id": "shovel_b_pit",
+        "center": { "x": 73, "z": 158 },
+        "height": 46.8,
+        "terrain_type": "open_pit_highwall"
+      },
+      {
+        "id": "shovel_c_pit",
+        "center": { "x": 133, "z": 218 },
+        "height": 37.6,
+        "terrain_type": "open_pit_highwall"
+      },
+      {
+        "id": "dispatch_flat_zone",
+        "center": { "x": 290, "z": 155 },
+        "height": 2.2,
+        "terrain_type": "flattened_dispatch_zone"
+      },
+      {
+        "id": "pm_bay_pad",
+        "center": { "x": 521, "z": 45 },
+        "height": 9.4,
+        "terrain_type": "maintenance_pad"
+      },
+      {
+        "id": "crusher_1_pad",
+        "center": { "x": 504, "z": 202 },
+        "height": 7.8,
+        "terrain_type": "crusher_pad"
+      },
+      {
+        "id": "crusher_2_pad",
+        "center": { "x": 584, "z": 157 },
+        "height": 7.7,
+        "terrain_type": "crusher_pad"
+      },
+      {
+        "id": "tailings_water_area",
+        "center": { "x": 305, "z": 250 },
+        "height": 0,
+        "terrain_type": "water_or_tailings_lowland"
+      }
+    ]
+  },
+  "facilities": [
+    {
+      "id": "shovel_a",
+      "type": "shovel",
+      "name": "Shovel A",
+      "position2d": { "x": 63, "y": 53 },
+      "position": { "x": 63, "y": 41.5, "z": 53 },
+      "rotation": { "x": 0, "y": 0.7, "z": 0 },
+      "size": { "width": 22, "height": 12, "depth": 18 },
+      "asset_key": "shovel_basic",
+      "queue": 1,
+      "capacity": 1,
+      "status": "normal",
+      "riskLevel": "normal"
+    },
+    {
+      "id": "shovel_b",
+      "type": "shovel",
+      "name": "Shovel B",
+      "position2d": { "x": 73, "y": 158 },
+      "position": { "x": 73, "y": 46.8, "z": 158 },
+      "rotation": { "x": 0, "y": 0.2, "z": 0 },
+      "size": { "width": 22, "height": 12, "depth": 18 },
+      "asset_key": "shovel_basic",
+      "queue": 0,
+      "capacity": 1,
+      "status": "normal",
+      "riskLevel": "normal"
+    },
+    {
+      "id": "shovel_c",
+      "type": "shovel",
+      "name": "Shovel C",
+      "position2d": { "x": 133, "y": 218 },
+      "position": { "x": 133, "y": 37.6, "z": 218 },
+      "rotation": { "x": 0, "y": -0.45, "z": 0 },
+      "size": { "width": 22, "height": 12, "depth": 18 },
+      "asset_key": "shovel_basic",
+      "queue": 3,
+      "capacity": 1,
+      "status": "warning",
+      "riskLevel": "warning"
+    },
+    {
+      "id": "dispatch",
+      "type": "dispatch",
+      "name": "Central Dispatch Control Zone",
+      "position2d": { "x": 290, "y": 155 },
+      "position": { "x": 290, "y": 2.2, "z": 155 },
+      "rotation": { "x": 0, "y": 0, "z": 0 },
+      "size": { "width": 180, "height": 4, "depth": 72 },
+      "asset_key": "dispatch_control_zone",
+      "queue": 0,
+      "capacity": 6,
+      "status": "normal",
+      "riskLevel": "normal"
+    },
+    {
+      "id": "pm_bay",
+      "type": "pm_bay",
+      "name": "PM Bay",
+      "position2d": { "x": 521, "y": 45 },
+      "position": { "x": 521, "y": 9.4, "z": 45 },
+      "rotation": { "x": 0, "y": -0.15, "z": 0 },
+      "size": { "width": 42, "height": 10, "depth": 24 },
+      "asset_key": "pm_bay_double_slot",
+      "capacity": 2,
+      "occupied": 2,
+      "queue": 2,
+      "status": "in-progress",
+      "riskLevel": "warning"
+    },
+    {
+      "id": "crusher_1",
+      "type": "crusher",
+      "name": "Crusher 1",
+      "position2d": { "x": 504, "y": 202 },
+      "position": { "x": 504, "y": 7.8, "z": 202 },
+      "rotation": { "x": 0, "y": 0.15, "z": 0 },
+      "size": { "width": 28, "height": 16, "depth": 28 },
+      "asset_key": "crusher_basic_low_capacity",
+      "queue": 2,
+      "capacity": 1,
+      "status": "normal",
+      "riskLevel": "normal"
+    },
+    {
+      "id": "crusher_2",
+      "type": "crusher",
+      "name": "Crusher 2",
+      "position2d": { "x": 584, "y": 157 },
+      "position": { "x": 584, "y": 7.7, "z": 157 },
+      "rotation": { "x": 0, "y": -0.25, "z": 0 },
+      "size": { "width": 32, "height": 18, "depth": 32 },
+      "asset_key": "crusher_basic_high_capacity",
+      "queue": 0,
+      "capacity": 2,
+      "status": "normal",
+      "riskLevel": "normal"
+    },
+    {
+      "id": "standby",
+      "type": "standby",
+      "name": "Standby Area",
+      "position2d": { "x": 385, "y": 229 },
+      "position": { "x": 385, "y": 1.7, "z": 229 },
+      "rotation": { "x": 0, "y": 0, "z": 0 },
+      "size": { "width": 52, "height": 2, "depth": 30 },
+      "asset_key": "standby_pad",
+      "queue": 0,
+      "capacity": 6,
+      "status": "standby",
+      "riskLevel": "normal"
+    },
+    {
+      "id": "concentrator",
+      "type": "sink",
+      "name": "Feed Target / Concentrator Sink",
+      "position2d": { "x": 625, "y": 95 },
+      "position": { "x": 625, "y": 6.5, "z": 95 },
+      "rotation": { "x": 0, "y": -0.45, "z": 0 },
+      "size": { "width": 70, "height": 8, "depth": 52 },
+      "asset_key": "concentrator_sink",
+      "queue": 0,
+      "capacity": 999,
+      "status": "normal",
+      "riskLevel": "normal"
+    },
+    {
+      "id": "service_zone",
+      "type": "service",
+      "name": "Water Truck / Grader Service Zone",
+      "position2d": { "x": 300, "y": 210 },
+      "position": { "x": 300, "y": 1.8, "z": 210 },
+      "rotation": { "x": 0, "y": 0.2, "z": 0 },
+      "size": { "width": 70, "height": 3, "depth": 34 },
+      "asset_key": "service_zone",
+      "queue": 0,
+      "capacity": 3,
+      "status": "normal",
+      "riskLevel": "normal"
+    }
+  ],
+  "routes": [
+    {
+      "id": "main_road",
+      "from": "shovel_access",
+      "to": "crusher_access",
+      "kind": "main_haul",
+      "riskLevel": "normal",
+      "width": 16,
+      "speedFactor": 1.0,
+      "wearFactor": 1.0,
+      "pmFactor": 1.0,
+      "activeTruckCount": 5,
+      "points": [
+        { "x": 60.0, "y": 46.3, "z": 95.0 },
+        { "x": 101.4, "y": 44.2, "z": 103.7 },
+        { "x": 143.8, "y": 33.8, "z": 123.1 },
+        { "x": 199.2, "y": 17.1, "z": 143.5 },
+        { "x": 280.0, "y": 2.8, "z": 155.0 },
+        { "x": 345.9, "y": 1.8, "z": 153.0 },
+        { "x": 402.5, "y": 4.3, "z": 142.5 },
+        { "x": 462.8, "y": 7.7, "z": 128.3 },
+        { "x": 540.0, "y": 9.3, "z": 115.0 }
+      ]
+    },
+    {
+      "id": "branch_shovel_a",
+      "from": "main_road",
+      "to": "shovel_a",
+      "kind": "branch_haul",
+      "riskLevel": "normal",
+      "width": 6,
+      "speedFactor": 0.98,
+      "wearFactor": 1.03,
+      "pmFactor": 1.02,
+      "activeTruckCount": 1,
+      "points": [
+        { "x": 100.0, "y": 43.7, "z": 95.0 },
+        { "x": 60.0, "y": 41.8, "z": 55.0 }
+      ]
+    },
+    {
+      "id": "branch_shovel_b",
+      "from": "main_road",
+      "to": "shovel_b",
+      "kind": "branch_haul",
+      "riskLevel": "normal",
+      "width": 6,
+      "speedFactor": 0.99,
+      "wearFactor": 1.02,
+      "pmFactor": 1.01,
+      "activeTruckCount": 1,
+      "points": [
+        { "x": 140.0, "y": 34.7, "z": 120.0 },
+        { "x": 80.0, "y": 47.4, "z": 155.0 }
+      ]
+    },
+    {
+      "id": "branch_shovel_c",
+      "from": "main_road",
+      "to": "shovel_c",
+      "kind": "branch_haul",
+      "riskLevel": "warning",
+      "width": 6,
+      "speedFactor": 0.94,
+      "wearFactor": 1.09,
+      "pmFactor": 1.12,
+      "activeTruckCount": 1,
+      "points": [
+        { "x": 200.0, "y": 17.8, "z": 155.0 },
+        { "x": 140.0, "y": 37.5, "z": 210.0 }
+      ]
+    },
+    {
+      "id": "branch_crusher_1",
+      "from": "main_road",
+      "to": "crusher_1",
+      "kind": "crusher_access",
+      "riskLevel": "normal",
+      "width": 7,
+      "speedFactor": 0.98,
+      "wearFactor": 1.04,
+      "pmFactor": 1.03,
+      "activeTruckCount": 2,
+      "points": [
+        { "x": 460.0, "y": 7.4, "z": 145.0 },
+        { "x": 500.0, "y": 7.8, "z": 195.0 }
+      ]
+    },
+    {
+      "id": "branch_crusher_2",
+      "from": "main_road",
+      "to": "crusher_2",
+      "kind": "crusher_access",
+      "riskLevel": "normal",
+      "width": 7,
+      "speedFactor": 1.0,
+      "wearFactor": 1.02,
+      "pmFactor": 1.01,
+      "activeTruckCount": 1,
+      "points": [
+        { "x": 520.0, "y": 9.3, "z": 120.0 },
+        { "x": 580.0, "y": 7.9, "z": 155.0 }
+      ]
+    },
+    {
+      "id": "branch_pm_bay",
+      "from": "main_road",
+      "to": "pm_bay",
+      "kind": "pm_access",
+      "riskLevel": "normal",
+      "width": 6,
+      "speedFactor": 0.95,
+      "wearFactor": 1.03,
+      "pmFactor": 1.06,
+      "activeTruckCount": 2,
+      "points": [
+        { "x": 480.0, "y": 8.6, "z": 115.0 },
+        { "x": 520.0, "y": 9.5, "z": 55.0 }
+      ]
+    },
+    {
+      "id": "high_risk_segment",
+      "from": "dispatch",
+      "to": "crusher_access",
+      "kind": "main_haul_risk_segment",
+      "riskLevel": "high",
+      "width": 8,
+      "speedFactor": 0.92,
+      "wearFactor": 1.12,
+      "pmFactor": 1.25,
+      "activeTruckCount": 2,
+      "points": [
+        { "x": 380.0, "y": 2.9, "z": 157.0 },
+        { "x": 408.3, "y": 4.5, "z": 145.5 },
+        { "x": 433.8, "y": 6.1, "z": 135.9 },
+        { "x": 457.3, "y": 7.5, "z": 127.6 },
+        { "x": 480.0, "y": 8.5, "z": 120.0 }
+      ]
+    },
+    {
+      "id": "crusher_1_to_concentrator",
+      "from": "crusher_1",
+      "to": "concentrator",
+      "kind": "conveyor_feed",
+      "riskLevel": "normal",
+      "width": 3,
+      "speedFactor": 1.0,
+      "wearFactor": 1.0,
+      "pmFactor": 1.0,
+      "activeTruckCount": 0,
+      "points": [
+        { "x": 504, "y": 7.8, "z": 202 },
+        { "x": 575, "y": 7.0, "z": 185 },
+        { "x": 625, "y": 6.5, "z": 95 }
+      ]
+    },
+    {
+      "id": "crusher_2_to_concentrator",
+      "from": "crusher_2",
+      "to": "concentrator",
+      "kind": "conveyor_feed",
+      "riskLevel": "normal",
+      "width": 3,
+      "speedFactor": 1.0,
+      "wearFactor": 1.0,
+      "pmFactor": 1.0,
+      "activeTruckCount": 0,
+      "points": [
+        { "x": 584, "y": 7.7, "z": 157 },
+        { "x": 606, "y": 7.0, "z": 127 },
+        { "x": 625, "y": 6.5, "z": 95 }
+      ]
+    },
+    {
+      "id": "service_loop",
+      "from": "service_zone",
+      "to": "dispatch",
+      "kind": "service_road",
+      "riskLevel": "normal",
+      "width": 4,
+      "speedFactor": 0.9,
+      "wearFactor": 1.02,
+      "pmFactor": 1.03,
+      "activeTruckCount": 0,
+      "points": [
+        { "x": 300, "y": 1.8, "z": 210 },
+        { "x": 330, "y": 2.0, "z": 190 },
+        { "x": 290, "y": 2.2, "z": 155 }
+      ]
+    }
+  ],
+  "queueAreas": [
+    {
+      "id": "crusher_1_queue",
+      "type": "dump_queue",
+      "label": "Crusher 1 Dump Queue",
+      "position2d": { "x": 452, "y": 161 },
+      "position": { "x": 452, "y": 7.2, "z": 161 },
+      "size": { "width": 58, "height": 2, "depth": 34 },
+      "liveCount": 2,
+      "capacity": 4,
+      "severity": "warning",
+      "targetFacility": "crusher_1"
+    },
+    {
+      "id": "crusher_2_queue",
+      "type": "dump_queue",
+      "label": "Crusher 2 Dump Queue",
+      "position2d": { "x": 572, "y": 174 },
+      "position": { "x": 572, "y": 7.8, "z": 174 },
+      "size": { "width": 54, "height": 2, "depth": 32 },
+      "liveCount": 0,
+      "capacity": 4,
+      "severity": "normal",
+      "targetFacility": "crusher_2"
+    },
+    {
+      "id": "pm_queue",
+      "type": "pm_queue",
+      "label": "PM Queue",
+      "position2d": { "x": 458, "y": 70 },
+      "position": { "x": 458, "y": 9.1, "z": 70 },
+      "size": { "width": 68, "height": 2, "depth": 32 },
+      "liveCount": 2,
+      "capacity": 4,
+      "severity": "warning",
+      "targetFacility": "pm_bay"
+    }
+  ],
+  "truckFrames": [
+    {
+      "time": "day_001_step_03",
+      "truck_id": "T01",
+      "route_id": "main_road",
+      "route_progress": 0.26,
+      "position2d": { "x": 180, "y": 155 },
+      "position": { "x": 180, "y": 20.5, "z": 155 },
+      "rotation_y": 1.36,
+      "speed": 27,
+      "truck_state": "RUNNING",
+      "truck_hi": 0.88,
+      "tire_hi": 0.81,
+      "pm_due_hours": 18,
+      "asset_key": "truck_cat_798ac",
+      "target_node": "crusher_1"
+    },
+    {
+      "time": "day_001_step_03",
+      "truck_id": "T02",
+      "route_id": "main_road",
+      "route_progress": 0.38,
+      "position2d": { "x": 260, "y": 120 },
+      "position": { "x": 260, "y": 5.1, "z": 120 },
+      "rotation_y": 1.15,
+      "speed": 29,
+      "truck_state": "RUNNING",
+      "truck_hi": 0.9,
+      "tire_hi": 0.86,
+      "pm_due_hours": 22,
+      "asset_key": "truck_cat_798ac",
+      "target_node": "crusher_2"
+    },
+    {
+      "time": "day_001_step_03",
+      "truck_id": "T05",
+      "route_id": "main_road",
+      "route_progress": 0.57,
+      "position2d": { "x": 350, "y": 180 },
+      "position": { "x": 350, "y": 1.4, "z": 180 },
+      "rotation_y": 1.7,
+      "speed": 24,
+      "truck_state": "RUNNING",
+      "truck_hi": 0.78,
+      "tire_hi": 0.72,
+      "pm_due_hours": 11,
+      "asset_key": "truck_cat_798ac",
+      "target_node": "crusher_1"
+    },
+    {
+      "time": "day_001_step_03",
+      "truck_id": "T09",
+      "route_id": "high_risk_segment",
+      "route_progress": 0.45,
+      "position2d": { "x": 420, "y": 140 },
+      "position": { "x": 420, "y": 5.2, "z": 140 },
+      "rotation_y": 1.2,
+      "speed": 21,
+      "truck_state": "RUNNING",
+      "truck_hi": 0.74,
+      "tire_hi": 0.68,
+      "pm_due_hours": 9,
+      "asset_key": "truck_cat_798ac",
+      "target_node": "crusher_1"
+    },
+    {
+      "time": "day_001_step_03",
+      "truck_id": "T13",
+      "route_id": "branch_crusher_1",
+      "route_progress": 0.82,
+      "position2d": { "x": 490, "y": 195 },
+      "position": { "x": 490, "y": 8.0, "z": 195 },
+      "rotation_y": 0.68,
+      "speed": 14,
+      "truck_state": "RUNNING",
+      "truck_hi": 0.83,
+      "tire_hi": 0.8,
+      "pm_due_hours": 16,
+      "asset_key": "truck_cat_798ac",
+      "target_node": "crusher_1"
+    },
+    {
+      "time": "day_001_step_03",
+      "truck_id": "T03",
+      "route_id": "branch_shovel_b",
+      "route_progress": 0.22,
+      "position2d": { "x": 145, "y": 100 },
+      "position": { "x": 145, "y": 33.1, "z": 100 },
+      "rotation_y": -0.5,
+      "speed": 18,
+      "truck_state": "WARNING",
+      "truck_hi": 0.58,
+      "tire_hi": 0.58,
+      "pm_due_hours": 4,
+      "asset_key": "truck_cat_798ac",
+      "target_node": "shovel_b"
+    },
+    {
+      "time": "day_001_step_03",
+      "truck_id": "T07",
+      "route_id": "branch_pm_bay",
+      "route_progress": 0.92,
+      "position2d": { "x": 520, "y": 60 },
+      "position": { "x": 520, "y": 9.4, "z": 60 },
+      "rotation_y": -0.58,
+      "speed": 8,
+      "truck_state": "CRITICAL",
+      "truck_hi": 0.42,
+      "tire_hi": 0.32,
+      "pm_due_hours": 0,
+      "asset_key": "truck_cat_798ac",
+      "target_node": "pm_bay",
+      "work_order_id": "WO-001",
+      "selected": true
+    },
+    {
+      "time": "day_001_step_03",
+      "truck_id": "T12",
+      "route_id": "branch_pm_bay",
+      "route_progress": 0.65,
+      "position2d": { "x": 540, "y": 80 },
+      "position": { "x": 540, "y": 9.1, "z": 80 },
+      "rotation_y": -0.58,
+      "speed": 0,
+      "truck_state": "STANDBY",
+      "truck_hi": 0.91,
+      "tire_hi": 0.84,
+      "pm_due_hours": 20,
+      "asset_key": "truck_cat_798ac",
+      "target_node": "pm_bay"
+    },
+    {
+      "time": "day_001_step_03",
+      "truck_id": "T15",
+      "route_id": "branch_pm_bay",
+      "route_progress": 1.0,
+      "position2d": { "x": 500, "y": 45 },
+      "position": { "x": 500, "y": 9.6, "z": 45 },
+      "rotation_y": 0,
+      "speed": 0,
+      "truck_state": "IN_PROGRESS",
+      "truck_hi": 0.67,
+      "tire_hi": 0.45,
+      "pm_due_hours": 0,
+      "asset_key": "truck_cat_798ac",
+      "target_node": "pm_bay",
+      "work_order_id": "WO-002"
+    }
+  ],
+  "timeRiskProfiles": [
+    {
+      "timeRange": "06-09",
+      "label": "stable_morning",
+      "speedFactor": 1.0,
+      "pmFactor": 1.0,
+      "wearFactor": 1.0
+    },
+    {
+      "timeRange": "09-12",
+      "label": "transition",
+      "speedFactor": 0.99,
+      "pmFactor": 1.05,
+      "wearFactor": 1.03
+    },
+    {
+      "timeRange": "12-16",
+      "label": "high_heat_risk",
+      "speedFactor": 0.92,
+      "pmFactor": 1.25,
+      "wearFactor": 1.12
+    },
+    {
+      "timeRange": "16-18",
+      "label": "post_heat",
+      "speedFactor": 0.95,
+      "pmFactor": 1.15,
+      "wearFactor": 1.08
+    },
+    {
+      "timeRange": "18-22",
+      "label": "cooldown",
+      "speedFactor": 0.98,
+      "pmFactor": 1.05,
+      "wearFactor": 1.03
+    },
+    {
+      "timeRange": "22-05",
+      "label": "night",
+      "speedFactor": 0.96,
+      "pmFactor": 1.1,
+      "wearFactor": 1.05
+    }
+  ],
+  "assets": [
+    {
+      "asset_key": "truck_cat_798ac",
+      "type": "truck",
+      "model_url": "assets/models/truck_cat_798ac.glb",
+      "scale": 1.0,
+      "default_rotation": { "x": 0, "y": 1.57, "z": 0 }
+    },
+    {
+      "asset_key": "shovel_basic",
+      "type": "shovel",
+      "model_url": "assets/models/shovel_basic.glb",
+      "scale": 1.0,
+      "default_rotation": { "x": 0, "y": 0, "z": 0 }
+    },
+    {
+      "asset_key": "crusher_basic_low_capacity",
+      "type": "crusher",
+      "model_url": "assets/models/crusher_basic_low_capacity.glb",
+      "scale": 1.0,
+      "default_rotation": { "x": 0, "y": 0, "z": 0 }
+    },
+    {
+      "asset_key": "crusher_basic_high_capacity",
+      "type": "crusher",
+      "model_url": "assets/models/crusher_basic_high_capacity.glb",
+      "scale": 1.1,
+      "default_rotation": { "x": 0, "y": 0, "z": 0 }
+    },
+    {
+      "asset_key": "pm_bay_double_slot",
+      "type": "pm_bay",
+      "model_url": "assets/models/pm_bay_double_slot.glb",
+      "scale": 1.0,
+      "default_rotation": { "x": 0, "y": 0, "z": 0 }
+    },
+    {
+      "asset_key": "dispatch_control_zone",
+      "type": "dispatch",
+      "model_url": "assets/models/dispatch_zone.glb",
+      "scale": 1.0,
+      "default_rotation": { "x": 0, "y": 0, "z": 0 }
+    },
+    {
+      "asset_key": "standby_pad",
+      "type": "standby",
+      "model_url": "assets/models/standby_pad.glb",
+      "scale": 1.0,
+      "default_rotation": { "x": 0, "y": 0, "z": 0 }
+    },
+    {
+      "asset_key": "concentrator_sink",
+      "type": "sink",
+      "model_url": "assets/models/concentrator_sink.glb",
+      "scale": 1.0,
+      "default_rotation": { "x": 0, "y": 0, "z": 0 }
+    },
+    {
+      "asset_key": "service_zone",
+      "type": "service",
+      "model_url": "assets/models/service_zone.glb",
+      "scale": 1.0,
+      "default_rotation": { "x": 0, "y": 0, "z": 0 }
+    }
+  ],
+  "camera": {
+    "default_position": { "x": 330, "y": 185, "z": 365 },
+    "target": { "x": 330, "y": 0, "z": 140 },
+    "minZoom": 40,
+    "maxZoom": 560,
+    "presets": [
+      {
+        "id": "overview",
+        "label": "Full Mine Overview",
+        "position": { "x": 330, "y": 185, "z": 365 },
+        "target": { "x": 330, "y": 0, "z": 140 }
+      },
+      {
+        "id": "dispatch_focus",
+        "label": "Dispatch Zone Focus",
+        "position": { "x": 300, "y": 105, "z": 255 },
+        "target": { "x": 290, "y": 2, "z": 155 }
+      },
+      {
+        "id": "pm_bay_focus",
+        "label": "PM Bay Focus",
+        "position": { "x": 510, "y": 80, "z": 110 },
+        "target": { "x": 521, "y": 9, "z": 45 }
+      },
+      {
+        "id": "crusher_focus",
+        "label": "Crusher Area Focus",
+        "position": { "x": 540, "y": 95, "z": 235 },
+        "target": { "x": 520, "y": 8, "z": 180 }
+      },
+      {
+        "id": "t07_follow",
+        "label": "Follow T07",
+        "position": { "x": 505, "y": 55, "z": 95 },
+        "target": { "x": 520, "y": 9.4, "z": 60 }
+      }
+    ]
+  },
+  "overlays": [
+    {
+      "id": "label_t07",
+      "type": "truck_label",
+      "target_id": "T07",
+      "label": "T07 / Tire HI 32% / PM Due",
+      "visible": true,
+      "screen_anchor": "top",
+      "severity": "critical"
+    },
+    {
+      "id": "label_pm_bay",
+      "type": "facility_label",
+      "target_id": "pm_bay",
+      "label": "PM Bay 2/2 occupied",
+      "visible": true,
+      "screen_anchor": "top",
+      "severity": "warning"
+    },
+    {
+      "id": "label_crusher_1",
+      "type": "facility_label",
+      "target_id": "crusher_1",
+      "label": "Crusher 1 / Queue 2",
+      "visible": true,
+      "screen_anchor": "top",
+      "severity": "warning"
+    },
+    {
+      "id": "label_crusher_2",
+      "type": "facility_label",
+      "target_id": "crusher_2",
+      "label": "Crusher 2 / Queue 0",
+      "visible": true,
+      "screen_anchor": "top",
+      "severity": "normal"
+    },
+    {
+      "id": "label_shovel_c",
+      "type": "facility_label",
+      "target_id": "shovel_c",
+      "label": "Shovel C / Queue 3",
+      "visible": true,
+      "screen_anchor": "top",
+      "severity": "warning"
+    },
+    {
+      "id": "risk_overlay_high_heat",
+      "type": "route_risk_overlay",
+      "target_id": "high_risk_segment",
+      "label": "High heat risk segment / PM 1.25 / wear 1.12",
+      "visible": true,
+      "screen_anchor": "route_midpoint",
+      "severity": "critical"
+    }
+  ],
+  "statusColorMap": {
+    "RUNNING": "#16A34A",
+    "WARNING": "#F59E0B",
+    "CRITICAL": "#DC2626",
+    "IN_PROGRESS": "#7C3AED",
+    "STANDBY": "#6B7280",
+    "PM_DUE": "#DC2626"
+  }
+}

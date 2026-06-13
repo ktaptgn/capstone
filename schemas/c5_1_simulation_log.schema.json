@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "C5.1 Simulation Log",
+  "type": "object",
+  "required": [
+    "time",
+    "policy_id",
+    "truck_id",
+    "truck_state",
+    "action",
+    "daily_demand",
+    "completed_loads",
+    "total_cost"
+  ],
+  "properties": {
+    "time": {
+      "type": "string"
+    },
+    "policy_id": {
+      "type": "string"
+    },
+    "truck_id": {
+      "type": "string"
+    },
+    "truck_state": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "destination": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "action": {
+      "type": "string"
+    },
+    "reason_code": {
+      "type": "string"
+    },
+    "payload_ton": {
+      "type": "number"
+    },
+    "ore_grade": {
+      "type": "number"
+    },
+    "produced_copper": {
+      "type": "number"
+    },
+    "truck_hi": {
+      "type": "number"
+    },
+    "tire_hi": {
+      "type": "number"
+    },
+    "pm_due_hours": {
+      "type": "number"
+    },
+    "pm_cost": {
+      "type": "number"
+    },
+    "downtime_hours": {
+      "type": "number"
+    },
+    "daily_demand": {
+      "type": "number"
+    },
+    "completed_loads": {
+      "type": "number"
+    },
+    "available_trucks": {
+      "type": "number"
+    },
+    "queue_time": {
+      "type": "number"
+    },
+    "total_cost": {
+      "type": "number"
+    }
+  }
+}
