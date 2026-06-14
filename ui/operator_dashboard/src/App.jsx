@@ -9,6 +9,7 @@ import HeuristicAnalysisPage from './pages/HeuristicAnalysisPage';
 import PolicyDecisionPage from './pages/PolicyDecisionPage';
 import C5OpsAssistant from './components/C5OpsAssistant';
 import { dashboardKpis } from './data/dashboardKpis';
+import versionResults from './data/version_results.json';
 
 function App() {
   const [page, setPage] = useState('overview');
@@ -16,6 +17,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [simDate, setSimDate] = useState(new Date());
   const [isLive, setIsLive] = useState(true);
+  const [selectedVersion, setSelectedVersion] = useState(versionResults.default);
 
   /* ── Decision log (lifted from DecisionPanel) ── */
   const [decisionLog, setDecisionLog] = useState([]);
@@ -56,7 +58,7 @@ function App() {
     switch (page) {
       case 'overview': return <OverviewPage timeSpeed={timeSpeed} onDecision={handleDecision} simDate={simDate} isLive={isLive} />;
       case 'fleet': return <FleetPage />;
-      case 'policy': return <PolicyPage />;
+      case 'policy': return <PolicyPage version={selectedVersion} />;
       case 'decisions': return <PolicyDecisionPage decisionLog={decisionLog} onAddReport={handleAddReport} />;
       case 'analysis': return <HeuristicAnalysisPage />;
       case 'scenario': return <ScenarioPage />;
@@ -70,6 +72,8 @@ function App() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
         <Header
           activePage={page}
+          selectedVersion={selectedVersion}
+          onVersionChange={setSelectedVersion}
           timeSpeed={timeSpeed}
           onTimeSpeedChange={setTimeSpeed}
           darkMode={darkMode}

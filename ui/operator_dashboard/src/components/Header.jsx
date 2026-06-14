@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Bell, Download, Thermometer, Play, Moon, Sun, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { generateDaySnapshot, formatDate } from '../data/simulationData';
+import versionResults from '../data/version_results.json';
 
 const pageNames = {
   overview: '전체 현황',
@@ -116,7 +117,7 @@ function CalendarPopup({ selectedDate, onSelect, onClose }) {
   );
 }
 
-export default function Header({ activePage, timeSpeed = 1, onTimeSpeedChange, darkMode = false, onDarkModeToggle, simDate, onSimDateChange, isLive, onSetLive }) {
+export default function Header({ activePage, selectedVersion, onVersionChange, timeSpeed = 1, onTimeSpeedChange, darkMode = false, onDarkModeToggle, simDate, onSimDateChange, isLive, onSetLive }) {
   const setTimeSpeed = onTimeSpeedChange || (() => {});
   const [calendarOpen, setCalendarOpen] = useState(false);
 
@@ -143,9 +144,35 @@ export default function Header({ activePage, timeSpeed = 1, onTimeSpeedChange, d
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '0 24px', flexShrink: 0,
     }}>
-      <h1 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-main)', margin: 0 }}>
-        {pageNames[activePage]}
-      </h1>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <h1 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-main)', margin: 0 }}>
+          {pageNames[activePage]}
+        </h1>
+        {selectedVersion && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }} title="정책 비교 결과 버전 선택">
+            <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-muted)' }}>결과 버전</span>
+            <div style={{ display: 'flex', border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
+              {versionResults.versions.map(v => {
+                const active = v === selectedVersion;
+                return (
+                  <button
+                    key={v}
+                    onClick={() => onVersionChange && onVersionChange(v)}
+                    style={{
+                      padding: '4px 10px', border: 'none', cursor: 'pointer',
+                      fontSize: 11, fontWeight: 700, fontFamily: 'inherit',
+                      background: active ? '#8A4931' : 'transparent',
+                      color: active ? '#fff' : 'var(--text-sub)', transition: 'all 0.15s',
+                    }}
+                  >
+                    {v}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         {/* Time acceleration controls */}
         <div style={{

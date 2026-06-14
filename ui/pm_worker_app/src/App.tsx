@@ -7,8 +7,10 @@ import WorkRecordsScreen from './components/records/WorkRecordsScreen';
 import AlertsScreen from './components/alerts/AlertsScreen';
 import PMBotButton from './components/bot/PMBotButton';
 import PMBotSheet from './components/bot/PMBotSheet';
+import VersionResultsCard from './components/today/VersionResultsCard';
 import { buildPolicyContext, deriveTodayPMTasksFromSchedule, loadOfficialPolicyContext } from './selectors/dataLoader';
 import type { PolicyId } from './policies/types';
+import versionResults from './data/version_results.json';
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabId>('today');
@@ -16,6 +18,7 @@ function App() {
   const [policyContext, setPolicyContext] = useState(buildPolicyContext());
   const [botOpen, setBotOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [selectedVersion, setSelectedVersion] = useState<string>(versionResults.default as string);
 
   useEffect(() => {
     loadOfficialPolicyContext().then(context => {
@@ -63,7 +66,16 @@ function App() {
 
   return (
     <div className={`flex flex-col h-[844px] relative ${darkMode ? 'dark-app' : ''}`}>
-      <TopAppBar unreadAlerts={unreadAlerts} onAlertClick={() => setActiveTab(activeTab === 'alerts' ? 'today' : 'alerts')} darkMode={darkMode} onDarkModeToggle={() => setDarkMode(d => !d)} />
+      <TopAppBar
+        unreadAlerts={unreadAlerts}
+        onAlertClick={() => setActiveTab(activeTab === 'alerts' ? 'today' : 'alerts')}
+        darkMode={darkMode}
+        onDarkModeToggle={() => setDarkMode(d => !d)}
+        versions={versionResults.versions as string[]}
+        selectedVersion={selectedVersion}
+        onVersionChange={setSelectedVersion}
+      />
+      {activeTab === 'today' && <VersionResultsCard selectedVersion={selectedVersion} />}
       {renderScreen()}
       <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
       <PMBotButton onClick={() => setBotOpen(true)} />
