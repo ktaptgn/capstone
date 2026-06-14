@@ -1,0 +1,185 @@
+# C5.3 -- 3-component reliability (C6 model) in the C5 mine, scaled to 25 trucks,
+# dispatch-only + fixed rule-based PM, H0-H4 recast as route-selection strategies.
+#
+# Provenance (anti-overclaim): every reliability/cost number below is a documented
+# value carried over verbatim from the RL Lab C6 configs -- NOT tuned for C5.3.
+#   - reliability.*           <- c6/configs/c6_reliability.yaml
+#   - reliability.regime.*    <- c6/configs/c6_regimes.yaml (heterogeneous_condition)
+#   - cost.*                  <- c6/configs/c6_cost_model.yaml
+#   - rule_based_pm.hi_threshold <- C6.1 grid-search frozen CBM optimum (0.21/0.21/0.28)
+#   - routes / fleet          <- c6/configs/c6_env.yaml, scaled x2.5 (10 -> 25 trucks)
+
+simulation:
+  version: C5.3
+  # Hybrid temporal model: C5 daily campaign (horizon_days x 24 hour-steps) carrying a daily
+  # demand quota, with C6 hour-resolution reliability (downtime/PM/CM measured in hours).
+  horizon_days: 365
+  step_hours: 1.0
+  seed_control: true
+  report_value_multiplier: 1000   # normalized CU -> presentation value (C5 convention)
+
+mine:
+  base_reference: "C5.1 capstone (Escondida 0.1-scale) + C6 routes A/B/C"
+  truck_count: 25
+  payload_ton: 350
+  pm_bay_count: 2                 # C6 had 1 bay for 10 trucks; ~2 for 25 keeps PM-bay pressure comparable
+  shovel_count: 2
+  crusher_count: 1
+
+demand:
+  # Capacity-based, scaled x2.5 from C6 (84 loads/day for 10 trucks) to hold per-truck intensity.
+  daily_demand_loads: 210
+  operating_hours_per_day: 24
+  default_grade: 0.008
+  ore_ton_per_load: 350
+  unmet_demand_terminates: true   # episode ends when daily demand met (C6 model)
+
+# Three routes trade grade/cycle against per-component wear. This is the dispatch
+# decision surface: without it, dispatch-only H0-H4 collapse to identical behaviour.
+routes:
+  A:
+    label: short_smooth_low_grade
+    grade: 0.006
+    capacity_loads_per_day: 88
+    cycle_time_factor: 1.0
+    tire_wear_multiplier: 1.0
+    engine_wear_multiplier: 1.0
+    brake_wear_multiplier: 1.0
+  B:
+    label: long_rough_mid_grade
+    grade: 0.008
+    capacity_loads_per_day: 75
+    cycle_time_factor: 1.4
+    tire_wear_multiplier: 1.6
+    engine_wear_multiplier: 1.2
+    brake_wear_multiplier: 1.1
+  C:
+    label: steep_heavy_high_grade
+    grade: 0.010
+    capacity_loads_per_day: 62
+    cycle_time_factor: 1.3
+    tire_wear_multiplier: 1.3
+    engine_wear_multiplier: 1.6
+    brake_wear_multiplier: 1.7
+
+reliability:
+  components: [tire, engine, brake]
+  initial_hi:
+    tire: 1.0
+    engine: 1.0
+    brake: 1.0
+  min_hi: 0.0
+  max_hi: 1.0
+
+  wear:
+    base_loss_per_load:
+      tire: 0.004
+      engine: 0.003
+      brake: 0.003
+    stochastic_noise_std:
+      tire: 0.0005
+      engine: 0.0004
+      brake: 0.0004
+
+  # Frailty: per-truck per-component latent wear-rate multiplier ~ Gamma(mean=1, cv).
+  # cv=0 homogeneous; cv>0 makes two same-age trucks degrade at different real rates,
+  # so condition carries information beyond age.
+  frailty:
+    enabled: true
+    cv: 0.30                       # C6 base CV; the active regime overrides it (heterogeneous_condition -> 0.50)
+
+  # Weibull-like wear-out hazard: 0 above threshold_hi, rising as HI falls below it.
+  failure:
+    threshold_hi: 0.20
+    hazard_scale:
+      tire: 0.04
+      engine: 0.03
+      brake: 0.035
+    hazard_shape:
+      tire: 2.0
+      engine: 2.2
+      brake: 2.1
+
+  # Sensor noise on the OBSERVED component HI (POMDP). "센서노이즈 c6과 동일".
+  condition_observation:
+    noise_enabled: true
+    noise_std: 0.03                # base; the active regime overrides it
+    clip_to_range: true
+
+cost:
+  unit: normalized_CU
+  pm:
+    tire:   {cost_cu: 2.0, duration_hours: 2.0, recovery: 0.35}
+    engine: {cost_cu: 4.0, duration_hours: 4.0, recovery: 0.30}
+    brake:  {cost_cu: 2.5, duration_hours: 3.0, recovery: 0.35}
+  cm:
+    tire:   {cost_cu: 8.0,  duration_hours: 8.0,  recovery: 0.60}
+    engine: {cost_cu: 12.0, duration_hours: 12.0, recovery: 0.55}
+    brake:  {cost_cu: 9.0,  duration_hours: 10.0, recovery: 0.60}
+  degradation:
+    tire_hi_loss_cost: 0.5
+    engine_hi_loss_cost: 0.8
+    brake_hi_loss_cost: 0.6
+  downtime:
+    downtime_cost_per_hour_cu: 1.0
+  demand:
+    unmet_load_penalty_cu: 2.0
+  idle:
+    penalty_cu: 0.05
+
+# Fixed rule-based PM, shared byte-identically by every dispatch policy: PM is NOT a
+# decision variable. CBM threshold rule -- refer a component to PM when its OBSERVED HI
+# is at/below threshold (or a failure-risk override fires), subject to PM-bay capacity.
+# Thresholds are the C6.1 grid-search frozen CBM optimum, not tuned here.
+rule_based_pm:
+  hi_threshold:
+    tire: 0.21
+    engine: 0.21
+    brake: 0.28
+  failure_risk_override: 0.80      # PM regardless of threshold once component risk >= this
+  cooldown_steps_per_truck_component: 4
+
+# Operating regimes (verbatim from c6/configs/c6_regimes.yaml). A regime overrides the
+# frailty CV and sensor-noise std and supplies the wear/hazard/cm-cost/downtime/demand
+# multipliers applied on top of the documented base. heterogeneous_condition is the main
+# C5.3 regime (matches the C6.1 frailty comparison); the two high-stress regimes are run
+# for robustness -- to see whether the failure/CM path activates and the ranking flips.
+default_regime: heterogeneous_condition
+regimes:
+  heterogeneous_condition:
+    wear_multiplier: 1.2
+    hazard_multiplier: 1.3
+    cm_cost_multiplier: 1.2
+    downtime_multiplier: 1.2
+    demand_factor: 1.0
+    heterogeneity_cv: 0.50
+    condition_noise_std: 0.03
+  high_stress:
+    wear_multiplier: 1.5
+    hazard_multiplier: 1.8
+    cm_cost_multiplier: 1.3
+    downtime_multiplier: 1.3
+    demand_factor: 1.0
+    heterogeneity_cv: 0.30
+    condition_noise_std: 0.03
+  high_demand_high_stress:
+    wear_multiplier: 1.5
+    hazard_multiplier: 1.8
+    cm_cost_multiplier: 1.3
+    downtime_multiplier: 1.3
+    demand_factor: 1.15
+    heterogeneity_cv: 0.30
+    condition_noise_std: 0.03
+
+policies:
+  enabled: [H0, H1, H2, H3, H4]    # H_TIME excluded: no dispatch analogue under fixed rule-PM
+  rl_enabled: false
+
+evaluation:
+  seeds: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
+          111, 112, 113, 114, 115, 116, 117, 118, 119, 120,
+          121, 122, 123, 124, 125, 126, 127, 128, 129, 130]   # 30 held-out eval seeds
+
+outputs:
+  log_dir: outputs/c5_3/logs
+  summary_dir: outputs/c5_3/summary
