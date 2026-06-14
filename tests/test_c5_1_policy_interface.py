@@ -42,9 +42,9 @@ def _state():
 def test_h0_h4_share_base_policy_decide_interface():
     config = load_c5_1_config(ROOT / "configs" / "c5_1.yaml")
 
-    assert set(POLICY_REGISTRY) == {"H0", "H1", "H2", "H3", "H4"}
+    assert set(POLICY_REGISTRY) == {"H0", "H1", "H2", "H3", "H4", "H_TIME"}
 
-    for policy_id in ["H0", "H1", "H2", "H3", "H4"]:
+    for policy_id in ["H0", "H1", "H2", "H3", "H4", "H_TIME"]:
         policy = create_policy(policy_id, config)
         decision = policy.decide(_state())
 

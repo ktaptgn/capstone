@@ -25,3 +25,10 @@ cost_model:
     unmet_demand_penalty_per_load: 2.0
     downtime_cost_per_hour: 0.5
     degradation_cost_per_hi_loss: 0.2
+    # Reliability lever (only charged when reliability.enabled triggers a breakdown).
+    # Derivation: a reactive repair's DIRECT cost is set to 3x a planned PM_VEHICLE event.
+    #   planned PM_VEHICLE  = pm 1.5 + 4h downtime x 0.5 = 3.5
+    #   direct reactive     = breakdown_cost + 8h downtime x 0.5 = breakdown_cost + 4.0
+    #   3 x 3.5 = 10.5  ->  breakdown_cost_per_event = 6.5
+    # All-in (incl. the ~6.0 unmet penalty from the spoiled haul) a breakdown ~= 4.7x a planned PM.
+    breakdown_cost_per_event: 6.5

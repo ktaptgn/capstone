@@ -19,6 +19,7 @@ class StepCost:
     downtime_cost: float
     degradation_cost: float
     unmet_demand_cost: float
+    breakdown_cost: float = 0.0
 
     @property
     def total(self) -> float:
@@ -27,6 +28,7 @@ class StepCost:
             + self.downtime_cost
             + self.degradation_cost
             + self.unmet_demand_cost
+            + self.breakdown_cost
         )
 
 
@@ -54,18 +56,26 @@ class C5_1CostModel:
             self.event_costs["unmet_demand_penalty_per_load"]
         )
 
+    def breakdown_cost(self, breakdown_events: float = 1.0) -> float:
+        # Optional lever cost; absent key defaults to 0.0 so legacy configs are unchanged.
+        return float(breakdown_events) * float(
+            self.event_costs.get("breakdown_cost_per_event", 0.0)
+        )
+
     def step_cost(
         self,
         action: str,
         downtime_hours: float = 0.0,
         hi_loss: float = 0.0,
         unmet_loads: float = 0.0,
+        breakdown_events: float = 0.0,
     ) -> StepCost:
         return StepCost(
             pm_cost=self.pm_cost(action),
             downtime_cost=self.downtime_cost(downtime_hours),
             degradation_cost=self.degradation_cost(hi_loss),
             unmet_demand_cost=self.unmet_demand_cost(unmet_loads),
+            breakdown_cost=self.breakdown_cost(breakdown_events),
         )
 
     def to_report_value(self, normalized_cost: float) -> float:

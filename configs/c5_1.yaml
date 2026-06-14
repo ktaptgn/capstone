@@ -41,6 +41,7 @@ operations:
   target_queue_time_hours: 1.8
   high_demand_pressure: 0.70
   pm_due_threshold_hours: 12
+  periodic_pm_interval_days: 3
   pm_risk_threshold: 0.68
   cost_value_threshold: 0.15
   backpressure_queue_threshold_hours: 2.2
@@ -53,7 +54,19 @@ policies:
     - H2
     - H3
     - H4
+    - H_TIME
   rl_enabled: false
+
+# Reliability levers (ported from RL Lab PPO diagnostics: C1 free self-healing, C3
+# health-has-no-consequence). Set enabled: false to reproduce the original C5.1 numbers.
+reliability:
+  enabled: true
+  breakdown_truck_hi_threshold: 0.45   # below this truck HI a RUN attempt can fail
+  breakdown_tire_hi_threshold: 0.40    # below this tire HI a RUN attempt can fail
+  breakdown_prob_at_zero: 0.6          # failure probability at HI = 0 (ramps from threshold)
+  breakdown_downtime_hours: 8          # reactive repair downtime (vs 2-4h scheduled PM)
+  repair_restore_hi: 0.70              # reactive repair only partially restores health
+  standby_self_heal: false             # disable free HI recovery while parked (C1 path)
 
 production:
   copper_output_formula: ore_ton * grade

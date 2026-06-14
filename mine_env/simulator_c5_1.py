@@ -12,6 +12,7 @@ from mine_env.costs_c5_1 import C5_1CostModel
 from mine_env.logger_c5_1 import write_policy_log
 from mine_env.maintenance_c5_1 import C5_1MaintenanceModel
 from mine_env.policies import create_policy
+from mine_env.reliability_c5_1 import C5_1ReliabilityModel
 
 
 SUMMARY_FIELDS = [
@@ -25,6 +26,13 @@ SUMMARY_FIELDS = [
     "total_cost",
     "total_cost_report_value",
     "pm_cost",
+    "downtime_cost",
+    "degradation_cost",
+    "unmet_demand_cost",
+    "breakdown_cost",
+    "failure_count",
+    "pm_count",
+    "total_downtime_hours",
     "avg_queue_time",
     "availability_rate",
 ]
@@ -130,12 +138,32 @@ def _apply_run(
     return truck_hi_loss + tire_hi_loss
 
 
-def _apply_standby(truck: dict[str, Any], config: dict[str, Any]) -> None:
-    recovery = float(config["fleet"]["standby_hi_recovery"])
+def _apply_standby(
+    truck: dict[str, Any],
+    config: dict[str, Any],
+    reliability: C5_1ReliabilityModel,
+) -> None:
+    recovery = reliability.standby_recovery(
+        float(config["fleet"]["standby_hi_recovery"])
+    )
     truck["truck_hi"] = round(min(float(truck["truck_hi"]) + recovery, 1.0), 4)
     truck["tire_hi"] = round(min(float(truck["tire_hi"]) + recovery, 1.0), 4)
     truck["truck_state"] = "STANDBY"
     truck["location"] = "Yard"
+
+
+def _apply_breakdown(
+    truck: dict[str, Any],
+    breakdown: Any,
+    config: dict[str, Any],
+) -> None:
+    # Reactive failure: only a partial health restore (NOT a free full-health PM), and the
+    # truck is pulled offline (REPAIR) for the turn so its demand goes unmet.
+    truck["truck_hi"] = round(breakdown.restored_truck_hi, 4)
+    truck["tire_hi"] = round(breakdown.restored_tire_hi, 4)
+    truck["pm_due_hours"] = float(config["fleet"]["pm_due_recovery_hours"])
+    truck["truck_state"] = "REPAIR"
+    truck["location"] = "PM Bay"
 
 
 def _record(
@@ -153,6 +181,7 @@ def _record(
     available_trucks: int,
     queue_time: float,
     total_cost: float,
+    breakdown_events: int = 0,
 ) -> dict[str, Any]:
     return {
         "time": f"day_{day:03d}",
@@ -171,6 +200,7 @@ def _record(
         "pm_due_hours": round(float(truck["pm_due_hours"]), 3),
         "pm_cost": round(pm_cost, 6),
         "downtime_hours": round(downtime_hours, 3),
+        "breakdown": int(breakdown_events),
         "daily_demand": float(daily_demand),
         "completed_loads": float(completed_loads),
         "available_trucks": float(available_trucks),
@@ -192,11 +222,20 @@ def run_policy_simulation(
     policy = create_policy(policy_id, config)
     cost_model = C5_1CostModel(config)
     maintenance_model = C5_1MaintenanceModel(config)
+    reliability = C5_1ReliabilityModel(config)
+    breakdown_rng = random.Random(seed + 20_000)
     trucks = build_initial_trucks(config, seed)
 
     records: list[dict[str, Any]] = []
     total_cost = 0.0
     pm_cost_total = 0.0
+    downtime_cost_total = 0.0
+    degradation_cost_total = 0.0
+    unmet_demand_cost_total = 0.0
+    breakdown_cost_total = 0.0
+    total_downtime_hours = 0.0
+    pm_count_total = 0
+    failure_count_total = 0
     unmet_demand_total = 0
     total_demand = 0
     completed_total = 0
@@ -237,6 +276,7 @@ def run_policy_simulation(
             downtime_hours = 0.0
             pm_cost = 0.0
             hi_loss = 0.0
+            breakdown_events = 0
 
             if (
                 action in {"PM_TIRE", "PM_VEHICLE"}
@@ -254,33 +294,64 @@ def run_policy_simulation(
                     decision["action"] = action
                     decision["destination"] = None
                     decision["reason_code"] = "DEMAND_ALREADY_MET"
-                    _apply_standby(truck, config)
+                    _apply_standby(truck, config, reliability)
                 else:
-                    destination = decision.get("destination") or _next_crusher(
-                        config, completed_loads
+                    breakdown = (
+                        reliability.maybe_breakdown(truck, breakdown_rng)
+                        if reliability.enabled
+                        else None
                     )
-                    decision["destination"] = destination
-                    hi_loss = _apply_run(truck, loads, destination, config)
-                    completed_loads += loads
-                    payload_ton = loads * float(config["mine"]["truck_avg_payload_ton"])
-                    produced_copper = payload_ton * float(config["demand"]["ore_grade"])
+                    if breakdown is not None:
+                        # Health-driven failure overrides the dispatch: nothing is hauled
+                        # this turn (its loads fall to unmet demand) and a breakdown cost
+                        # plus repair downtime is incurred.
+                        _apply_breakdown(truck, breakdown, config)
+                        downtime_hours = breakdown.downtime_hours
+                        breakdown_events = 1
+                        loads = 0
+                        decision["destination"] = None
+                        decision["reason_code"] = f"BREAKDOWN_{breakdown.trigger}"
+                    else:
+                        destination = decision.get("destination") or _next_crusher(
+                            config, completed_loads
+                        )
+                        decision["destination"] = destination
+                        hi_loss = _apply_run(truck, loads, destination, config)
+                        completed_loads += loads
+                        payload_ton = loads * float(
+                            config["mine"]["truck_avg_payload_ton"]
+                        )
+                        produced_copper = payload_ton * float(
+                            config["demand"]["ore_grade"]
+                        )
             elif action in {"PM_TIRE", "PM_VEHICLE"}:
                 downtime_hours, _ = _apply_pm(truck, action, maintenance_model, config)
                 pm_cost = cost_model.pm_cost(action)
                 pm_actions_today += 1
+                pm_count_total += 1
             else:
-                _apply_standby(truck, config)
+                _apply_standby(truck, config, reliability)
 
             step_cost = cost_model.step_cost(
                 action,
                 downtime_hours=downtime_hours,
                 hi_loss=hi_loss,
+                breakdown_events=breakdown_events,
             )
             total_cost += step_cost.total
             pm_cost_total += step_cost.pm_cost
+            downtime_cost_total += step_cost.downtime_cost
+            degradation_cost_total += step_cost.degradation_cost
+            breakdown_cost_total += step_cost.breakdown_cost
+            total_downtime_hours += downtime_hours
+            failure_count_total += breakdown_events
             queue_time_samples.append(queue_time)
             availability_samples.append(
-                sum(1 for item in trucks if item["truck_state"] != "PM")
+                sum(
+                    1
+                    for item in trucks
+                    if item["truck_state"] not in {"PM", "REPAIR"}
+                )
             )
 
             records.append(
@@ -299,12 +370,14 @@ def run_policy_simulation(
                     len(remaining_truck_ids),
                     queue_time,
                     total_cost,
+                    breakdown_events,
                 )
             )
 
         unmet = max(daily_demand - completed_loads, 0)
         unmet_cost = cost_model.unmet_demand_cost(unmet)
         total_cost += unmet_cost
+        unmet_demand_cost_total += unmet_cost
         if records:
             records[-1]["total_cost"] = round(total_cost, 6)
         unmet_demand_total += unmet
@@ -323,6 +396,13 @@ def run_policy_simulation(
         "total_cost": round(total_cost, 6),
         "total_cost_report_value": round(cost_model.to_report_value(total_cost), 3),
         "pm_cost": round(pm_cost_total, 6),
+        "downtime_cost": round(downtime_cost_total, 6),
+        "degradation_cost": round(degradation_cost_total, 6),
+        "unmet_demand_cost": round(unmet_demand_cost_total, 6),
+        "breakdown_cost": round(breakdown_cost_total, 6),
+        "failure_count": failure_count_total,
+        "pm_count": pm_count_total,
+        "total_downtime_hours": round(total_downtime_hours, 6),
         "avg_queue_time": round(
             sum(queue_time_samples) / len(queue_time_samples), 6
         )
