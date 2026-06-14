@@ -38,6 +38,10 @@ outputs/c5_1/analysis/*
 !outputs/c5_1/work_orders/.gitkeep
 !outputs/c5_1/analysis/.gitkeep
 
+# C5.3 / C5.4 — track results (CSV/JSON/PNG) but not run logs
+outputs/c5_3/logs/*
+outputs/c5_4/logs/*
+
 # Local secrets and machine-specific files
 .env
 .env.*

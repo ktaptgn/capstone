@@ -1,0 +1,301 @@
+{
+  "versions": [
+    "C5.1",
+    "C5.2",
+    "C5.3",
+    "C5.4"
+  ],
+  "default": "C5.4",
+  "data": {
+    "C5.1": {
+      "label": "C5.1",
+      "title": "C5.1 — 휴리스틱 비교 기반",
+      "subtitle": "레거시 H0–H4, 단일 환경. H1과 H4가 동일(충돌)했던 버전.",
+      "costLabel": "총 운영비용",
+      "costUnit": "normalized CU",
+      "recommended": "H3",
+      "headline": "H3가 최저 비용. 단 레거시 H1과 H4가 bit-identical로 충돌(사실상 4정책 비교) — C5.2에서 해소.",
+      "source": "project memory / changelog (reliability off)",
+      "policies": [
+        {
+          "id": "H0",
+          "name": "Baseline",
+          "color": "#64748B",
+          "demandFulfill": null,
+          "pmCost": null,
+          "downtime": null,
+          "failures": null,
+          "totalCost": 1858.65,
+          "useCase": "기준 비교"
+        },
+        {
+          "id": "H1",
+          "name": "Bottleneck Dispatch",
+          "color": "#16A34A",
+          "demandFulfill": null,
+          "pmCost": null,
+          "downtime": null,
+          "failures": null,
+          "totalCost": 7062.53,
+          "useCase": "처리량 우선 (H4와 충돌)"
+        },
+        {
+          "id": "H2",
+          "name": "PM Risk Priority",
+          "color": "#0D9488",
+          "demandFulfill": null,
+          "pmCost": null,
+          "downtime": null,
+          "failures": null,
+          "totalCost": 3339.37,
+          "useCase": "고장 위험 회피"
+        },
+        {
+          "id": "H3",
+          "name": "Cost Unit Value",
+          "color": "#F59E0B",
+          "demandFulfill": null,
+          "pmCost": null,
+          "downtime": null,
+          "failures": null,
+          "totalCost": 1724.75,
+          "useCase": "비용 균형 (추천)"
+        },
+        {
+          "id": "H4",
+          "name": "Flow / Backpressure",
+          "color": "#3B82F6",
+          "demandFulfill": null,
+          "pmCost": null,
+          "downtime": null,
+          "failures": null,
+          "totalCost": 7062.53,
+          "useCase": "흐름 압력 (H1과 충돌)"
+        }
+      ]
+    },
+    "C5.2": {
+      "label": "C5.2",
+      "title": "C5.2 — 보정 휴리스틱 + 신뢰성 레버",
+      "subtitle": "H0 calendar / H_TIME / H1 due+health / H2·H3·H4. 건강도에 비용 결과 부여.",
+      "costLabel": "총 운영비용",
+      "costUnit": "normalized CU",
+      "recommended": "H3",
+      "headline": "상태인지 PM(H1/H2/H3, 고장 0)이 blind periodic PM(H0/H_TIME, 고장 발생)을 이김. H3 추천.",
+      "source": "05_C5_2_SPECIFICATION.md (365d x 3 seeds, levers on)",
+      "policies": [
+        {
+          "id": "H3",
+          "name": "Cost-value",
+          "color": "#F59E0B",
+          "demandFulfill": 97.6,
+          "pmCost": 613.3,
+          "downtime": 724.3,
+          "failures": 0,
+          "totalCost": 1675.67,
+          "useCase": "비용 균형 (추천)"
+        },
+        {
+          "id": "H1",
+          "name": "Due + health",
+          "color": "#16A34A",
+          "demandFulfill": 94.7,
+          "pmCost": 520.8,
+          "downtime": 625.0,
+          "failures": 0,
+          "totalCost": 1858.65,
+          "useCase": "상태 기반 PM"
+        },
+        {
+          "id": "H_TIME",
+          "name": "Operating-hours",
+          "color": "#7C3AED",
+          "demandFulfill": 98.5,
+          "pmCost": 244.0,
+          "downtime": 766.7,
+          "failures": 110,
+          "totalCost": 1948.67,
+          "useCase": "가동시간 기반 (blind)"
+        },
+        {
+          "id": "H2",
+          "name": "Risk priority",
+          "color": "#0D9488",
+          "demandFulfill": 81.7,
+          "pmCost": 402.7,
+          "downtime": 483.0,
+          "failures": 0,
+          "totalCost": 3312.74,
+          "useCase": "위험 우선 PM"
+        },
+        {
+          "id": "H0",
+          "name": "Calendar periodic",
+          "color": "#64748B",
+          "demandFulfill": 83.2,
+          "pmCost": 1095.0,
+          "downtime": 1826.7,
+          "failures": 92,
+          "totalCost": 5748.85,
+          "useCase": "달력 주기 PM (blind)"
+        },
+        {
+          "id": "H4",
+          "name": "Flow / backpressure",
+          "color": "#3B82F6",
+          "demandFulfill": 49.8,
+          "pmCost": 220.8,
+          "downtime": 265.0,
+          "failures": 0,
+          "totalCost": 7107.03,
+          "useCase": "흐름 압력 (저충족)"
+        }
+      ]
+    },
+    "C5.3": {
+      "label": "C5.3",
+      "title": "C5.3 — 3-컴포넌트 신뢰성 + dispatch-only",
+      "subtitle": "25대 + 경로 A/B/C, frailty + 센서노이즈. PM 고정(rule), 경로선택만 비교.",
+      "costLabel": "총 TCO",
+      "costUnit": "normalized CU",
+      "recommended": "H1",
+      "headline": "상태인지 라우팅(H1/H2)이 blind(H0/H3/H4)를 TCO로 이김. 고스트레스에선 고장 ~6× 적게 발생.",
+      "source": "outputs/c5_3/summary (30 seeds x 365d, heterogeneous_condition)",
+      "policies": [
+        {
+          "id": "H1",
+          "name": "Health routing",
+          "color": "#16A34A",
+          "demandFulfill": 100.0,
+          "pmCost": 8630.5,
+          "downtime": 13102.9,
+          "failures": 0.1,
+          "totalCost": 22397.3,
+          "useCase": "약한 컴포넌트 보호 (추천)"
+        },
+        {
+          "id": "H2",
+          "name": "Risk-aware routing",
+          "color": "#0D9488",
+          "demandFulfill": 100.0,
+          "pmCost": 8646.3,
+          "downtime": 13125.4,
+          "failures": 0.1,
+          "totalCost": 22437.0,
+          "useCase": "마모 트럭 완만경로"
+        },
+        {
+          "id": "H3",
+          "name": "Value routing",
+          "color": "#F59E0B",
+          "demandFulfill": 100.0,
+          "pmCost": 9123.8,
+          "downtime": 13888.6,
+          "failures": 0.5,
+          "totalCost": 23702.3,
+          "useCase": "등급 추종 (blind)"
+        },
+        {
+          "id": "H4",
+          "name": "Capacity routing",
+          "color": "#3B82F6",
+          "demandFulfill": 100.0,
+          "pmCost": 9150.6,
+          "downtime": 13901.2,
+          "failures": 0.3,
+          "totalCost": 23742.3,
+          "useCase": "용량 분산 (blind)"
+        },
+        {
+          "id": "H0",
+          "name": "Route-blind",
+          "color": "#64748B",
+          "demandFulfill": 100.0,
+          "pmCost": 9219.2,
+          "downtime": 14017.1,
+          "failures": 0.4,
+          "totalCost": 23932.8,
+          "useCase": "경로 무시 baseline"
+        }
+      ]
+    },
+    "C5.4": {
+      "label": "C5.4",
+      "title": "C5.4 — joint PM 스케줄링 + dispatch",
+      "subtitle": "PM 시점이 정책 결정. 6개 PM×dispatch 가족. C5.3 신뢰성/비용 표면 그대로.",
+      "costLabel": "총 TCO",
+      "costUnit": "normalized CU",
+      "recommended": "H2",
+      "headline": "상태인지 joint PM+dispatch(H1/H2)가 blind periodic(H0/H_TIME)을 +40% TCO로 이김(30/30 seed). blind는 과정비+bay포화 고장꼬리로 2중 손해.",
+      "source": "outputs/c5_4/summary (30 seeds x 365d, heterogeneous_condition)",
+      "policies": [
+        {
+          "id": "H2",
+          "name": "Risk priority + risk-aware",
+          "color": "#0D9488",
+          "demandFulfill": 100.0,
+          "pmCost": 8621.5,
+          "downtime": 13081.2,
+          "failures": 0.1,
+          "totalCost": 22367.1,
+          "useCase": "위험 우선 PM+완만경로"
+        },
+        {
+          "id": "H1",
+          "name": "CBM + health",
+          "color": "#16A34A",
+          "demandFulfill": 100.0,
+          "pmCost": 8628.0,
+          "downtime": 13094.6,
+          "failures": 0.0,
+          "totalCost": 22385.6,
+          "useCase": "상태기반 PM+경로 (추천)"
+        },
+        {
+          "id": "H3",
+          "name": "Cost-value",
+          "color": "#F59E0B",
+          "demandFulfill": 100.0,
+          "pmCost": 9128.1,
+          "downtime": 13862.2,
+          "failures": 0.0,
+          "totalCost": 23675.1,
+          "useCase": "비용가치 PM"
+        },
+        {
+          "id": "H4",
+          "name": "Flow / backpressure",
+          "color": "#3B82F6",
+          "demandFulfill": 100.0,
+          "pmCost": 9162.0,
+          "downtime": 13890.3,
+          "failures": 0.1,
+          "totalCost": 23740.3,
+          "useCase": "흐름 압력 PM"
+        },
+        {
+          "id": "H_TIME",
+          "name": "Operating-hours + blind",
+          "color": "#7C3AED",
+          "demandFulfill": 100.0,
+          "pmCost": 13498.0,
+          "downtime": 21811.7,
+          "failures": 66.4,
+          "totalCost": 36693.7,
+          "useCase": "가동시간 PM (blind)"
+        },
+        {
+          "id": "H0",
+          "name": "Calendar + blind",
+          "color": "#64748B",
+          "demandFulfill": 100.0,
+          "pmCost": 13549.0,
+          "downtime": 22286.3,
+          "failures": 95.9,
+          "totalCost": 37547.9,
+          "useCase": "달력 주기 PM (blind)"
+        }
+      ]
+    }
+  }
+}

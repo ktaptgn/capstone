@@ -1,0 +1,77 @@
+{
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "days": 365,
+  "state_aware_ref_tco": {
+    "H1": 22675.2477053,
+    "H2": 22683.0013118
+  },
+  "calendar": [
+    {
+      "interval_days": 3,
+      "tco": 39675.7265349,
+      "fail": 180.8,
+      "pm_count": 1594.0
+    },
+    {
+      "interval_days": 4,
+      "tco": 40721.5764908,
+      "fail": 222.9,
+      "pm_count": 1594.0
+    },
+    {
+      "interval_days": 5,
+      "tco": 43686.264038,
+      "fail": 340.8,
+      "pm_count": 1594.0
+    },
+    {
+      "interval_days": 6,
+      "tco": 45953.2060429,
+      "fail": 432.5,
+      "pm_count": 1594.0
+    },
+    {
+      "interval_days": 8,
+      "tco": 51710.8597915,
+      "fail": 658.5,
+      "pm_count": 1593.7
+    }
+  ],
+  "operating_hours": [
+    {
+      "due_hours": 24,
+      "tco": 38718.4782028,
+      "fail": 147.7,
+      "pm_count": 1590.0
+    },
+    {
+      "due_hours": 36,
+      "tco": 39396.5786781,
+      "fail": 174.1,
+      "pm_count": 1587.1
+    },
+    {
+      "due_hours": 48,
+      "tco": 39641.3266041,
+      "fail": 272.1,
+      "pm_count": 1483.7
+    },
+    {
+      "due_hours": 72,
+      "tco": 36982.776921,
+      "fail": 551.3,
+      "pm_count": 1035.2
+    }
+  ]
+}

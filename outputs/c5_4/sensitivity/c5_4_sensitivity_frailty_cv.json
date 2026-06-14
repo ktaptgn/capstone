@@ -1,0 +1,325 @@
+{
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "days": 365,
+  "rows": [
+    {
+      "cv": 0.1,
+      "policies": {
+        "H0": {
+          "tco": 35352.7023062,
+          "cm": 2.9,
+          "failure": 2.9,
+          "pm_count": 1594.0
+        },
+        "H_TIME": {
+          "tco": 35166.958886399996,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 1588.0
+        },
+        "H1": {
+          "tco": 23435.0762873,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3230.2
+        },
+        "H2": {
+          "tco": 23413.585618099998,
+          "cm": 0.1,
+          "failure": 0.1,
+          "pm_count": 3227.7
+        },
+        "H3": {
+          "tco": 24680.2524493,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3309.9
+        },
+        "H4": {
+          "tco": 24756.6954619,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3317.5
+        }
+      },
+      "best_state_aware_tco": 23413.585618099998,
+      "best_blind_tco": 35166.958886399996,
+      "state_aware_advantage_pct": 33.42163678772162
+    },
+    {
+      "cv": 0.2,
+      "policies": {
+        "H0": {
+          "tco": 35896.9421427,
+          "cm": 26.5,
+          "failure": 26.5,
+          "pm_count": 1594.0
+        },
+        "H_TIME": {
+          "tco": 35182.848651399996,
+          "cm": 0.6,
+          "failure": 0.6,
+          "pm_count": 1588.0
+        },
+        "H1": {
+          "tco": 23320.7101032,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3212.6
+        },
+        "H2": {
+          "tco": 23307.2897704,
+          "cm": 0.2,
+          "failure": 0.2,
+          "pm_count": 3211.0
+        },
+        "H3": {
+          "tco": 24822.8910537,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3332.4
+        },
+        "H4": {
+          "tco": 24890.6056848,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3349.1
+        }
+      },
+      "best_state_aware_tco": 23307.2897704,
+      "best_blind_tco": 35182.848651399996,
+      "state_aware_advantage_pct": 33.75382988076335
+    },
+    {
+      "cv": 0.3,
+      "policies": {
+        "H0": {
+          "tco": 36945.13933,
+          "cm": 70.9,
+          "failure": 70.9,
+          "pm_count": 1594.0
+        },
+        "H_TIME": {
+          "tco": 35824.9863388,
+          "cm": 29.0,
+          "failure": 29.0,
+          "pm_count": 1588.0
+        },
+        "H1": {
+          "tco": 23097.0056347,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3179.1
+        },
+        "H2": {
+          "tco": 23082.0634591,
+          "cm": 0.1,
+          "failure": 0.1,
+          "pm_count": 3179.2
+        },
+        "H3": {
+          "tco": 24963.3200669,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3352.0
+        },
+        "H4": {
+          "tco": 25031.8971993,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3371.7
+        }
+      },
+      "best_state_aware_tco": 23082.0634591,
+      "best_blind_tco": 35824.9863388,
+      "state_aware_advantage_pct": 35.56993088340376
+    },
+    {
+      "cv": 0.4,
+      "policies": {
+        "H0": {
+          "tco": 38107.7418916,
+          "cm": 117.8,
+          "failure": 117.8,
+          "pm_count": 1594.0
+        },
+        "H_TIME": {
+          "tco": 36986.4367078,
+          "cm": 78.8,
+          "failure": 78.8,
+          "pm_count": 1588.0
+        },
+        "H1": {
+          "tco": 22870.7866522,
+          "cm": 0.1,
+          "failure": 0.1,
+          "pm_count": 3149.3
+        },
+        "H2": {
+          "tco": 22827.6194914,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3149.7
+        },
+        "H3": {
+          "tco": 25022.4533943,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3368.0
+        },
+        "H4": {
+          "tco": 25097.15792,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3373.3
+        }
+      },
+      "best_state_aware_tco": 22827.6194914,
+      "best_blind_tco": 36986.4367078,
+      "state_aware_advantage_pct": 38.281106472238434
+    },
+    {
+      "cv": 0.5,
+      "policies": {
+        "H0": {
+          "tco": 39675.7265349,
+          "cm": 180.8,
+          "failure": 180.8,
+          "pm_count": 1594.0
+        },
+        "H_TIME": {
+          "tco": 38693.2476663,
+          "cm": 148.0,
+          "failure": 148.0,
+          "pm_count": 1588.0
+        },
+        "H1": {
+          "tco": 22675.2477053,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3115.8
+        },
+        "H2": {
+          "tco": 22683.0013118,
+          "cm": 0.1,
+          "failure": 0.1,
+          "pm_count": 3121.6
+        },
+        "H3": {
+          "tco": 25191.7801864,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3391.5
+        },
+        "H4": {
+          "tco": 25266.6021011,
+          "cm": 0.2,
+          "failure": 0.2,
+          "pm_count": 3408.5
+        }
+      },
+      "best_state_aware_tco": 22675.2477053,
+      "best_blind_tco": 38693.2476663,
+      "state_aware_advantage_pct": 41.39740375153602
+    },
+    {
+      "cv": 0.65,
+      "policies": {
+        "H0": {
+          "tco": 42235.9690379,
+          "cm": 282.7,
+          "failure": 282.7,
+          "pm_count": 1594.0
+        },
+        "H_TIME": {
+          "tco": 41206.1763596,
+          "cm": 246.6,
+          "failure": 246.6,
+          "pm_count": 1588.0
+        },
+        "H1": {
+          "tco": 22314.9599165,
+          "cm": 0.1,
+          "failure": 0.1,
+          "pm_count": 3056.7
+        },
+        "H2": {
+          "tco": 22278.1910397,
+          "cm": 0.0,
+          "failure": 0.0,
+          "pm_count": 3052.3
+        },
+        "H3": {
+          "tco": 25625.2417586,
+          "cm": 0.2,
+          "failure": 0.2,
+          "pm_count": 3421.3
+        },
+        "H4": {
+          "tco": 25708.7712443,
+          "cm": 0.3,
+          "failure": 0.3,
+          "pm_count": 3444.5
+        }
+      },
+      "best_state_aware_tco": 22278.1910397,
+      "best_blind_tco": 41206.1763596,
+      "state_aware_advantage_pct": 45.934825776403926
+    },
+    {
+      "cv": 0.8,
+      "policies": {
+        "H0": {
+          "tco": 44317.7681699,
+          "cm": 365.8,
+          "failure": 365.8,
+          "pm_count": 1594.0
+        },
+        "H_TIME": {
+          "tco": 43296.482219800004,
+          "cm": 330.1,
+          "failure": 330.1,
+          "pm_count": 1588.0
+        },
+        "H1": {
+          "tco": 21729.3053582,
+          "cm": 0.1,
+          "failure": 0.1,
+          "pm_count": 2974.0
+        },
+        "H2": {
+          "tco": 21785.30371,
+          "cm": 0.5,
+          "failure": 0.5,
+          "pm_count": 2982.2
+        },
+        "H3": {
+          "tco": 25819.7988079,
+          "cm": 8.8,
+          "failure": 8.8,
+          "pm_count": 3385.9
+        },
+        "H4": {
+          "tco": 25886.2183797,
+          "cm": 7.1,
+          "failure": 7.1,
+          "pm_count": 3373.1
+        }
+      },
+      "best_state_aware_tco": 21729.3053582,
+      "best_blind_tco": 43296.482219800004,
+      "state_aware_advantage_pct": 49.81276943496595
+    }
+  ]
+}

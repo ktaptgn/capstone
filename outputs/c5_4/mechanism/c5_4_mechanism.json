@@ -1,0 +1,1187 @@
+{
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112
+  ],
+  "days": 365,
+  "timing": {
+    "heterogeneous_condition|H0": {
+      "early": 615,
+      "mid": 664,
+      "late": 663,
+      "total": 1942
+    },
+    "heterogeneous_condition|H_TIME": {
+      "early": 469,
+      "mid": 548,
+      "late": 548,
+      "total": 1565
+    },
+    "heterogeneous_condition|H1": {
+      "early": 0,
+      "mid": 0,
+      "late": 0,
+      "total": 0
+    },
+    "heterogeneous_condition|H2": {
+      "early": 0,
+      "mid": 0,
+      "late": 1,
+      "total": 1
+    },
+    "heterogeneous_condition|H3": {
+      "early": 0,
+      "mid": 0,
+      "late": 0,
+      "total": 0
+    },
+    "heterogeneous_condition|H4": {
+      "early": 0,
+      "mid": 0,
+      "late": 2,
+      "total": 2
+    },
+    "high_stress|H0": {
+      "early": 1194,
+      "mid": 1335,
+      "late": 1337,
+      "total": 3866
+    },
+    "high_stress|H_TIME": {
+      "early": 1077,
+      "mid": 1219,
+      "late": 1255,
+      "total": 3551
+    },
+    "high_stress|H1": {
+      "early": 17,
+      "mid": 21,
+      "late": 29,
+      "total": 67
+    },
+    "high_stress|H2": {
+      "early": 16,
+      "mid": 33,
+      "late": 30,
+      "total": 79
+    },
+    "high_stress|H3": {
+      "early": 116,
+      "mid": 141,
+      "late": 143,
+      "total": 400
+    },
+    "high_stress|H4": {
+      "early": 142,
+      "mid": 185,
+      "late": 187,
+      "total": 514
+    }
+  },
+  "per_seed": {
+    "heterogeneous_condition|H0": {
+      "by_seed": {
+        "101": {
+          "failures": 69,
+          "max_frailty": 2.4518,
+          "tco": 36713.358559
+        },
+        "102": {
+          "failures": 162,
+          "max_frailty": 2.345799,
+          "tco": 38797.346965
+        },
+        "103": {
+          "failures": 228,
+          "max_frailty": 2.718937,
+          "tco": 41169.315009
+        },
+        "104": {
+          "failures": 103,
+          "max_frailty": 2.700947,
+          "tco": 37631.122299
+        },
+        "105": {
+          "failures": 204,
+          "max_frailty": 2.576161,
+          "tco": 40040.619358
+        },
+        "106": {
+          "failures": 39,
+          "max_frailty": 2.36643,
+          "tco": 36257.867083
+        },
+        "107": {
+          "failures": 231,
+          "max_frailty": 2.78374,
+          "tco": 40622.755429
+        },
+        "108": {
+          "failures": 355,
+          "max_frailty": 3.150683,
+          "tco": 44271.515341
+        },
+        "109": {
+          "failures": 20,
+          "max_frailty": 2.084195,
+          "tco": 35632.237556
+        },
+        "110": {
+          "failures": 397,
+          "max_frailty": 3.047173,
+          "tco": 45621.12775
+        },
+        "111": {
+          "failures": 0,
+          "max_frailty": 2.095381,
+          "tco": 35135.652093
+        },
+        "112": {
+          "failures": 134,
+          "max_frailty": 2.415176,
+          "tco": 38274.123808
+        }
+      },
+      "corr_maxfrailty_failures": 0.911,
+      "max_failure_seed": 110
+    },
+    "heterogeneous_condition|H_TIME": {
+      "by_seed": {
+        "101": {
+          "failures": 11,
+          "max_frailty": 2.4518,
+          "tco": 35333.342318
+        },
+        "102": {
+          "failures": 90,
+          "max_frailty": 2.345799,
+          "tco": 37049.065899
+        },
+        "103": {
+          "failures": 213,
+          "max_frailty": 2.718937,
+          "tco": 40317.100547
+        },
+        "104": {
+          "failures": 70,
+          "max_frailty": 2.700947,
+          "tco": 36985.435977
+        },
+        "105": {
+          "failures": 157,
+          "max_frailty": 2.576161,
+          "tco": 38646.078761
+        },
+        "106": {
+          "failures": 11,
+          "max_frailty": 2.36643,
+          "tco": 35460.385942
+        },
+        "107": {
+          "failures": 214,
+          "max_frailty": 2.78374,
+          "tco": 40013.14435
+        },
+        "108": {
+          "failures": 356,
+          "max_frailty": 3.150683,
+          "tco": 43959.684374
+        },
+        "109": {
+          "failures": 0,
+          "max_frailty": 2.084195,
+          "tco": 35072.695203
+        },
+        "110": {
+          "failures": 358,
+          "max_frailty": 3.047173,
+          "tco": 44095.543292
+        },
+        "111": {
+          "failures": 0,
+          "max_frailty": 2.095381,
+          "tco": 35008.907582
+        },
+        "112": {
+          "failures": 85,
+          "max_frailty": 2.415176,
+          "tco": 36979.418294
+        }
+      },
+      "corr_maxfrailty_failures": 0.917,
+      "max_failure_seed": 110
+    },
+    "heterogeneous_condition|H1": {
+      "by_seed": {
+        "101": {
+          "failures": 0,
+          "max_frailty": 2.4518,
+          "tco": 21866.444754
+        },
+        "102": {
+          "failures": 0,
+          "max_frailty": 2.345799,
+          "tco": 20013.885745
+        },
+        "103": {
+          "failures": 0,
+          "max_frailty": 2.718937,
+          "tco": 23114.506834
+        },
+        "104": {
+          "failures": 0,
+          "max_frailty": 2.700947,
+          "tco": 21166.54192
+        },
+        "105": {
+          "failures": 0,
+          "max_frailty": 2.576161,
+          "tco": 23276.302269
+        },
+        "106": {
+          "failures": 0,
+          "max_frailty": 2.36643,
+          "tco": 23109.678682
+        },
+        "107": {
+          "failures": 0,
+          "max_frailty": 2.78374,
+          "tco": 21827.562431
+        },
+        "108": {
+          "failures": 0,
+          "max_frailty": 3.150683,
+          "tco": 25599.059404
+        },
+        "109": {
+          "failures": 0,
+          "max_frailty": 2.084195,
+          "tco": 20144.64344
+        },
+        "110": {
+          "failures": 0,
+          "max_frailty": 3.047173,
+          "tco": 26633.851574
+        },
+        "111": {
+          "failures": 0,
+          "max_frailty": 2.095381,
+          "tco": 19896.160551
+        },
+        "112": {
+          "failures": 0,
+          "max_frailty": 2.415176,
+          "tco": 22562.629983
+        }
+      },
+      "corr_maxfrailty_failures": null,
+      "max_failure_seed": 101
+    },
+    "heterogeneous_condition|H2": {
+      "by_seed": {
+        "101": {
+          "failures": 0,
+          "max_frailty": 2.4518,
+          "tco": 21866.046982
+        },
+        "102": {
+          "failures": 1,
+          "max_frailty": 2.345799,
+          "tco": 19934.624913
+        },
+        "103": {
+          "failures": 0,
+          "max_frailty": 2.718937,
+          "tco": 22961.922653
+        },
+        "104": {
+          "failures": 0,
+          "max_frailty": 2.700947,
+          "tco": 21271.266778
+        },
+        "105": {
+          "failures": 0,
+          "max_frailty": 2.576161,
+          "tco": 23345.408008
+        },
+        "106": {
+          "failures": 0,
+          "max_frailty": 2.36643,
+          "tco": 23093.144691
+        },
+        "107": {
+          "failures": 0,
+          "max_frailty": 2.78374,
+          "tco": 21788.907657
+        },
+        "108": {
+          "failures": 0,
+          "max_frailty": 3.150683,
+          "tco": 25834.338315
+        },
+        "109": {
+          "failures": 0,
+          "max_frailty": 2.084195,
+          "tco": 20101.618393
+        },
+        "110": {
+          "failures": 0,
+          "max_frailty": 3.047173,
+          "tco": 26632.734728
+        },
+        "111": {
+          "failures": 0,
+          "max_frailty": 2.095381,
+          "tco": 20257.640879
+        },
+        "112": {
+          "failures": 0,
+          "max_frailty": 2.415176,
+          "tco": 22568.6317
+        }
+      },
+      "corr_maxfrailty_failures": -0.202,
+      "max_failure_seed": 102
+    },
+    "heterogeneous_condition|H3": {
+      "by_seed": {
+        "101": {
+          "failures": 0,
+          "max_frailty": 2.4518,
+          "tco": 22146.125958
+        },
+        "102": {
+          "failures": 0,
+          "max_frailty": 2.345799,
+          "tco": 22024.056989
+        },
+        "103": {
+          "failures": 0,
+          "max_frailty": 2.718937,
+          "tco": 28228.317146
+        },
+        "104": {
+          "failures": 0,
+          "max_frailty": 2.700947,
+          "tco": 23983.914406
+        },
+        "105": {
+          "failures": 0,
+          "max_frailty": 2.576161,
+          "tco": 25383.061448
+        },
+        "106": {
+          "failures": 0,
+          "max_frailty": 2.36643,
+          "tco": 23531.71738
+        },
+        "107": {
+          "failures": 0,
+          "max_frailty": 2.78374,
+          "tco": 24453.138849
+        },
+        "108": {
+          "failures": 0,
+          "max_frailty": 3.150683,
+          "tco": 30031.253182
+        },
+        "109": {
+          "failures": 0,
+          "max_frailty": 2.084195,
+          "tco": 21851.979688
+        },
+        "110": {
+          "failures": 0,
+          "max_frailty": 3.047173,
+          "tco": 30284.236818
+        },
+        "111": {
+          "failures": 0,
+          "max_frailty": 2.095381,
+          "tco": 19754.198892
+        },
+        "112": {
+          "failures": 0,
+          "max_frailty": 2.415176,
+          "tco": 22125.790471
+        }
+      },
+      "corr_maxfrailty_failures": null,
+      "max_failure_seed": 101
+    },
+    "heterogeneous_condition|H4": {
+      "by_seed": {
+        "101": {
+          "failures": 0,
+          "max_frailty": 2.4518,
+          "tco": 22250.161129
+        },
+        "102": {
+          "failures": 0,
+          "max_frailty": 2.345799,
+          "tco": 22073.401306
+        },
+        "103": {
+          "failures": 1,
+          "max_frailty": 2.718937,
+          "tco": 28271.422503
+        },
+        "104": {
+          "failures": 0,
+          "max_frailty": 2.700947,
+          "tco": 24047.649189
+        },
+        "105": {
+          "failures": 0,
+          "max_frailty": 2.576161,
+          "tco": 25443.224055
+        },
+        "106": {
+          "failures": 0,
+          "max_frailty": 2.36643,
+          "tco": 23588.965869
+        },
+        "107": {
+          "failures": 0,
+          "max_frailty": 2.78374,
+          "tco": 24530.834005
+        },
+        "108": {
+          "failures": 0,
+          "max_frailty": 3.150683,
+          "tco": 30101.314312
+        },
+        "109": {
+          "failures": 0,
+          "max_frailty": 2.084195,
+          "tco": 21959.478801
+        },
+        "110": {
+          "failures": 1,
+          "max_frailty": 3.047173,
+          "tco": 30399.569842
+        },
+        "111": {
+          "failures": 0,
+          "max_frailty": 2.095381,
+          "tco": 19811.701751
+        },
+        "112": {
+          "failures": 0,
+          "max_frailty": 2.415176,
+          "tco": 22184.293017
+        }
+      },
+      "corr_maxfrailty_failures": 0.448,
+      "max_failure_seed": 103
+    },
+    "high_stress|H0": {
+      "by_seed": {
+        "101": {
+          "failures": 260,
+          "max_frailty": 1.789128,
+          "tco": 42628.902956
+        },
+        "102": {
+          "failures": 319,
+          "max_frailty": 1.737806,
+          "tco": 44512.788568
+        },
+        "103": {
+          "failures": 417,
+          "max_frailty": 1.916314,
+          "tco": 48010.982311
+        },
+        "104": {
+          "failures": 297,
+          "max_frailty": 1.907839,
+          "tco": 43661.303241
+        },
+        "105": {
+          "failures": 343,
+          "max_frailty": 1.848704,
+          "tco": 45434.508797
+        },
+        "106": {
+          "failures": 204,
+          "max_frailty": 1.747836,
+          "tco": 42150.483369
+        },
+        "107": {
+          "failures": 395,
+          "max_frailty": 1.946739,
+          "tco": 46086.099004
+        },
+        "108": {
+          "failures": 470,
+          "max_frailty": 2.116225,
+          "tco": 48597.140577
+        },
+        "109": {
+          "failures": 211,
+          "max_frailty": 1.608784,
+          "tco": 41178.237451
+        },
+        "110": {
+          "failures": 561,
+          "max_frailty": 2.06887,
+          "tco": 51980.195474
+        },
+        "111": {
+          "failures": 122,
+          "max_frailty": 1.614375,
+          "tco": 39504.992504
+        },
+        "112": {
+          "failures": 267,
+          "max_frailty": 1.771454,
+          "tco": 43189.173363
+        }
+      },
+      "corr_maxfrailty_failures": 0.912,
+      "max_failure_seed": 110
+    },
+    "high_stress|H_TIME": {
+      "by_seed": {
+        "101": {
+          "failures": 193,
+          "max_frailty": 1.789128,
+          "tco": 40585.010925
+        },
+        "102": {
+          "failures": 291,
+          "max_frailty": 1.737806,
+          "tco": 43214.338302
+        },
+        "103": {
+          "failures": 400,
+          "max_frailty": 1.916314,
+          "tco": 47048.013006
+        },
+        "104": {
+          "failures": 294,
+          "max_frailty": 1.907839,
+          "tco": 43558.865225
+        },
+        "105": {
+          "failures": 321,
+          "max_frailty": 1.848704,
+          "tco": 44342.210577
+        },
+        "106": {
+          "failures": 183,
+          "max_frailty": 1.747836,
+          "tco": 40952.809203
+        },
+        "107": {
+          "failures": 372,
+          "max_frailty": 1.946739,
+          "tco": 45153.397285
+        },
+        "108": {
+          "failures": 469,
+          "max_frailty": 2.116225,
+          "tco": 48288.242556
+        },
+        "109": {
+          "failures": 175,
+          "max_frailty": 1.608784,
+          "tco": 40015.609022
+        },
+        "110": {
+          "failures": 541,
+          "max_frailty": 2.06887,
+          "tco": 51027.838666
+        },
+        "111": {
+          "failures": 58,
+          "max_frailty": 1.614375,
+          "tco": 37233.740576
+        },
+        "112": {
+          "failures": 254,
+          "max_frailty": 1.771454,
+          "tco": 42497.610407
+        }
+      },
+      "corr_maxfrailty_failures": 0.922,
+      "max_failure_seed": 110
+    },
+    "high_stress|H1": {
+      "by_seed": {
+        "101": {
+          "failures": 0,
+          "max_frailty": 1.789128,
+          "tco": 31129.701164
+        },
+        "102": {
+          "failures": 2,
+          "max_frailty": 1.737806,
+          "tco": 30621.508163
+        },
+        "103": {
+          "failures": 2,
+          "max_frailty": 1.916314,
+          "tco": 33188.724425
+        },
+        "104": {
+          "failures": 1,
+          "max_frailty": 1.907839,
+          "tco": 31413.515706
+        },
+        "105": {
+          "failures": 3,
+          "max_frailty": 1.848704,
+          "tco": 33077.883168
+        },
+        "106": {
+          "failures": 0,
+          "max_frailty": 1.747836,
+          "tco": 33257.511115
+        },
+        "107": {
+          "failures": 0,
+          "max_frailty": 1.946739,
+          "tco": 32060.739296
+        },
+        "108": {
+          "failures": 1,
+          "max_frailty": 2.116225,
+          "tco": 34506.741396
+        },
+        "109": {
+          "failures": 1,
+          "max_frailty": 1.608784,
+          "tco": 30781.229175
+        },
+        "110": {
+          "failures": 56,
+          "max_frailty": 2.06887,
+          "tco": 36703.727586
+        },
+        "111": {
+          "failures": 0,
+          "max_frailty": 1.614375,
+          "tco": 30918.404245
+        },
+        "112": {
+          "failures": 1,
+          "max_frailty": 1.771454,
+          "tco": 32497.097448
+        }
+      },
+      "corr_maxfrailty_failures": 0.46,
+      "max_failure_seed": 110
+    },
+    "high_stress|H2": {
+      "by_seed": {
+        "101": {
+          "failures": 0,
+          "max_frailty": 1.789128,
+          "tco": 31154.506068
+        },
+        "102": {
+          "failures": 1,
+          "max_frailty": 1.737806,
+          "tco": 30671.621114
+        },
+        "103": {
+          "failures": 0,
+          "max_frailty": 1.916314,
+          "tco": 32950.208511
+        },
+        "104": {
+          "failures": 0,
+          "max_frailty": 1.907839,
+          "tco": 31298.464334
+        },
+        "105": {
+          "failures": 0,
+          "max_frailty": 1.848704,
+          "tco": 33037.742516
+        },
+        "106": {
+          "failures": 0,
+          "max_frailty": 1.747836,
+          "tco": 33222.876777
+        },
+        "107": {
+          "failures": 2,
+          "max_frailty": 1.946739,
+          "tco": 32132.035707
+        },
+        "108": {
+          "failures": 5,
+          "max_frailty": 2.116225,
+          "tco": 34612.360447
+        },
+        "109": {
+          "failures": 0,
+          "max_frailty": 1.608784,
+          "tco": 30671.394205
+        },
+        "110": {
+          "failures": 68,
+          "max_frailty": 2.06887,
+          "tco": 36907.552979
+        },
+        "111": {
+          "failures": 3,
+          "max_frailty": 1.614375,
+          "tco": 30981.192436
+        },
+        "112": {
+          "failures": 0,
+          "max_frailty": 1.771454,
+          "tco": 32712.06186
+        }
+      },
+      "corr_maxfrailty_failures": 0.481,
+      "max_failure_seed": 110
+    },
+    "high_stress|H3": {
+      "by_seed": {
+        "101": {
+          "failures": 0,
+          "max_frailty": 1.789128,
+          "tco": 32316.800745
+        },
+        "102": {
+          "failures": 0,
+          "max_frailty": 1.737806,
+          "tco": 33050.033459
+        },
+        "103": {
+          "failures": 67,
+          "max_frailty": 1.916314,
+          "tco": 38048.13691
+        },
+        "104": {
+          "failures": 0,
+          "max_frailty": 1.907839,
+          "tco": 33663.858318
+        },
+        "105": {
+          "failures": 0,
+          "max_frailty": 1.848704,
+          "tco": 34028.076186
+        },
+        "106": {
+          "failures": 0,
+          "max_frailty": 1.747836,
+          "tco": 33776.0476
+        },
+        "107": {
+          "failures": 0,
+          "max_frailty": 1.946739,
+          "tco": 34120.325268
+        },
+        "108": {
+          "failures": 144,
+          "max_frailty": 2.116225,
+          "tco": 39941.71482
+        },
+        "109": {
+          "failures": 0,
+          "max_frailty": 1.608784,
+          "tco": 32020.73559
+        },
+        "110": {
+          "failures": 189,
+          "max_frailty": 2.06887,
+          "tco": 41447.216356
+        },
+        "111": {
+          "failures": 0,
+          "max_frailty": 1.614375,
+          "tco": 30225.952235
+        },
+        "112": {
+          "failures": 0,
+          "max_frailty": 1.771454,
+          "tco": 32136.125411
+        }
+      },
+      "corr_maxfrailty_failures": 0.764,
+      "max_failure_seed": 110
+    },
+    "high_stress|H4": {
+      "by_seed": {
+        "101": {
+          "failures": 0,
+          "max_frailty": 1.789128,
+          "tco": 32399.438132
+        },
+        "102": {
+          "failures": 0,
+          "max_frailty": 1.737806,
+          "tco": 33124.829104
+        },
+        "103": {
+          "failures": 89,
+          "max_frailty": 1.916314,
+          "tco": 38306.781888
+        },
+        "104": {
+          "failures": 0,
+          "max_frailty": 1.907839,
+          "tco": 33791.161316
+        },
+        "105": {
+          "failures": 1,
+          "max_frailty": 1.848704,
+          "tco": 34077.118573
+        },
+        "106": {
+          "failures": 0,
+          "max_frailty": 1.747836,
+          "tco": 33843.61601
+        },
+        "107": {
+          "failures": 1,
+          "max_frailty": 1.946739,
+          "tco": 34227.081538
+        },
+        "108": {
+          "failures": 173,
+          "max_frailty": 2.116225,
+          "tco": 40327.937403
+        },
+        "109": {
+          "failures": 0,
+          "max_frailty": 1.608784,
+          "tco": 32125.620407
+        },
+        "110": {
+          "failures": 249,
+          "max_frailty": 2.06887,
+          "tco": 42290.466097
+        },
+        "111": {
+          "failures": 0,
+          "max_frailty": 1.614375,
+          "tco": 30300.476093
+        },
+        "112": {
+          "failures": 1,
+          "max_frailty": 1.771454,
+          "tco": 32255.873169
+        }
+      },
+      "corr_maxfrailty_failures": 0.756,
+      "max_failure_seed": 110
+    }
+  },
+  "causal": {
+    "heterogeneous_condition|H0": {
+      "route_pct": {
+        "A": 36.9,
+        "B": 33.6,
+        "C": 29.5
+      },
+      "pm_share_pct": {
+        "tire": 33.3,
+        "engine": 33.3,
+        "brake": 33.3
+      },
+      "cm_share_pct": {
+        "tire": 65.9,
+        "engine": 20.6,
+        "brake": 13.5
+      },
+      "end_hi": {
+        "tire": 0.87,
+        "engine": 0.903,
+        "brake": 0.923
+      },
+      "tco": 39180.6,
+      "pm_visits": 1594.0,
+      "cm_per_run": 161.8
+    },
+    "heterogeneous_condition|H_TIME": {
+      "route_pct": {
+        "A": 36.9,
+        "B": 33.6,
+        "C": 29.5
+      },
+      "pm_share_pct": {
+        "tire": 33.3,
+        "engine": 33.3,
+        "brake": 33.3
+      },
+      "cm_share_pct": {
+        "tire": 69.1,
+        "engine": 15.6,
+        "brake": 15.3
+      },
+      "end_hi": {
+        "tire": 0.866,
+        "engine": 0.884,
+        "brake": 0.918
+      },
+      "tco": 38243.4,
+      "pm_visits": 1588.0,
+      "cm_per_run": 130.4
+    },
+    "heterogeneous_condition|H1": {
+      "route_pct": {
+        "A": 41.9,
+        "B": 35.7,
+        "C": 22.4
+      },
+      "pm_share_pct": {
+        "tire": 39.9,
+        "engine": 33.4,
+        "brake": 26.7
+      },
+      "cm_share_pct": {
+        "tire": 0.0,
+        "engine": 0.0,
+        "brake": 0.0
+      },
+      "end_hi": {
+        "tire": 0.371,
+        "engine": 0.425,
+        "brake": 0.446
+      },
+      "tco": 22434.3,
+      "pm_visits": 3079.0,
+      "cm_per_run": 0.0
+    },
+    "heterogeneous_condition|H2": {
+      "route_pct": {
+        "A": 41.9,
+        "B": 35.7,
+        "C": 22.4
+      },
+      "pm_share_pct": {
+        "tire": 40.0,
+        "engine": 33.3,
+        "brake": 26.7
+      },
+      "cm_share_pct": {
+        "tire": 100.0,
+        "engine": 0.0,
+        "brake": 0.0
+      },
+      "end_hi": {
+        "tire": 0.353,
+        "engine": 0.417,
+        "brake": 0.402
+      },
+      "tco": 22471.4,
+      "pm_visits": 3088.0,
+      "cm_per_run": 0.1
+    },
+    "heterogeneous_condition|H3": {
+      "route_pct": {
+        "A": 41.9,
+        "B": 28.6,
+        "C": 29.5
+      },
+      "pm_share_pct": {
+        "tire": 40.5,
+        "engine": 32.7,
+        "brake": 26.8
+      },
+      "cm_share_pct": {
+        "tire": 0.0,
+        "engine": 0.0,
+        "brake": 0.0
+      },
+      "end_hi": {
+        "tire": 0.772,
+        "engine": 0.761,
+        "brake": 0.763
+      },
+      "tco": 24483.1,
+      "pm_visits": 3293.0,
+      "cm_per_run": 0.0
+    },
+    "heterogeneous_condition|H4": {
+      "route_pct": {
+        "A": 38.6,
+        "B": 34.3,
+        "C": 27.1
+      },
+      "pm_share_pct": {
+        "tire": 41.1,
+        "engine": 32.4,
+        "brake": 26.5
+      },
+      "cm_share_pct": {
+        "tire": 100.0,
+        "engine": 0.0,
+        "brake": 0.0
+      },
+      "end_hi": {
+        "tire": 0.775,
+        "engine": 0.773,
+        "brake": 0.782
+      },
+      "tco": 24555.2,
+      "pm_visits": 3308.0,
+      "cm_per_run": 0.2
+    },
+    "high_stress|H0": {
+      "route_pct": {
+        "A": 36.9,
+        "B": 33.5,
+        "C": 29.5
+      },
+      "pm_share_pct": {
+        "tire": 33.3,
+        "engine": 33.3,
+        "brake": 33.3
+      },
+      "cm_share_pct": {
+        "tire": 66.3,
+        "engine": 22.2,
+        "brake": 11.4
+      },
+      "end_hi": {
+        "tire": 0.789,
+        "engine": 0.814,
+        "brake": 0.859
+      },
+      "tco": 44744.6,
+      "pm_visits": 1460.0,
+      "cm_per_run": 322.2
+    },
+    "high_stress|H_TIME": {
+      "route_pct": {
+        "A": 37.0,
+        "B": 33.5,
+        "C": 29.5
+      },
+      "pm_share_pct": {
+        "tire": 33.3,
+        "engine": 33.3,
+        "brake": 33.3
+      },
+      "cm_share_pct": {
+        "tire": 73.2,
+        "engine": 15.4,
+        "brake": 11.4
+      },
+      "end_hi": {
+        "tire": 0.778,
+        "engine": 0.766,
+        "brake": 0.847
+      },
+      "tco": 43659.8,
+      "pm_visits": 1456.0,
+      "cm_per_run": 295.9
+    },
+    "high_stress|H1": {
+      "route_pct": {
+        "A": 41.9,
+        "B": 35.7,
+        "C": 22.4
+      },
+      "pm_share_pct": {
+        "tire": 39.4,
+        "engine": 32.8,
+        "brake": 27.8
+      },
+      "cm_share_pct": {
+        "tire": 95.5,
+        "engine": 0.0,
+        "brake": 4.5
+      },
+      "end_hi": {
+        "tire": 0.35,
+        "engine": 0.41,
+        "brake": 0.413
+      },
+      "tco": 32513.1,
+      "pm_visits": 3854.0,
+      "cm_per_run": 5.6
+    },
+    "high_stress|H2": {
+      "route_pct": {
+        "A": 41.9,
+        "B": 35.7,
+        "C": 22.4
+      },
+      "pm_share_pct": {
+        "tire": 39.4,
+        "engine": 32.8,
+        "brake": 27.8
+      },
+      "cm_share_pct": {
+        "tire": 96.2,
+        "engine": 1.3,
+        "brake": 2.5
+      },
+      "end_hi": {
+        "tire": 0.343,
+        "engine": 0.401,
+        "brake": 0.386
+      },
+      "tco": 32529.3,
+      "pm_visits": 3870.0,
+      "cm_per_run": 6.6
+    },
+    "high_stress|H3": {
+      "route_pct": {
+        "A": 41.9,
+        "B": 28.6,
+        "C": 29.5
+      },
+      "pm_share_pct": {
+        "tire": 39.2,
+        "engine": 32.8,
+        "brake": 28.0
+      },
+      "cm_share_pct": {
+        "tire": 55.0,
+        "engine": 27.7,
+        "brake": 17.2
+      },
+      "end_hi": {
+        "tire": 0.752,
+        "engine": 0.727,
+        "brake": 0.751
+      },
+      "tco": 34564.6,
+      "pm_visits": 3478.0,
+      "cm_per_run": 33.3
+    },
+    "high_stress|H4": {
+      "route_pct": {
+        "A": 38.6,
+        "B": 34.3,
+        "C": 27.1
+      },
+      "pm_share_pct": {
+        "tire": 39.2,
+        "engine": 33.1,
+        "brake": 27.7
+      },
+      "cm_share_pct": {
+        "tire": 86.0,
+        "engine": 4.3,
+        "brake": 9.7
+      },
+      "end_hi": {
+        "tire": 0.743,
+        "engine": 0.748,
+        "brake": 0.756
+      },
+      "tco": 34755.9,
+      "pm_visits": 3392.0,
+      "cm_per_run": 42.8
+    }
+  }
+}
