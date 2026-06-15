@@ -3,9 +3,13 @@
 ## Version and Status
 - **Version**: C5.4
 - **Effective Date**: 2026-06-14
-- **Status**: Implemented + unit-tested. The evaluation sweep is **not yet run** — `06`/results
-  tables (`07_C5_4_RESULTS.md`) are produced by `scripts/run_c5_4_sweep.py`; no C5.4 numbers are
-  claimed in this document.
+- **Status**: Implemented + unit-tested (**45 passed**); the evaluation sweep and Tier 1–4 analyses
+  **have been run** — auto-generated tables in `07_C5_4_RESULTS.md` (headline, 30 seeds × 365 d ×
+  3 regimes) with the hand-authored interpretation/mechanism narrative in its companion
+  `07_C5_4_INTERPRETATION.md`; plus `08_C5_4_SENSITIVITY.md`, `09_C5_4_MECHANISM.md`, and
+  `outputs/c5_4/`. This specification states no numbers itself; every figure lives in those reports
+  (anti-overclaim). NB: re-running `scripts/run_c5_4_sweep.py` overwrites `07_C5_4_RESULTS.md`'s
+  tables but never the separate `07_C5_4_INTERPRETATION.md`.
 - **Builds on**: C5.3 (`06_C5_3_SPECIFICATION.md`). Self-contained new `c5_4` module; the
   C5.1/C5.2/C5.3 code is unchanged.
 
@@ -204,6 +208,19 @@ python scripts/analyze_c5_4_mechanism.py          # failure timing / per-seed / 
 Per-component PM/CM counts, per-seed frailty descriptors (`avg_frailty`, `max_frailty`) and the
 optional `failure_log` (via `record_events=True`) are first-class summary fields, so the Tier-3
 analyses read from the sweep artifacts rather than re-deriving the RNG.
+
+**Portability / determinism notes (so a second machine reproduces these numbers bit-for-bit):**
+- **Run from the repository root** with the canonical code in `scripts/` + `mine_env/`. Every script
+  resolves its own paths from `Path(__file__)` — there are no absolute/user-specific paths.
+- **Use a real Python** (3.12 + NumPy as in `requirements.txt`). On some Windows setups the bare
+  `python` on `PATH` is a Microsoft-Store stub that exits without running; invoke the full
+  interpreter path (e.g. an Anaconda `python.exe`) if `python --version` does not print a version.
+- **All randomness is seeded**: one `numpy.random.default_rng(seed)` stream per `(policy, seed)`;
+  the held-out seeds are fixed in `configs/c5_4.yaml → evaluation.seeds` (101–130). Same seed →
+  identical summary row (no wall-clock, no hidden global RNG, no set-iteration in the result path).
+- **`presentation_pack_c5_4/source_scripts/` is an export SNAPSHOT for slide-making, not a runnable
+  copy** — its scripts resolve paths relative to the pack, not the repo, so run the originals under
+  `scripts/`, not the pack copies.
 
 ---
 

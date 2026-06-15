@@ -17,6 +17,7 @@ dist/
 dist-ssr/
 build/
 .next/
+.npm-cache-*/
 *.local
 npm-debug.log*
 yarn-error.log*

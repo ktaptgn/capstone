@@ -13,26 +13,31 @@ simulation:
   version: C5.3
   # Hybrid temporal model: C5 daily campaign (horizon_days x 24 hour-steps) carrying a daily
   # demand quota, with C6 hour-resolution reliability (downtime/PM/CM measured in hours).
-  horizon_days: 365
-  step_hours: 1.0
-  seed_control: true
-  report_value_multiplier: 1000   # normalized CU -> presentation value (C5 convention)
+  horizon_days: 365               # read: campaign length (24 hour-steps/day)
+  step_hours: 1.0                 # descriptor: reliability/PM/CM resolved at 1-hour resolution
+  # seed_control: removed -- unused flag. Reproducibility is guaranteed by the explicit, fixed
+  # evaluation.seeds below (one NumPy RNG stream per (policy, seed) -> identical summary).
+  report_value_multiplier: 1000   # read: normalized CU -> presentation value (C5 convention)
 
 mine:
   base_reference: "C5.1 capstone (Escondida 0.1-scale) + C6 routes A/B/C"
   truck_count: 25
   payload_ton: 350
   pm_bay_count: 2                 # C6 had 1 bay for 10 trucks; ~2 for 25 keeps PM-bay pressure comparable
-  shovel_count: 2
-  crusher_count: 1
+  # shovel_count / crusher_count removed: C5.3 models neither a shovel nor a crusher queue
+  # (dispatch is route-based), so they were never read by the simulator.
 
 demand:
   # Capacity-based, scaled x2.5 from C6 (84 loads/day for 10 trucks) to hold per-truck intensity.
-  daily_demand_loads: 210
-  operating_hours_per_day: 24
-  default_grade: 0.008
-  ore_ton_per_load: 350
-  unmet_demand_terminates: true   # episode ends when daily demand met (C6 model)
+  daily_demand_loads: 210         # read: daily quota spread evenly across the 24 hour-steps
+  operating_hours_per_day: 24     # read: hour-steps per day
+  # The following keys were removed -- they are NOT read by simulator_c5_3 and were misleading:
+  #   default_grade            -- each route carries its own grade (routes.*); this default was unused.
+  #   ore_ton_per_load         -- duplicated mine.payload_ton (350 t); unused.
+  #   unmet_demand_terminates  -- INACCURATE: the campaign always runs the full 24 h/day. There is
+  #                               no early termination when the daily quota is met; idle hours only
+  #                               tick downtime/PM. (Once demand_remaining hits 0, dispatch simply
+  #                               stops issuing hauls.) Removed to avoid the false "episode ends" claim.
 
 # Three routes trade grade/cycle against per-component wear. This is the dispatch
 # decision surface: without it, dispatch-only H0-H4 collapse to identical behaviour.
@@ -124,6 +129,9 @@ cost:
     downtime_cost_per_hour_cu: 1.0
   demand:
     unmet_load_penalty_cu: 2.0
+  # `idle` is documented but NOT applied: C5.3's TCO excludes idle/production (the RL-Lab
+  # idle-exploit fix). Kept in the cost block because C5.4 mirrors this block verbatim
+  # (test_reliability_cost_routes_are_verbatim_from_c5_3) -- do not rely on it.
   idle:
     penalty_cu: 0.05
 

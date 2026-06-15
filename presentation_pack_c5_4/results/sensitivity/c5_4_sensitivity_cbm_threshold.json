@@ -1,0 +1,157 @@
+{
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "days": 365,
+  "regimes": {
+    "heterogeneous_condition": {
+      "rows": [
+        {
+          "scale": 0.8,
+          "thresholds": {
+            "tire": 0.168,
+            "engine": 0.168,
+            "brake": 0.224
+          },
+          "tco": 22663.404663,
+          "cm": 0.3,
+          "pm_count": 3121.0,
+          "failure": 0.3
+        },
+        {
+          "scale": 0.9,
+          "thresholds": {
+            "tire": 0.189,
+            "engine": 0.189,
+            "brake": 0.252
+          },
+          "tco": 22617.63713,
+          "cm": 0.1,
+          "pm_count": 3112.5,
+          "failure": 0.1
+        },
+        {
+          "scale": 1.0,
+          "thresholds": {
+            "tire": 0.21,
+            "engine": 0.21,
+            "brake": 0.28
+          },
+          "tco": 22675.2477053,
+          "cm": 0.0,
+          "pm_count": 3115.8,
+          "failure": 0.0
+        },
+        {
+          "scale": 1.1,
+          "thresholds": {
+            "tire": 0.231,
+            "engine": 0.231,
+            "brake": 0.308
+          },
+          "tco": 22658.4568752,
+          "cm": 0.1,
+          "pm_count": 3118.0,
+          "failure": 0.1
+        },
+        {
+          "scale": 1.2,
+          "thresholds": {
+            "tire": 0.252,
+            "engine": 0.252,
+            "brake": 0.336
+          },
+          "tco": 22714.9799226,
+          "cm": 0.0,
+          "pm_count": 3124.3,
+          "failure": 0.0
+        }
+      ],
+      "best_scale": 0.9,
+      "frozen_thresholds": {
+        "tire": 0.21,
+        "engine": 0.21,
+        "brake": 0.28
+      }
+    },
+    "high_stress": {
+      "rows": [
+        {
+          "scale": 0.8,
+          "thresholds": {
+            "tire": 0.168,
+            "engine": 0.168,
+            "brake": 0.224
+          },
+          "tco": 32625.0238308,
+          "cm": 6.8,
+          "pm_count": 3862.6,
+          "failure": 6.8
+        },
+        {
+          "scale": 0.9,
+          "thresholds": {
+            "tire": 0.189,
+            "engine": 0.189,
+            "brake": 0.252
+          },
+          "tco": 32673.4290794,
+          "cm": 7.2,
+          "pm_count": 3866.3,
+          "failure": 7.2
+        },
+        {
+          "scale": 1.0,
+          "thresholds": {
+            "tire": 0.21,
+            "engine": 0.21,
+            "brake": 0.28
+          },
+          "tco": 32674.1281194,
+          "cm": 6.6,
+          "pm_count": 3853.9,
+          "failure": 6.6
+        },
+        {
+          "scale": 1.1,
+          "thresholds": {
+            "tire": 0.231,
+            "engine": 0.231,
+            "brake": 0.308
+          },
+          "tco": 32675.0439334,
+          "cm": 5.8,
+          "pm_count": 3842.0,
+          "failure": 5.8
+        },
+        {
+          "scale": 1.2,
+          "thresholds": {
+            "tire": 0.252,
+            "engine": 0.252,
+            "brake": 0.336
+          },
+          "tco": 32639.9570313,
+          "cm": 3.8,
+          "pm_count": 3855.0,
+          "failure": 3.8
+        }
+      ],
+      "best_scale": 0.8,
+      "frozen_thresholds": {
+        "tire": 0.21,
+        "engine": 0.21,
+        "brake": 0.28
+      }
+    }
+  }
+}
