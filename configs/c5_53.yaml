@@ -274,6 +274,18 @@ congestion:
     congestion_beta: [1.0, 2.0]
     congestion_cost_level: [low, base, high]
 
+soft_congestion:
+  enabled: true
+  soft_start: 0.85
+  alpha_soft:
+    low: 0.05
+    base: 0.10
+    high: 0.20
+  beta_soft: 2.0
+  alpha_hard: 1.0
+  beta_hard: 2.0
+  cost_per_hour: 0.50
+
 reliability:
   components: [tire, engine, brake]
   initial_hi:

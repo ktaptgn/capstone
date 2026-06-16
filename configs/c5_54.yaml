@@ -1,0 +1,421 @@
+# C5.54 -- route allocation improvement experiment on top of C5.53.
+# This module preserves C5.4/C5.5/C5.51/C5.52/C5.53 and tests official guarded
+# H4 route-allocation candidates without creating H5.
+
+simulation:
+  version: C5.54
+  horizon_days: 365
+  step_hours: 1.0
+  seed_control: true
+  report_value_multiplier: 1000
+
+mine:
+  base_reference: "C5.53 proxy cycle-time + hard/soft congestion with guarded H4 route allocation"
+  truck_count: 25
+  operating_truck_count: 20
+  standby_truck_count: 5
+  payload_ton: 350
+  pm_bay_facility_count: 1
+  pm_service_capacity: 2
+  shovel_count: 3
+  crusher_count: 2
+
+demand:
+  daily_demand_loads: 210
+  operating_hours_per_day: 24
+  default_grade: 0.008
+  ore_ton_per_load: 350
+  unmet_demand_terminates: true
+  # C5.52-only grade-adjusted target assumption: balanced Shovel B-equivalent output.
+  target_effective_grade_index: 0.80
+
+truck_motion:
+  selected_model: "Cat 798 AC / 400-ton-class ultra-class truck proxy"
+  payload_ton: 350
+  oem_top_speed_kmh_reference: 64
+  empty_speed_kmh:
+    low: 25
+    base: 32
+    high: 40
+  loaded_speed_kmh:
+    low: 15
+    base: 24
+    high: 28
+  flat_loaded_speed_kmh:
+    low: 22
+    base: 30
+    high: 35
+
+route_speed_factors:
+  A:
+    empty_factor: 0.85
+    loaded_factor: 0.80
+    interpretation: "far / rough / high-grade / hard route"
+  B:
+    empty_factor: 1.00
+    loaded_factor: 1.00
+    interpretation: "balanced route"
+  C:
+    empty_factor: 1.15
+    loaded_factor: 1.10
+    interpretation: "near / smooth / low-grade route"
+
+crusher_approach_factors:
+  crusher_1:
+    travel_factor: 1.00
+    interpretation: "near but queue-prone"
+  crusher_2:
+    travel_factor: 0.95
+    interpretation: "farther but more stable"
+
+route_distances:
+  R_A1:
+    empty_distance_km: 3.5
+    loaded_distance_km: 4.5
+  R_A2:
+    empty_distance_km: 3.5
+    loaded_distance_km: 6.0
+  R_B1:
+    empty_distance_km: 2.5
+    loaded_distance_km: 3.5
+  R_B2:
+    empty_distance_km: 2.5
+    loaded_distance_km: 5.0
+  R_C1:
+    empty_distance_km: 1.5
+    loaded_distance_km: 2.5
+  R_C2:
+    empty_distance_km: 1.5
+    loaded_distance_km: 4.0
+
+shovel_loading_proxy:
+  payload_ton: 350
+  shovels:
+    A:
+      bucket_payload_ton: 110
+      bucket_cycle_time_sec: 42
+      spotting_time_min: 0.9
+    B:
+      bucket_payload_ton: 105
+      bucket_cycle_time_sec: 38
+      spotting_time_min: 0.8
+    C:
+      bucket_payload_ton: 100
+      bucket_cycle_time_sec: 35
+      spotting_time_min: 0.7
+
+crusher_service_proxy:
+  spotting_time_min: 0.8
+  dumping_time_min: 1.2
+  crushers:
+    crusher_1:
+      acceptance_time_min: 1.6
+      role: "near_low_capacity_queue_prone"
+    crusher_2:
+      acceptance_time_min: 1.1
+      role: "far_high_capacity_stable"
+
+facilities:
+  shovels:
+    SHOVEL_A:
+      label: Shovel A
+      grade_index: 0.90
+      hardness_factor: 1.20
+      road_profile: far_rough
+      capacity_loads_per_day: 72
+      cycle_time_factor: 1.35
+      tire_wear_multiplier: 1.65
+      engine_wear_multiplier: 1.35
+      brake_wear_multiplier: 1.20
+    SHOVEL_B:
+      label: Shovel B
+      grade_index: 0.80
+      hardness_factor: 1.00
+      road_profile: normal
+      capacity_loads_per_day: 75
+      cycle_time_factor: 1.00
+      tire_wear_multiplier: 1.15
+      engine_wear_multiplier: 1.10
+      brake_wear_multiplier: 1.05
+    SHOVEL_C:
+      label: Shovel C
+      grade_index: 0.70
+      hardness_factor: 0.85
+      road_profile: near_smooth
+      capacity_loads_per_day: 84
+      cycle_time_factor: 0.85
+      tire_wear_multiplier: 0.80
+      engine_wear_multiplier: 0.85
+      brake_wear_multiplier: 0.80
+  crushers:
+    CRUSHER_1:
+      label: Crusher 1
+      role: closer_lower_capacity
+      capacity_loads_per_day: 95
+      travel_time_factor: 0.80
+      queue_risk_factor: 1.25
+      tire_wear_multiplier: 0.85
+      engine_wear_multiplier: 0.90
+      brake_wear_multiplier: 1.20
+    CRUSHER_2:
+      label: Crusher 2
+      role: farther_higher_capacity
+      capacity_loads_per_day: 140
+      travel_time_factor: 1.15
+      queue_risk_factor: 0.85
+      tire_wear_multiplier: 1.15
+      engine_wear_multiplier: 1.10
+      brake_wear_multiplier: 0.95
+
+routes:
+  R_A1:
+    shovel_id: SHOVEL_A
+    crusher_id: CRUSHER_1
+    grade: 0.90
+    grade_index: 0.90
+    hardness_factor: 1.20
+    crusher_factor: 0.80
+    capacity_loads_per_day: 58
+    cycle_time_factor: 1.35
+    tire_wear_multiplier: 1.55
+    engine_wear_multiplier: 1.35
+    brake_wear_multiplier: 1.20
+    queue_sensitivity: 1.25
+  R_A2:
+    shovel_id: SHOVEL_A
+    crusher_id: CRUSHER_2
+    grade: 0.90
+    grade_index: 0.90
+    hardness_factor: 1.20
+    crusher_factor: 1.15
+    capacity_loads_per_day: 68
+    cycle_time_factor: 1.55
+    tire_wear_multiplier: 1.65
+    engine_wear_multiplier: 1.45
+    brake_wear_multiplier: 1.15
+    queue_sensitivity: 0.90
+  R_B1:
+    shovel_id: SHOVEL_B
+    crusher_id: CRUSHER_1
+    grade: 0.80
+    grade_index: 0.80
+    hardness_factor: 1.00
+    crusher_factor: 0.80
+    capacity_loads_per_day: 62
+    cycle_time_factor: 1.15
+    tire_wear_multiplier: 1.20
+    engine_wear_multiplier: 1.10
+    brake_wear_multiplier: 1.15
+    queue_sensitivity: 1.20
+  R_B2:
+    shovel_id: SHOVEL_B
+    crusher_id: CRUSHER_2
+    grade: 0.80
+    grade_index: 0.80
+    hardness_factor: 1.00
+    crusher_factor: 1.15
+    capacity_loads_per_day: 75
+    cycle_time_factor: 1.30
+    tire_wear_multiplier: 1.25
+    engine_wear_multiplier: 1.15
+    brake_wear_multiplier: 1.05
+    queue_sensitivity: 0.85
+  R_C1:
+    shovel_id: SHOVEL_C
+    crusher_id: CRUSHER_1
+    grade: 0.70
+    grade_index: 0.70
+    hardness_factor: 0.85
+    crusher_factor: 0.80
+    capacity_loads_per_day: 66
+    cycle_time_factor: 0.95
+    tire_wear_multiplier: 0.95
+    engine_wear_multiplier: 0.90
+    brake_wear_multiplier: 1.05
+    queue_sensitivity: 1.15
+  R_C2:
+    shovel_id: SHOVEL_C
+    crusher_id: CRUSHER_2
+    grade: 0.70
+    grade_index: 0.70
+    hardness_factor: 0.85
+    crusher_factor: 1.15
+    capacity_loads_per_day: 82
+    cycle_time_factor: 1.10
+    tire_wear_multiplier: 1.05
+    engine_wear_multiplier: 0.95
+    brake_wear_multiplier: 0.95
+    queue_sensitivity: 0.80
+
+grade_aware_objective:
+  enabled: true
+  target_effective_grade_index: 0.80
+  shortfall_cost_sensitivity:
+    # Derived from unmet load penalty 2.0 CU / balanced load effective units (350 x 0.80 = 280).
+    low: 0.003571
+    base: 0.007143
+    high: 0.014286
+  value_guard:
+    h1_route_value_weight: 0.85
+    h2_route_value_bonus: 0.45
+
+congestion:
+  enabled: true
+  base_cycle_time_hours: 1.0
+  congestion_alpha: 1.0
+  congestion_beta: 2.0
+  congestion_cost_level: base
+  congestion_cost_per_hour:
+    low: 0.25
+    base: 0.50
+    high: 1.00
+  sensitivity:
+    congestion_alpha: [0.0, 0.5, 1.0, 2.0]
+    congestion_beta: [1.0, 2.0]
+    congestion_cost_level: [low, base, high]
+
+soft_congestion:
+  enabled: true
+  soft_start: 0.85
+  alpha_soft:
+    low: 0.05
+    base: 0.10
+    high: 0.20
+  beta_soft: 2.0
+  alpha_hard: 1.0
+  beta_hard: 2.0
+  cost_per_hour: 0.50
+
+h4_balanced_rr_guard:
+  official_candidate: true
+  route_order: [R_A1, R_B1, R_C1, R_A2, R_B2, R_C2]
+  soft_utilization_threshold: 0.90
+  risk_guard_mode: "h4_baseline_percentile"
+  risk_guard_level: base
+  risk_guard_percentile: 0.90
+  risk_guard_levels:
+    relaxed: 0.95
+    base: 0.90
+    strict: 0.75
+  fallback_policy: "h4_route_score"
+
+reliability:
+  components: [tire, engine, brake]
+  initial_hi:
+    tire: 1.0
+    engine: 1.0
+    brake: 1.0
+  min_hi: 0.0
+  max_hi: 1.0
+  wear:
+    base_loss_per_load:
+      tire: 0.004
+      engine: 0.003
+      brake: 0.003
+    stochastic_noise_std:
+      tire: 0.0005
+      engine: 0.0004
+      brake: 0.0004
+  frailty:
+    enabled: true
+    cv: 0.30
+  failure:
+    threshold_hi: 0.20
+    hazard_scale:
+      tire: 0.04
+      engine: 0.03
+      brake: 0.035
+    hazard_shape:
+      tire: 2.0
+      engine: 2.2
+      brake: 2.1
+  condition_observation:
+    noise_enabled: true
+    noise_std: 0.03
+    clip_to_range: true
+
+cost:
+  unit: normalized_CU
+  pm:
+    tire:   {cost_cu: 2.0, duration_hours: 2.0, recovery: 0.35}
+    engine: {cost_cu: 4.0, duration_hours: 4.0, recovery: 0.30}
+    brake:  {cost_cu: 2.5, duration_hours: 3.0, recovery: 0.35}
+  cm:
+    tire:   {cost_cu: 8.0,  duration_hours: 8.0,  recovery: 0.60}
+    engine: {cost_cu: 12.0, duration_hours: 12.0, recovery: 0.55}
+    brake:  {cost_cu: 9.0,  duration_hours: 10.0, recovery: 0.60}
+  degradation:
+    tire_hi_loss_cost: 0.5
+    engine_hi_loss_cost: 0.8
+    brake_hi_loss_cost: 0.6
+  downtime:
+    downtime_cost_per_hour_cu: 1.0
+  demand:
+    unmet_load_penalty_cu: 2.0
+  idle:
+    penalty_cu: 0.05
+
+rule_based_pm:
+  hi_threshold:
+    tire: 0.21
+    engine: 0.21
+    brake: 0.28
+  failure_risk_override: 0.80
+  cooldown_steps_per_truck_component: 4
+
+pm_scheduling:
+  calendar:
+    interval_days: 3
+  operating_hours:
+    due_hours: 30
+  risk_priority:
+    risk_threshold: 0.80
+  cost_value:
+    lookahead_hauls: 24
+  flow_backpressure:
+    soft_threshold_hi: 0.30
+
+default_regime: heterogeneous_condition
+regimes:
+  heterogeneous_condition:
+    wear_multiplier: 1.2
+    hazard_multiplier: 1.3
+    cm_cost_multiplier: 1.2
+    downtime_multiplier: 1.2
+    demand_factor: 1.0
+    heterogeneity_cv: 0.50
+    condition_noise_std: 0.03
+  high_stress:
+    wear_multiplier: 1.5
+    hazard_multiplier: 1.8
+    cm_cost_multiplier: 1.3
+    downtime_multiplier: 1.3
+    demand_factor: 1.0
+    heterogeneity_cv: 0.30
+    condition_noise_std: 0.03
+  high_demand_high_stress:
+    wear_multiplier: 1.5
+    hazard_multiplier: 1.8
+    cm_cost_multiplier: 1.3
+    downtime_multiplier: 1.3
+    demand_factor: 1.15
+    heterogeneity_cv: 0.30
+    condition_noise_std: 0.03
+
+policies:
+  enabled: [H4, BALANCED_RR_H4_PM, H4_BALANCED_RR_GUARD]
+  rl_enabled: false
+  family_map:
+    H4:              {pm: flow_backpressure, dispatch: route_flow}
+    BALANCED_RR_H4_PM: {pm: flow_backpressure, dispatch: balanced_round_robin_audit}
+    H4_BALANCED_RR_GUARD: {pm: flow_backpressure, dispatch: balanced_round_robin_guard}
+
+evaluation:
+  seeds: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
+          111, 112, 113, 114, 115, 116, 117, 118, 119, 120,
+          121, 122, 123, 124, 125, 126, 127, 128, 129, 130]
+
+outputs:
+  log_dir: outputs/c5_54/logs
+  summary_dir: outputs/c5_54/summary
+  analysis_dir: outputs/c5_54/analysis

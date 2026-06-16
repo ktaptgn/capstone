@@ -295,7 +295,11 @@ export default function C5OperationMap3D({ timeSpeed = 1, fill = false }: C5Oper
           {data.facilities
             .filter((f) => !DISPATCH_AREA_IDS.has(f.id))
             .map((facility) => (
-              <FacilityCube key={facility.id} facility={facility} />
+              <FacilityCube
+                key={facility.id}
+                facility={facility}
+                groundY={elevation(facility.position.x, facility.position.z)}
+              />
             ))}
           <PMDecisionGate position={pmGatePos} />
           {data.queueAreas.map((area) => (

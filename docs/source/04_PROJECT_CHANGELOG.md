@@ -368,3 +368,161 @@ This changelog tracks the official direction changes for C5.1.
   output.
 - Proposed a soft-threshold congestion design starting around utilization 0.85 as a future
   experiment, while preserving the current hard-threshold metric for comparability.
+
+## 2026-06-16 / C5.53 Soft-Threshold Congestion Variant Analysis
+
+- Added C5.53 soft-threshold congestion metrics while preserving existing hard-threshold
+  `total_tco_v3` semantics.
+- Added `soft_congestion` parameters to `configs/c5_53.yaml`, including `soft_start: 0.85`,
+  low/base/high `alpha_soft`, `beta_soft`, hard-threshold parameters, and soft congestion cost.
+- Added `congestion_delay_hours_hard`, `congestion_cost_hard`, `total_tco_v3_hard`,
+  `congestion_delay_hours_soft`, `congestion_cost_soft`, and
+  `total_tco_v4_soft_congestion` summary fields in `mine_env/simulator_c5_53.py`.
+- Added `BALANCED_RR_H4_PM` as an audit-only synthetic comparator in `mine_env/policies_c5_53/`;
+  it uses the H4 PM family with round-robin route ranking and is not an official policy.
+- Added `scripts/analyze_c5_53_soft_threshold.py`, producing
+  `outputs/c5_53/analysis/c5_53_soft_threshold_policy_comparison.csv`,
+  `outputs/c5_53/analysis/c5_53_soft_threshold_tradeoff_summary.csv`, and
+  `reports/c5_53_soft_threshold_congestion_analysis.md`.
+- Ran the required 90-day x 10-seed x 3-regime experiment across official C5.53 policies plus
+  `BALANCED_RR_H4_PM` with no full event log.
+- Finding: H4 remains the best official H0-H4 policy under soft TCO v4 in all regimes, but
+  `BALANCED_RR_H4_PM` beats H4 in all regimes, suggesting route allocation improvement potential
+  for a future C5.54 design rather than immediate H5 creation.
+
+## 2026-06-16 / C5.54 H4 Route Allocation Design Proposal
+
+- Added `reports/c5_54_h4_route_allocation_design.md` as a design-only proposal for official
+  C5.54 route allocation variants.
+- Preserved C5.4, C5.5, C5.51, C5.52, and C5.53 logic; no C5.54 simulator or H5 implementation
+  was created.
+- Proposed three candidate variants: `H4_BALANCED_CAPACITY`,
+  `H4_EFFECTIVE_FULFILLMENT_GUARD`, and `H4_BALANCED_RR_GUARD`.
+- Recommended `H4_BALANCED_RR_GUARD` as the first implementation target because it is the closest
+  guarded official translation of the audit-only `BALANCED_RR_H4_PM` comparator.
+- Defined staged DOE execution: 30-day smoke, 90-day base across three regimes, then
+  soft-threshold sensitivity for surviving candidates.
+
+## 2026-06-16 / C5.54 Stage 1 H4 Balanced RR Guard Implementation
+
+- Added C5.54 as a separate experimental module without modifying C5.4, C5.5, C5.51, C5.52, or
+  C5.53 logic.
+- Added `configs/c5_54.yaml`, `mine_env/config_c5_54.py`, `mine_env/simulator_c5_54.py`, and
+  `mine_env/policies_c5_54/`.
+- Implemented the first official C5.54 candidate, `H4_BALANCED_RR_GUARD`, using H4's
+  flow-backpressure PM family plus balanced route order `R_A1, R_B1, R_C1, R_A2, R_B2, R_C2`,
+  route/facility utilization guards, risk guard, and fallback to H4 route score.
+- Preserved C5.53 hard and soft TCO semantics: `total_tco_v3_hard` remains the hard-threshold
+  result and `total_tco_v4_soft_congestion` remains the soft-threshold result.
+- Added guard/fallback summary metrics: `guard_skip_count`, `fallback_to_h4_count`,
+  `route_guard_violation_count`, `shovel_guard_violation_count`,
+  `crusher_guard_violation_count`, and `risk_guard_violation_count`.
+- Added `scripts/run_c5_54_sweep.py`, `scripts/analyze_c5_54_results.py`, C5.54 tests, and
+  `reports/c5_54_route_allocation_experiment.md`.
+- Ran the requested Stage 1 smoke test: 30 days x seeds 101-103 x heterogeneous condition for
+  `H4`, `BALANCED_RR_H4_PM`, and `H4_BALANCED_RR_GUARD`.
+- Finding: `H4_BALANCED_RR_GUARD` beat both H4 and the audit comparator under soft TCO in the
+  Stage 1 smoke run without hard-threshold congestion spikes or failure/CM increases. Stage 2
+  90-day evaluation is justified, but guard skip and fallback counts should be monitored.
+
+## 2026-06-16 / Operator 3D Map Facility OBJ Replacement
+
+- Replaced the dashboard 3D map shovel, crusher, and PM Bay placeholder cube bodies with OBJ
+  models named `shovel.obj`, `crusher.obj`, and `pm_bay.obj`.
+- Kept facility colors driven by the existing dashboard status/risk color functions so replacement
+  models retain the same color semantics as the previous facility bodies.
+- Removed the `concentrator` facility, crusher-to-concentrator routes, and `concentrator_sink`
+  asset entry from the 3D map dataset.
+- Anchored shovel facility models to the shared terrain elevation sampler and lowered their model
+  base slightly so the replacement OBJ appears attached to the terrain surface.
+
+## 2026-06-16 / C5.54 Stage 2 90-Day Robustness Run
+
+- Ran the requested C5.54 Stage 2 experiment: 90 days x 10 seeds x 3 regimes for `H4`,
+  `BALANCED_RR_H4_PM`, and `H4_BALANCED_RR_GUARD`.
+- Updated `outputs/c5_54/summary/c5_54_policy_comparison.csv`,
+  `outputs/c5_54/logs/c5_54_daily_summary.csv`,
+  `outputs/c5_54/analysis/c5_54_stage2_policy_summary.csv`,
+  `outputs/c5_54/analysis/c5_54_stage2_guard_behavior_summary.csv`, and
+  `reports/c5_54_route_allocation_experiment.md`.
+- Finding: `H4_BALANCED_RR_GUARD` ranked first under soft TCO v4 in all three tested regimes,
+  beating both official H4 and the audit-only `BALANCED_RR_H4_PM` comparator.
+- Finding: effective fulfillment stayed near or above 0.99, hard congestion spikes were avoided,
+  and failure/CM counts did not increase versus H4.
+- Finding: guard activity is high but interpretable; risk and shovel guards dominate while route
+  guard violations remain zero in this Stage 2 run.
+- H5 was not created or named; threshold and risk-guard sensitivity validation remains the next
+  required step before promoting any C5.54 candidate.
+
+## 2026-06-16 / C5.54 Guard Threshold and Risk Sensitivity
+
+- Added C5.54-only guard sensitivity controls for `H4_BALANCED_RR_GUARD`: risk levels
+  `relaxed`, `base`, and `strict` mapped to H4 baseline risk percentiles `0.95`, `0.90`, and
+  `0.75`.
+- Added `scripts/run_c5_54_guard_sensitivity.py` to run isolated S1/S2 sensitivity experiments
+  under `outputs/c5_54/sensitivity/` without overwriting Stage 2 base outputs.
+- Ran S1 smoke: 30 days x seeds 101-103 x heterogeneous condition across all 9
+  threshold/risk combinations.
+- Ran S2 full sensitivity for four representative settings:
+  `0.90/base`, `0.85/relaxed`, `0.85/strict`, and `0.85/base` across 90 days x 10 seeds x
+  three regimes.
+- Wrote `outputs/c5_54/analysis/c5_54_guard_sensitivity_summary.csv`,
+  `outputs/c5_54/analysis/c5_54_guard_sensitivity_guard_behavior.csv`, and
+  `reports/c5_54_guard_sensitivity_analysis.md`.
+- Finding: `0.90/base` remains a conservative robust setting that beats H4 and the audit
+  comparator in all S2 regimes with lower fallback dependence than `0.85/strict`.
+- Finding: `0.85/strict` has the best S2 soft TCO among tested settings and beats both
+  comparators in all regimes, but fallback dependence is materially higher and requires review.
+- H5 was not created or named; sensitivity evidence is supportive but final confirmation should
+  compare `0.85/strict` against `0.90/base`.
+
+## 2026-06-16 / C5.54 H5 Candidate Freeze Decision
+
+- Added `scripts/analyze_c5_54_h5_freeze_decision.py` to generate the final freeze decision
+  from existing C5.54 sensitivity outputs without rerunning the full sweep.
+- Wrote `outputs/c5_54/analysis/c5_54_h5_candidate_freeze_table.csv` and
+  `reports/c5_54_h5_candidate_freeze_decision.md`.
+- Compared the two remaining candidate settings: `0.90/base` and `0.85/strict`.
+- Finding: `0.85/strict` has lower soft TCO in `high_demand_high_stress`, but is not lower TCO
+  in the two lower-stress regimes and materially increases fallback dependence.
+- Decision: recommend `H4_BALANCED_RR_GUARD` with `soft_utilization_threshold = 0.90` and
+  `risk_guard_level = base` as the default H5 candidate setting.
+- Keep `0.85/strict` as an aggressive sensitivity variant; H5 implementation was not created.
+
+## 2026-06-16 / C5.55 Official H5 Benchmark
+
+- Added C5.55 as a separate official H5 benchmark module without modifying C5.4, C5.5, C5.51,
+  C5.52, C5.53, or C5.54.
+- Added `configs/c5_55.yaml`, `mine_env/config_c5_55.py`, `mine_env/simulator_c5_55.py`,
+  `mine_env/policies_c5_55/`, `scripts/run_c5_55_sweep.py`, and
+  `scripts/analyze_c5_55_results.py`.
+- Defined official `H5` as the C5.54 guarded H4 route-allocation policy frozen at
+  `soft_utilization_threshold = 0.90` and `risk_guard_level = base`.
+- Defined `H5_AGGRESSIVE` as a sensitivity comparator frozen at `0.85/strict`; it is not the
+  default official policy.
+- Ran the requested 90-day x 10-seed x 3-regime benchmark across `H0`, `H_TIME`, `H1`, `H2`,
+  `H3`, `H4`, `H5`, `BALANCED_RR_H4_PM`, and `H5_AGGRESSIVE` with event logs disabled.
+- Wrote `outputs/c5_55/summary/c5_55_policy_comparison.csv`,
+  `outputs/c5_55/logs/c5_55_daily_summary.csv`,
+  `outputs/c5_55/analysis/c5_55_policy_tradeoff_summary.csv`,
+  `outputs/c5_55/analysis/c5_55_guard_behavior_summary.csv`, and
+  `reports/c5_55_h5_policy_benchmark.md`.
+- Finding: official H5 beats H4 and the audit-only `BALANCED_RR_H4_PM` comparator in all three
+  regimes under soft TCO v4.
+- Finding: `H5_AGGRESSIVE` beats H5 only in `high_demand_high_stress`, so it remains a
+  stress-sensitive alternative rather than the default.
+- Finding: H5 is robust enough for personal presentation as a follow-up benchmark, while C5.55
+  does not replace the team C5.4 result.
+
+## 2026-06-16 / C5.55 Personal Presentation Summary Package
+
+- Added `scripts/analyze_c5_55_presentation_summary.py` to create presentation-focused summary
+  tables from existing C5.55 benchmark outputs without rerunning experiments.
+- Wrote `reports/c5_55_personal_presentation_summary.md`.
+- Wrote `outputs/c5_55/analysis/c5_55_presentation_ranking_table.csv`,
+  `outputs/c5_55/analysis/c5_55_h4_h5_h5aggressive_comparison.csv`, and
+  `outputs/c5_55/analysis/c5_55_presentation_caveat_table.csv`.
+- Summarized H5 as the default official presentation policy, `H5_AGGRESSIVE` as a
+  stress-sensitive alternative, and `BALANCED_RR_H4_PM` as audit-only.
+- Added presentation caveats that C5.55 is a personal follow-up benchmark, does not replace C5.4,
+  uses proxy cycle-time/congestion assumptions, and must disclose H5 guard/fallback behavior.

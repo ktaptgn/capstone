@@ -34,6 +34,7 @@ def main() -> int:
     ap.add_argument("--seeds", default=None, help="comma-separated seeds")
     ap.add_argument("--regimes", default="heterogeneous_condition,high_stress,high_demand_high_stress")
     ap.add_argument("--sensitivities", default="base")
+    ap.add_argument("--policies", default=None, help="comma-separated policies; defaults to config policies")
     ap.add_argument("--congestion-alpha", type=float, default=None)
     ap.add_argument("--congestion-beta", type=float, default=None)
     ap.add_argument("--congestion-cost-level", default=None)
@@ -46,7 +47,11 @@ def main() -> int:
 
     base_cfg = load_config(CONFIG_PATH)
     write_route_cycle_time_table(base_cfg, args.analysis_dir)
-    policies = list(base_cfg["policies"]["enabled"])
+    policies = (
+        [p.strip() for p in args.policies.split(",") if p.strip()]
+        if args.policies
+        else list(base_cfg["policies"]["enabled"])
+    )
     seeds = (
         [int(s) for s in args.seeds.split(",") if s.strip()]
         if args.seeds

@@ -1,0 +1,10 @@
+regime,policy,completed_loads,guard_skip_count,fallback_to_h4_count,route_guard_violation_count,shovel_guard_violation_count,crusher_guard_violation_count,risk_guard_violation_count,guard_skip_per_completed_load,fallback_per_completed_load,route_violation_per_completed_load,shovel_violation_per_completed_load,crusher_violation_per_completed_load,risk_violation_per_completed_load,dominant_guard
+heterogeneous_condition,BALANCED_RR_H4_PM,18900.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,none
+heterogeneous_condition,H4,18900.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,none
+heterogeneous_condition,H4_BALANCED_RR_GUARD,18900.0,83678.2,6813.0,0.0,35408.8,20505.6,41428.9,4.427418,0.360476,0.0,1.873481,1.084952,2.192005,risk
+high_demand_high_stress,BALANCED_RR_H4_PM,21690.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,none
+high_demand_high_stress,H4,21690.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,none
+high_demand_high_stress,H4_BALANCED_RR_GUARD,21690.0,108091.9,12270.0,0.0,68177.6,54870.9,39931.1,4.98349,0.565698,0.0,3.143273,2.529779,1.840991,shovel
+high_stress,BALANCED_RR_H4_PM,18900.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,none
+high_stress,H4,18900.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,none
+high_stress,H4_BALANCED_RR_GUARD,18900.0,81992.4,6673.0,0.0,34750.4,20066.4,40545.0,4.338222,0.353069,0.0,1.838646,1.061714,2.145238,risk

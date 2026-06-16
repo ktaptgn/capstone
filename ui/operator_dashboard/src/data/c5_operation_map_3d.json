@@ -340,35 +340,6 @@
       "riskLevel": "normal"
     },
     {
-      "id": "concentrator",
-      "type": "sink",
-      "name": "Feed Target / Concentrator Sink",
-      "position2d": {
-        "x": 625,
-        "y": 95
-      },
-      "position": {
-        "x": 625,
-        "y": 6.5,
-        "z": 95
-      },
-      "rotation": {
-        "x": 0,
-        "y": -0.45,
-        "z": 0
-      },
-      "size": {
-        "width": 70,
-        "height": 8,
-        "depth": 52
-      },
-      "asset_key": "concentrator_sink",
-      "queue": 0,
-      "capacity": 999,
-      "status": "normal",
-      "riskLevel": "normal"
-    },
-    {
       "id": "service_zone",
       "type": "service",
       "name": "Water Truck / Grader Service Zone",
@@ -638,64 +609,6 @@
           "x": 480.0,
           "y": 8.5,
           "z": 120.0
-        }
-      ]
-    },
-    {
-      "id": "crusher_1_to_concentrator",
-      "from": "crusher_1",
-      "to": "concentrator",
-      "kind": "conveyor_feed",
-      "riskLevel": "normal",
-      "width": 3,
-      "speedFactor": 1.0,
-      "wearFactor": 1.0,
-      "pmFactor": 1.0,
-      "activeTruckCount": 0,
-      "points": [
-        {
-          "x": 504,
-          "y": 7.8,
-          "z": 202
-        },
-        {
-          "x": 575,
-          "y": 7.0,
-          "z": 185
-        },
-        {
-          "x": 625,
-          "y": 6.5,
-          "z": 95
-        }
-      ]
-    },
-    {
-      "id": "crusher_2_to_concentrator",
-      "from": "crusher_2",
-      "to": "concentrator",
-      "kind": "conveyor_feed",
-      "riskLevel": "normal",
-      "width": 3,
-      "speedFactor": 1.0,
-      "wearFactor": 1.0,
-      "pmFactor": 1.0,
-      "activeTruckCount": 0,
-      "points": [
-        {
-          "x": 584,
-          "y": 7.7,
-          "z": 157
-        },
-        {
-          "x": 606,
-          "y": 7.0,
-          "z": 127
-        },
-        {
-          "x": 625,
-          "y": 6.5,
-          "z": 95
         }
       ]
     },
@@ -1495,17 +1408,6 @@
       "asset_key": "standby_pad",
       "type": "standby",
       "model_url": "assets/models/standby_pad.glb",
-      "scale": 1.0,
-      "default_rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      }
-    },
-    {
-      "asset_key": "concentrator_sink",
-      "type": "sink",
-      "model_url": "assets/models/concentrator_sink.glb",
       "scale": 1.0,
       "default_rotation": {
         "x": 0,

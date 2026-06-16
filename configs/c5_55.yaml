@@ -1,0 +1,38 @@
+# C5.55 -- official H5 benchmark overlay on top of C5.54.
+# C5.54 remains unchanged; this overlay freezes H5 naming and C5.55 output paths.
+
+simulation:
+  version: C5.55
+
+mine:
+  base_reference: "C5.54 freeze decision: H5 = H4_BALANCED_RR_GUARD at 0.90/base"
+
+h5_policy:
+  official_policy: H5
+  source_policy: H4_BALANCED_RR_GUARD
+  soft_utilization_threshold: 0.90
+  risk_guard_level: base
+  risk_guard_percentile: 0.90
+  aggressive_policy: H5_AGGRESSIVE
+  aggressive_soft_utilization_threshold: 0.85
+  aggressive_risk_guard_level: strict
+  aggressive_risk_guard_percentile: 0.75
+
+policies:
+  enabled: [H0, H_TIME, H1, H2, H3, H4, H5, BALANCED_RR_H4_PM, H5_AGGRESSIVE]
+  rl_enabled: false
+  family_map:
+    H0: {pm: none, dispatch: route_blind}
+    H_TIME: {pm: time_based, dispatch: route_hours}
+    H1: {pm: condition, dispatch: route_health}
+    H2: {pm: risk_priority, dispatch: route_risk}
+    H3: {pm: opportunistic, dispatch: route_value}
+    H4: {pm: flow_backpressure, dispatch: route_flow}
+    H5: {pm: flow_backpressure, dispatch: balanced_round_robin_guard_default}
+    BALANCED_RR_H4_PM: {pm: flow_backpressure, dispatch: balanced_round_robin_audit}
+    H5_AGGRESSIVE: {pm: flow_backpressure, dispatch: balanced_round_robin_guard_aggressive}
+
+outputs:
+  log_dir: outputs/c5_55/logs
+  summary_dir: outputs/c5_55/summary
+  analysis_dir: outputs/c5_55/analysis

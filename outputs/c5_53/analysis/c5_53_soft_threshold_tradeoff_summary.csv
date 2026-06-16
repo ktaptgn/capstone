@@ -1,0 +1,4 @@
+regime,best_official_soft_policy,best_overall_soft_policy,h4_soft_tco,h3_soft_tco,best_h1_h2_soft_policy,best_h1_h2_soft_tco,balanced_rr_soft_tco,balanced_beats_h4,h4_remains_best_official
+heterogeneous_condition,H4,BALANCED_RR_H4_PM,5774.972139,7973.081175,H1,9136.486088,5570.925434,True,True
+high_demand_high_stress,H4,BALANCED_RR_H4_PM,9069.153105,13128.721945,H1,13851.232464,8905.033721,True,True
+high_stress,H4,BALANCED_RR_H4_PM,7964.345458,10106.675729,H1,11221.048096,7767.351711,True,True
