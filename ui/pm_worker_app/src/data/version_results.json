@@ -10,7 +10,7 @@
     "C5.1": {
       "label": "C5.1",
       "title": "C5.1 — 휴리스틱 비교 기반",
-      "subtitle": "레거시 H0–H4, 단일 환경. H1과 H4가 동일(충돌)했던 버전.",
+      "subtitle": "레거시 H0-α–H4, 단일 환경. H1과 H4가 동일(충돌)했던 버전.",
       "costLabel": "총 운영비용",
       "costUnit": "normalized CU",
       "recommended": "H3",
@@ -18,7 +18,7 @@
       "source": "project memory / changelog (reliability off)",
       "policies": [
         {
-          "id": "H0",
+          "id": "H0-α",
           "name": "Baseline",
           "color": "#64748B",
           "demandFulfill": null,
@@ -77,11 +77,11 @@
     "C5.2": {
       "label": "C5.2",
       "title": "C5.2 — 보정 휴리스틱 + 신뢰성 레버",
-      "subtitle": "H0 calendar / H_TIME / H1 due+health / H2·H3·H4. 건강도에 비용 결과 부여.",
+      "subtitle": "H0-α calendar / H0-β / H1 due+health / H2·H3·H4. 건강도에 비용 결과 부여.",
       "costLabel": "총 운영비용",
       "costUnit": "normalized CU",
       "recommended": "H3",
-      "headline": "상태인지 PM(H1/H2/H3, 고장 0)이 blind periodic PM(H0/H_TIME, 고장 발생)을 이김. H3 추천.",
+      "headline": "상태인지 PM(H1/H2/H3, 고장 0)이 blind periodic PM(H0-α/H0-β, 고장 발생)을 이김. H3 추천.",
       "source": "05_C5_2_SPECIFICATION.md (365d x 3 seeds, levers on)",
       "policies": [
         {
@@ -107,7 +107,7 @@
           "useCase": "상태 기반 PM"
         },
         {
-          "id": "H_TIME",
+          "id": "H0-β",
           "name": "Operating-hours",
           "color": "#7C3AED",
           "demandFulfill": 98.5,
@@ -129,7 +129,7 @@
           "useCase": "위험 우선 PM"
         },
         {
-          "id": "H0",
+          "id": "H0-α",
           "name": "Calendar periodic",
           "color": "#64748B",
           "demandFulfill": 83.2,
@@ -159,7 +159,7 @@
       "costLabel": "총 TCO",
       "costUnit": "normalized CU",
       "recommended": "H1",
-      "headline": "상태인지 라우팅(H1/H2)이 blind(H0/H3/H4)를 TCO로 이김. 고스트레스에선 고장 ~6× 적게 발생.",
+      "headline": "상태인지 라우팅(H1/H2)이 blind(H0-α/H3/H4)를 TCO로 이김. 고스트레스에선 고장 ~6× 적게 발생.",
       "source": "outputs/c5_3/summary (30 seeds x 365d, heterogeneous_condition)",
       "policies": [
         {
@@ -207,7 +207,7 @@
           "useCase": "용량 분산 (blind)"
         },
         {
-          "id": "H0",
+          "id": "H0-α",
           "name": "Route-blind",
           "color": "#64748B",
           "demandFulfill": 100.0,
@@ -226,7 +226,7 @@
       "costLabel": "총 TCO",
       "costUnit": "normalized CU",
       "recommended": "H2",
-      "headline": "상태인지 joint PM+dispatch(H1/H2)가 blind periodic(H0/H_TIME)을 +40% TCO로 이김(30/30 seed). blind는 과정비+bay포화 고장꼬리로 2중 손해.",
+      "headline": "상태인지 joint PM+dispatch(H1/H2)가 blind periodic(H0-α/H0-β)을 +40% TCO로 이김(30/30 seed). blind는 과정비+bay포화 고장꼬리로 2중 손해.",
       "source": "outputs/c5_4/summary (30 seeds x 365d, heterogeneous_condition)",
       "policies": [
         {
@@ -274,7 +274,7 @@
           "useCase": "흐름 압력 PM"
         },
         {
-          "id": "H_TIME",
+          "id": "H0-β",
           "name": "Operating-hours + blind",
           "color": "#7C3AED",
           "demandFulfill": 100.0,
@@ -285,7 +285,7 @@
           "useCase": "가동시간 PM (blind)"
         },
         {
-          "id": "H0",
+          "id": "H0-α",
           "name": "Calendar + blind",
           "color": "#64748B",
           "demandFulfill": 100.0,
