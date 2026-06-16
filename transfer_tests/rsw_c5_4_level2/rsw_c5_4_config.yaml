@@ -1,0 +1,276 @@
+# RSW C5.4 Level 2 synthetic transfer mini-test configuration.
+#
+# This is not a real factory calibration. Values are synthetic and reconstruct the C5.4 joint
+# PM-scheduling + dispatch decision structure in an RSW setting. The C5.4 mining experiment remains
+# the main project.
+
+simulation:
+  version: rsw_c5_4_level2
+  gun_count: 10
+  maintenance_slots: 2
+  campaign_days: 30
+  hours_per_day: 24
+  step_hours: 1
+  seeds: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110]
+  record_event_log: true
+  record_failure_log: true
+
+optional_full_scale:
+  campaign_days: 365
+  seeds: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
+          111, 112, 113, 114, 115, 116, 117, 118, 119, 120,
+          121, 122, 123, 124, 125, 126, 127, 128, 129, 130]
+
+# Optional sanity checks. These scenarios do not replace or overwrite the 30-day base mini-test.
+sanity_scenarios:
+  demand_pressure_stress:
+    description: "Optional stress sanity run with higher daily demand to expose unmet-demand and flow/backpressure behavior."
+    family_daily_targets:
+      A: 500
+      B: 500
+      C: 500
+    regimes: [high_demand_high_stress]
+    days: 30
+    seeds: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110]
+    outputs:
+      directory: outputs/stress
+      policy_summary_csv: rsw_c5_4_demand_stress_policy_summary.csv
+      event_log_csv: rsw_c5_4_demand_stress_event_log.csv
+      failure_log_csv: rsw_c5_4_demand_stress_failure_log.csv
+      report_markdown: rsw_c5_4_demand_stress_report.md
+      plot_png: rsw_c5_4_demand_stress_plot.png
+  horizon_sanity_90:
+    description: "Optional 90-day sanity run to inspect whether failure and CM paths become more visible."
+    regimes: [heterogeneous_condition, high_stress, high_demand_high_stress]
+    days: 90
+    seeds: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110]
+    outputs:
+      directory: outputs/horizon_90
+      policy_summary_csv: rsw_c5_4_90day_policy_summary.csv
+      event_log_csv: rsw_c5_4_90day_event_log.csv
+      failure_log_csv: rsw_c5_4_90day_failure_log.csv
+      report_markdown: rsw_c5_4_90day_report.md
+      plot_png: rsw_c5_4_90day_plot.png
+
+demand:
+  daily_weld_demand: 210
+  # Explicit Step 1 assumption: equal base targets prevent easy-family-only fulfillment.
+  family_daily_targets:
+    A: 70
+    B: 70
+    C: 70
+  scale_family_targets_with_regime: true
+  failed_attempt_counts_as_completed: false
+
+reliability:
+  components: [tip, cooling, actuator]
+  min_hi: 0.0
+  max_hi: 1.0
+  gun_hi_aggregation: min
+
+  initial_hi:
+    mean:
+      tip: 0.70
+      cooling: 0.78
+      actuator: 0.82
+    std:
+      tip: 0.08
+      cooling: 0.06
+      actuator: 0.05
+    lower_clip: 0.25
+    upper_clip: 0.95
+
+  frailty:
+    distribution: gamma
+    mean: 1.0
+    cv: 0.50
+    min_clip: 0.50
+    max_clip: 2.50
+
+  sensor_noise:
+    enabled: true
+    sigma: 0.03
+    lower_clip: 0.0
+    upper_clip: 1.0
+
+  wear:
+    base_loss_per_hour:
+      tip: 0.0048
+      cooling: 0.0028
+      actuator: 0.0024
+    stochastic_sigma: 0.10
+    stochastic_mode: multiplicative_normal
+    minimum_factor: 0.0
+
+  failure_hazard:
+    model: threshold_power
+    threshold_hi:
+      tip: 0.20
+      cooling: 0.20
+      actuator: 0.20
+    p_max:
+      tip: 0.08
+      cooling: 0.04
+      actuator: 0.035
+    shape:
+      tip: 2.0
+      cooling: 2.2
+      actuator: 2.1
+    zero_above_threshold: true
+
+  # Explicit Step 1 assumption: defects are quality-cost events separate from failures/CM.
+  defect_hazard:
+    model: sigmoid
+    p_max: 0.06
+    slope: 14.0
+    center_hi: 0.32
+    job_severity_weight: 0.35
+
+job_families:
+  A:
+    name: standard_panel
+    welds_per_hour: 12
+    value_weight: 1.00
+    severity:
+      tip: 1.00
+      cooling: 1.00
+      actuator: 1.00
+  B:
+    name: high_strength_joint
+    welds_per_hour: 10
+    value_weight: 1.20
+    severity:
+      tip: 1.25
+      cooling: 1.10
+      actuator: 1.05
+  C:
+    name: complex_access_joint
+    welds_per_hour: 8
+    value_weight: 1.35
+    severity:
+      tip: 1.40
+      cooling: 1.20
+      actuator: 1.15
+
+maintenance:
+  visit_semantics:
+    slot_unit: gun
+    multi_component_pm_duration: sum
+    multi_component_cm_duration: max
+    full_service_components: [tip, cooling, actuator]
+
+  pm_recovery:
+    tip: 0.35
+    cooling: 0.30
+    actuator: 0.28
+  pm_cap:
+    tip: 0.85
+    cooling: 0.88
+    actuator: 0.88
+  cm_recovery:
+    tip: 0.50
+    cooling: 0.45
+    actuator: 0.45
+  cm_cap:
+    tip: 0.75
+    cooling: 0.78
+    actuator: 0.78
+
+cost:
+  unit: synthetic_CU
+  pm_cost:
+    tip: 3.0
+    cooling: 4.0
+    actuator: 4.0
+  pm_downtime_hours:
+    tip: 2
+    cooling: 3
+    actuator: 3
+  cm_cost:
+    tip: 12.0
+    cooling: 16.0
+    actuator: 16.0
+  cm_downtime_hours:
+    tip: 8
+    cooling: 10
+    actuator: 10
+  degradation_cost_per_hi_loss:
+    tip: 2.0
+    cooling: 1.5
+    actuator: 1.5
+  downtime_cost_per_gun_hour: 1.0
+  unmet_demand_cost_per_weld: 1.0
+  defect_event_cost: 8.0
+  tco_components: [pm, cm, downtime, degradation, unmet_demand, defect]
+
+pm_scheduling:
+  calendar:
+    interval_days: 3
+  operating_hours:
+    due_hours: 30
+  cbm_threshold:
+    tip: 0.21
+    cooling: 0.21
+    actuator: 0.28
+  critical_risk_override: 0.80
+  risk_priority:
+    risk_threshold: 0.80
+  cost_value:
+    lookahead_hours: 24
+  flow_backpressure:
+    soft_threshold_hi: 0.30
+    critical_threshold_hi: 0.22
+
+default_regime: heterogeneous_condition
+regimes:
+  heterogeneous_condition:
+    demand_factor: 1.00
+    wear_factor: 1.00
+    hazard_factor: 1.00
+  high_stress:
+    demand_factor: 1.00
+    wear_factor: 1.30
+    hazard_factor: 1.25
+  high_demand_high_stress:
+    demand_factor: 1.15
+    wear_factor: 1.30
+    hazard_factor: 1.25
+
+policies:
+  enabled: [H0, H_TIME, H1, H2, H3, H4]
+  rl_training_enabled: false
+  family_map:
+    H0: {pm: calendar_full_service, dispatch: route_blind_round_robin}
+    H_TIME: {pm: operating_hours_full_service, dispatch: route_blind_round_robin}
+    H1: {pm: condition_cbm, dispatch: health_routing}
+    H2: {pm: risk_priority, dispatch: risk_aware_routing}
+    H3: {pm: cost_value, dispatch: value_routing}
+    H4: {pm: flow_backpressure, dispatch: capacity_routing}
+
+sensitivity:
+  frailty_cv: [0.10, 0.30, 0.50, 0.80]
+  cbm_threshold_scale: [0.80, 0.90, 1.00, 1.10, 1.20]
+  maintenance_slots: [1, 2, 3]
+
+outputs:
+  directory: outputs
+  policy_summary_csv: rsw_c5_4_policy_summary.csv
+  policy_summary_xlsx: rsw_c5_4_policy_summary.xlsx
+  event_log_csv: rsw_c5_4_event_log.csv
+  failure_log_csv: rsw_c5_4_failure_log.csv
+  sensitivity_csv: rsw_c5_4_sensitivity.csv
+  sensitivity_markdown: rsw_c5_4_sensitivity.md
+  mechanism_csv: rsw_c5_4_mechanism.csv
+  mechanism_markdown: rsw_c5_4_mechanism.md
+  policy_comparison_png: rsw_c5_4_policy_comparison.png
+  report_markdown: rsw_c5_4_report.md
+  sanity_improvement_report: rsw_c5_4_sanity_improvement_report.md
+  excel_sheets:
+    - summary
+    - regime_rankings
+    - event_log_sample
+    - failure_log
+    - mechanism
+    - sensitivity
+    - config
+    - interpretation

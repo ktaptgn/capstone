@@ -1,0 +1,40 @@
+{
+  "label_granularity": "daily_aggregate",
+  "calibration_status": "suggested_only",
+  "matched_day_count": 8,
+  "unmatched_raw_day_count": 1,
+  "defect_count_total": 39,
+  "matched_weld_count": 10291,
+  "defect_rate_mean": 0.00378972,
+  "daily_defect_rate_mean": 0.00415421,
+  "defect_rate_min": 0.002,
+  "defect_rate_max": 0.007,
+  "process_variability_defect_rate_correlation": {
+    "force_std": 0.232797,
+    "current_std": 0.318526,
+    "voltage_std": 0.248341,
+    "weld_time_std": -0.053912
+  },
+  "recommended_defect_hazard": {
+    "p_max": 0.06,
+    "center_hi": 0.32,
+    "slope": 14.0,
+    "job_severity_weight": 0.35,
+    "status": "suggested_only"
+  },
+  "existing_defect_hazard": {
+    "p_max": 0.06,
+    "center_hi": 0.32,
+    "slope": 14.0,
+    "job_severity_weight": 0.35
+  },
+  "usage": "defect_hazard_calibration_only",
+  "not_supported": [
+    "PM scheduling validation",
+    "tip dressing timing validation",
+    "maintenance slot validation",
+    "downtime validation",
+    "electrode wear HI calibration"
+  ],
+  "interpretation": "Daily aggregate labels support descriptive defect-risk calibration only. They do not support per-weld supervised prediction or maintenance validation."
+}

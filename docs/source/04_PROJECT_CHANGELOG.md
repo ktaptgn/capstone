@@ -224,3 +224,147 @@ This changelog tracks the official direction changes for C5.1.
   PM/downtime structure, not as a failure or as real factory validation.
 - Added explicit limitations and tests confirming that KAMP data does not validate PM scheduling,
   tip dressing timing, maintenance slots, downtime, or electrode wear/HI.
+
+## 2026-06-16 / C5.5 Facility-Destination Experimental Module
+
+- Added C5.5 as an experimental module that inherits the C5.4 reliability, cost, frailty,
+  sensor-noise, PM-scheduling, policy roster, regimes, seeds, and normalized-CU objective while
+  replacing Route A/B/C dispatch with C5.1-style facility destination decisions.
+- Added `configs/c5_5.yaml`, `mine_env/simulator_c5_5.py`, `mine_env/config_c5_5.py`, and
+  `mine_env/policies_c5_5/` with H0, H_TIME, H1, H2, H3, and H4 adapted to shovel/crusher
+  destination ranking.
+- Modeled the required C5.5 layout: 25 trucks, 20 operating trucks, 5 standby/reserve trucks,
+  Shovel A/B/C, Crusher 1/2, and one PM bay facility with two simultaneous service slots.
+- Added `scripts/run_c5_5_sweep.py` and `scripts/analyze_c5_5_results.py`, plus C5.5 output
+  folders under `outputs/c5_5/`.
+- Added focused C5.5 tests for config loading, facility layout, state-valid destination decisions,
+  PM service capacity, policy smoke execution, and TCO decomposition. C5.4 focused regression tests
+  still pass.
+- Ran a first C5.5 smoke experiment at heterogeneous_condition, seeds 101-103, 30 days, all six
+  policies. H3 was lowest mean TCO in the smoke run; H1/H2 avoided failures but were too
+  production-conservative, causing high unmet-demand cost. This result is documented as
+  experimental and not tuned away.
+- Added `reports/c5_5_facility_destination_test.md` with inheritance notes, C5.1/C5.4/C5.5
+  comparison, facility layout, policy adaptation table, smoke result, limitations, and recommendation
+  to keep C5.5 experimental until the full comparison is run.
+
+## 2026-06-16 / C5.51 Facility-Route Ablation Module
+
+- Added C5.51 as a separate experimental module that inherits the C5.5 facility layout but restores
+  C5.4-style route ranking. C5.4 and C5.5 files and outputs were not overwritten.
+- Added `configs/c5_51.yaml`, `mine_env/config_c5_51.py`, `mine_env/simulator_c5_51.py`, and
+  `mine_env/policies_c5_51/`.
+- Defined six facility-compatible routes as Shovel x Crusher pairs: R_A1, R_A2, R_B1, R_B2, R_C1,
+  and R_C2. Route attributes include shovel/crusher mapping, grade, hardness, cycle factor,
+  capacity, component wear multipliers, and queue sensitivity.
+- Added route-level H0, H_TIME, H1, H2, H3, and H4 policies. Policies return ranked route lists,
+  not direct facility actions.
+- Added `scripts/run_c5_51_sweep.py`, `scripts/analyze_c5_51_results.py`, output folders under
+  `outputs/c5_51/`, and focused C5.51 regression tests.
+- Ran the comparable C5.51 smoke experiment at heterogeneous_condition, seeds 101-103, 30 days, all
+  six policies. H2 and H1 ranked best by mean TCO, both with fulfillment 1.000 and zero failures.
+- Compared against the C5.5 smoke: H1 fulfillment improved from 0.585 to 1.000, and H2 fulfillment
+  improved from 0.418 to 1.000. This supports the ablation hypothesis that direct facility
+  destination actions contributed to C5.5 H1/H2 under-dispatch in smoke testing.
+- Added `reports/c5_51_facility_route_test.md` with C5.4/C5.5/C5.51 comparison, route definitions,
+  smoke ranking, C5.5 comparison, limitations, and recommendation to keep C5.51 experimental until
+  the full comparison is run.
+
+## 2026-06-16 / C5.52 Grade-Aware Objective Experiment
+
+- Added C5.52 as a separate experimental module that inherits the C5.51 facility and route layout
+  while adding grade-adjusted production KPIs and a grade-aware TCO variant. C5.4, C5.5, and C5.51
+  code paths were not modified.
+- Added `configs/c5_52.yaml`, `mine_env/config_c5_52.py`, `mine_env/simulator_c5_52.py`,
+  `mine_env/policies_c5_52/`, `scripts/run_c5_52_sweep.py`, and C5.52 output folders.
+- Preserved load-based fulfillment and added `target_effective_output`,
+  `effective_fulfillment_rate`, `avg_grade_per_load`, `total_tco_v1`, `total_tco_v2`, and
+  `effective_output_shortfall_cost`.
+- Added low/base/high shortfall-cost sensitivity. The base rate is derived from the existing unmet
+  load penalty divided by a balanced-grade load (`2.0 / (350 x 0.80)`).
+- Added H1/H2 original aliases and H1/H2 value-guard variants without overwriting existing H1/H2
+  route policies.
+- Ran the requested 90-day x 10-seed x 3-regime C5.52 experiment across low/base/high shortfall
+  sensitivities and 10 policies, producing `outputs/c5_52/summary/c5_52_policy_comparison.csv`.
+- Result: H1/H2 remain strongest under legacy TCO v1, but under base/high grade-aware TCO v2 the
+  ranking shifts toward H4/H3 because H1/H2's low-grade route concentration creates effective-output
+  shortfall cost.
+- Added `reports/c5_52_grade_aware_objective_test.md` with fulfillment definitions, route shares,
+  avg grade/load, effective output, v1/v2 ranking comparisons, sensitivity results, and the
+  conclusion that reliability-cost optimum and production-value-aware optimum differ.
+
+## 2026-06-16 / C5.52 Pareto Tradeoff Analysis and C5.53 Plan
+
+- Added `reports/c5_52_pareto_tradeoff_analysis.md` to interpret C5.52 as a multi-objective
+  reliability-cost versus grade-adjusted production-value trade-off.
+- Exported Pareto plotting tables:
+  `outputs/c5_52/analysis/c5_52_pareto_points.csv` and
+  `outputs/c5_52/analysis/c5_52_policy_tradeoff_summary.csv`.
+- Added formal Pareto flags for `v1_output` and `v2_failure_output`, plus route/facility share and
+  ranking fields for downstream plotting or dashboard use.
+- Added `reports/c5_53_value_risk_weight_sweep_plan.md` as a design-only DOE proposal for the next
+  value-risk weight sweep. No C5.53 implementation or H5 policy was added.
+
+## 2026-06-16 / C5.52 Route and Facility Congestion Audit
+
+- Added `reports/c5_52_route_congestion_audit.md` to assess whether C5.52 route concentration,
+  especially H1/H2 concentration on low-risk C routes, implies route/facility bottlenecks.
+- Used existing C5.52 summary outputs only; no C5.4, C5.5, C5.51, or C5.52 simulator logic was
+  modified.
+- Finding: H1/H2 saturate R_C1/R_C2 route capacity and show high derived Shovel C utilization, but
+  current logs do not include realized queue hours or cycle time, so actual queue/cycle bottlenecks
+  cannot be confirmed without additional C5.53 logging.
+- Finding: H4 clearly lowers route concentration and improves effective fulfillment, but current
+  logs are insufficient to claim realized queue-hour or cycle-time savings.
+
+## 2026-06-16 / C5.53 Congestion-Aware Bottleneck Experiment
+
+- Added C5.53 as a separate congestion-aware experiment module without modifying C5.4, C5.5,
+  C5.51, or C5.52 simulator logic.
+- Added `configs/c5_53.yaml`, `mine_env/config_c5_53.py`, `mine_env/simulator_c5_53.py`, and
+  `mine_env/policies_c5_53/` to inherit the C5.52 route/facility/grade-aware structure while
+  adding deterministic route, shovel, and crusher congestion delay.
+- Added dispatch-event and daily-summary instrumentation for preferred route, assigned route,
+  fallback reason, route/facility utilization, queue delays, realized cycle time, route HHI, max
+  route share, congestion cost, and `total_tco_v3`.
+- Added `scripts/run_c5_53_sweep.py`, `scripts/analyze_c5_53_results.py`, C5.53 tests, and
+  `reports/c5_53_congestion_bottleneck_test.md`.
+- Ran the requested smoke test and the 90-day x 10-seed x 3-regime base congestion experiment
+  (`alpha=1.0`, `beta=2.0`). Summary output is in
+  `outputs/c5_53/summary/c5_53_policy_comparison.csv`, daily congestion logs are in
+  `outputs/c5_53/logs/c5_53_daily_summary.csv`, and a smoke dispatch-event log remains in
+  `outputs/c5_53/logs/c5_53_dispatch_events.csv`.
+- Finding: under the base congestion setting, H1/H2 family policies retain reliability-cost
+  characteristics but are heavily penalized by C-route concentration in `total_tco_v3`, while H4
+  keeps lower route concentration and near-zero congestion delay across regimes.
+
+## 2026-06-16 / C5.53 Literature-Informed Proxy Cycle-Time Calibration
+
+- Added C5.53-only literature-informed proxy values for ultra-class truck motion, route distance,
+  route speed factors, shovel loading time, and crusher service time in `configs/c5_53.yaml`.
+- Updated `mine_env/simulator_c5_53.py` so realized cycle time uses route-specific proxy
+  `base_cycle_time_min` plus route, shovel, and crusher queue delays instead of the earlier
+  abstract one-hour base cycle multiplier.
+- Added route cycle-time table export at
+  `outputs/c5_53/analysis/c5_53_route_cycle_time_table.csv`.
+- Updated `reports/c5_53_congestion_bottleneck_test.md` with a literature-informed proxy
+  calibration section and clarified that the values are not actual Escondida measurements.
+- Extended C5.53 tests to validate proxy config loading, cycle-time ordering, Crusher 2 service
+  versus distance behavior, and use of proxy base cycle time in realized dispatch events.
+- Re-ran the requested 30-day smoke test only after proxy calibration. H4 remained best under
+  `total_tco_v3` for the heterogeneous-condition smoke run.
+
+## 2026-06-16 / C5.53 H4 Zero-Congestion Audit
+
+- Added `reports/c5_53_h4_zero_congestion_audit.md` to diagnose why H4 shows zero or near-zero
+  congestion under the C5.53 base run.
+- Audited existing 90-day C5.53 summary and daily logs without modifying C5.4, C5.5, C5.51,
+  C5.52, or C5.53 simulator logic.
+- Finding: H4 uses the same congestion calculation path as H1/H2/H3; no H4-specific bypass or
+  logging omission was found.
+- Finding: exact zero congestion in heterogeneous and high-stress regimes is caused by the current
+  hard threshold (`utilization > 1.0`) and H4 preferred-attempt utilization staying at or below
+  capacity. The high-demand/high-stress regime is near-zero but nonzero in the current audited
+  output.
+- Proposed a soft-threshold congestion design starting around utilization 0.85 as a future
+  experiment, while preserving the current hard-threshold metric for comparability.
