@@ -82,6 +82,9 @@ SUMMARY_FIELDS = [
     "congestion_beta",
     "congestion_cost_level",
     "congestion_cost_per_hour",
+    "congestion_delay_hours_hard",
+    "congestion_cost_hard",
+    "total_tco_v3_hard",
     "congestion_delay_hours_total",
     "route_queue_hours_total",
     "shovel_queue_hours_total",
@@ -89,6 +92,13 @@ SUMMARY_FIELDS = [
     "congestion_cost",
     "total_tco_v3",
     "total_tco_v3_report_value",
+    "soft_congestion_start",
+    "soft_congestion_alpha",
+    "soft_congestion_beta",
+    "congestion_delay_hours_soft",
+    "congestion_cost_soft",
+    "total_tco_v4_soft_congestion",
+    "total_tco_v4_soft_congestion_report_value",
     "avg_realized_cycle_time_min",
     "avg_base_cycle_time_min",
     "avg_realized_cycle_time_hours",
@@ -96,6 +106,9 @@ SUMMARY_FIELDS = [
     "completed_loads_per_hour",
     "route_hhi",
     "max_route_share",
+    "max_route_utilization",
+    "max_shovel_utilization",
+    "max_crusher_utilization",
     "route_fallback_loads",
     "route_rejected_loads",
     "route_r_a1_attempts",
@@ -334,6 +347,21 @@ def _queue_delay(utilization: float, alpha: float, beta: float) -> float:
     return float(alpha) * float(utilization - 1.0) ** float(beta)
 
 
+def _soft_queue_delay(
+    utilization: float,
+    soft_start: float,
+    alpha_soft: float,
+    beta_soft: float,
+    alpha_hard: float,
+    beta_hard: float,
+) -> float:
+    """Return soft-threshold queue delay in minutes for one dispatch."""
+    pressure = max((float(utilization) - soft_start) / max(1.0 - soft_start, 1e-9), 0.0)
+    soft = float(alpha_soft) * pressure ** float(beta_soft)
+    hard = float(alpha_hard) * max(float(utilization) - 1.0, 0.0) ** float(beta_hard)
+    return soft + hard
+
+
 def _facility_capacity(config: dict[str, Any], facility_type: str, facility_id: str) -> float:
     if facility_type == "shovel":
         return float(config["facilities"]["shovels"][facility_id]["capacity_loads_per_day"])
@@ -501,6 +529,21 @@ def run_policy_simulation(
     )
     cost_level = str(congestion_cost_level or congestion_cfg.get("congestion_cost_level", "base"))
     congestion_cost_per_hour = _congestion_cost_rate(config, cost_level)
+    soft_cfg = config.get("soft_congestion", {})
+    soft_start = float(soft_cfg.get("soft_start", 0.85))
+    soft_alpha_cfg = soft_cfg.get("alpha_soft", {})
+    alpha_soft = float(
+        soft_alpha_cfg.get(
+            cost_level,
+            soft_alpha_cfg.get("base", soft_cfg.get("alpha_soft_base", 0.10)),
+        )
+        if isinstance(soft_alpha_cfg, dict)
+        else soft_alpha_cfg
+    )
+    beta_soft = float(soft_cfg.get("beta_soft", 2.0))
+    alpha_hard = float(soft_cfg.get("alpha_hard", alpha))
+    beta_hard = float(soft_cfg.get("beta_hard", beta))
+    soft_cost_per_hour = float(soft_cfg.get("cost_per_hour", congestion_cost_per_hour))
 
     totals = {"pm": 0.0, "cm": 0.0, "downtime": 0.0, "degradation": 0.0, "unmet": 0.0}
     counts = {
@@ -544,6 +587,12 @@ def run_policy_simulation(
     route_queue_hours_total = 0.0
     shovel_queue_hours_total = 0.0
     crusher_queue_hours_total = 0.0
+    route_queue_hours_soft_total = 0.0
+    shovel_queue_hours_soft_total = 0.0
+    crusher_queue_hours_soft_total = 0.0
+    max_route_utilization = 0.0
+    max_shovel_utilization = 0.0
+    max_crusher_utilization = 0.0
     route_fallback_loads = 0
     route_rejected_loads = 0
 
@@ -690,6 +739,9 @@ def run_policy_simulation(
                     preferred_shovel_util_after = shovel_attempt_after / preferred_shovel_capacity
                     preferred_crusher_util_before = crusher_attempt_before / preferred_crusher_capacity
                     preferred_crusher_util_after = crusher_attempt_after / preferred_crusher_capacity
+                    max_route_utilization = max(max_route_utilization, preferred_route_util_after)
+                    max_shovel_utilization = max(max_shovel_utilization, preferred_shovel_util_after)
+                    max_crusher_utilization = max(max_crusher_utilization, preferred_crusher_util_after)
 
                     day_route_attempts[preferred_route] += 1
                     day_shovel_attempts[preferred_shovel] += 1
@@ -738,6 +790,30 @@ def run_policy_simulation(
                     route_queue_delay_min = _queue_delay(preferred_route_util_after, alpha, beta)
                     shovel_queue_delay_min = _queue_delay(preferred_shovel_util_after, alpha, beta)
                     crusher_queue_delay_min = _queue_delay(preferred_crusher_util_after, alpha, beta)
+                    route_queue_delay_soft_min = _soft_queue_delay(
+                        preferred_route_util_after,
+                        soft_start,
+                        alpha_soft,
+                        beta_soft,
+                        alpha_hard,
+                        beta_hard,
+                    )
+                    shovel_queue_delay_soft_min = _soft_queue_delay(
+                        preferred_shovel_util_after,
+                        soft_start,
+                        alpha_soft,
+                        beta_soft,
+                        alpha_hard,
+                        beta_hard,
+                    )
+                    crusher_queue_delay_soft_min = _soft_queue_delay(
+                        preferred_crusher_util_after,
+                        soft_start,
+                        alpha_soft,
+                        beta_soft,
+                        alpha_hard,
+                        beta_hard,
+                    )
                     route_cycle = route_cycle_times[route_id]
                     base_cycle_time_min = float(route_cycle["base_cycle_time_min"])
                     realized_cycle_time_min = (
@@ -749,10 +825,16 @@ def run_policy_simulation(
                     route_queue_delay_hours = route_queue_delay_min / 60.0
                     shovel_queue_delay_hours = shovel_queue_delay_min / 60.0
                     crusher_queue_delay_hours = crusher_queue_delay_min / 60.0
+                    route_queue_delay_soft_hours = route_queue_delay_soft_min / 60.0
+                    shovel_queue_delay_soft_hours = shovel_queue_delay_soft_min / 60.0
+                    crusher_queue_delay_soft_hours = crusher_queue_delay_soft_min / 60.0
                     realized_cycle_time_hours = realized_cycle_time_min / 60.0
                     route_queue_hours_total += route_queue_delay_hours
                     shovel_queue_hours_total += shovel_queue_delay_hours
                     crusher_queue_hours_total += crusher_queue_delay_hours
+                    route_queue_hours_soft_total += route_queue_delay_soft_hours
+                    shovel_queue_hours_soft_total += shovel_queue_delay_soft_hours
+                    crusher_queue_hours_soft_total += crusher_queue_delay_soft_hours
                     day_route_queue += route_queue_delay_hours
                     day_shovel_queue += shovel_queue_delay_hours
                     day_crusher_queue += crusher_queue_delay_hours
@@ -879,6 +961,11 @@ def run_policy_simulation(
     congestion_delay_total = route_queue_hours_total + shovel_queue_hours_total + crusher_queue_hours_total
     congestion_cost = congestion_delay_total * congestion_cost_per_hour
     total_tco_v3 = total_tco_v2 + congestion_cost
+    congestion_delay_soft = (
+        route_queue_hours_soft_total + shovel_queue_hours_soft_total + crusher_queue_hours_soft_total
+    )
+    congestion_cost_soft = congestion_delay_soft * soft_cost_per_hour
+    total_tco_v4_soft = total_tco_v2 + congestion_cost_soft
     avg_grade = (
         effective_output / (counts["completed_loads"] * float(config["mine"]["payload_ton"]))
         if counts["completed_loads"] > 0
@@ -965,6 +1052,9 @@ def run_policy_simulation(
         "congestion_beta": round(beta, 6),
         "congestion_cost_level": cost_level,
         "congestion_cost_per_hour": round(congestion_cost_per_hour, 6),
+        "congestion_delay_hours_hard": round(congestion_delay_total, 6),
+        "congestion_cost_hard": round(congestion_cost, 6),
+        "total_tco_v3_hard": round(total_tco_v3, 6),
         "congestion_delay_hours_total": round(congestion_delay_total, 6),
         "route_queue_hours_total": round(route_queue_hours_total, 6),
         "shovel_queue_hours_total": round(shovel_queue_hours_total, 6),
@@ -972,6 +1062,15 @@ def run_policy_simulation(
         "congestion_cost": round(congestion_cost, 6),
         "total_tco_v3": round(total_tco_v3, 6),
         "total_tco_v3_report_value": round(cost_model.to_report_value(total_tco_v3), 3),
+        "soft_congestion_start": round(soft_start, 6),
+        "soft_congestion_alpha": round(alpha_soft, 6),
+        "soft_congestion_beta": round(beta_soft, 6),
+        "congestion_delay_hours_soft": round(congestion_delay_soft, 6),
+        "congestion_cost_soft": round(congestion_cost_soft, 6),
+        "total_tco_v4_soft_congestion": round(total_tco_v4_soft, 6),
+        "total_tco_v4_soft_congestion_report_value": round(
+            cost_model.to_report_value(total_tco_v4_soft), 3
+        ),
         "avg_realized_cycle_time_min": round(
             float(np.mean(cycle_time_min_samples)) if cycle_time_min_samples else 0.0,
             6,
@@ -998,6 +1097,9 @@ def run_policy_simulation(
         ),
         "route_hhi": _hhi(route_loads),
         "max_route_share": _max_share(route_loads),
+        "max_route_utilization": round(max_route_utilization, 6),
+        "max_shovel_utilization": round(max_shovel_utilization, 6),
+        "max_crusher_utilization": round(max_crusher_utilization, 6),
         "route_fallback_loads": route_fallback_loads,
         "route_rejected_loads": route_rejected_loads,
         "route_r_a1_attempts": route_attempts["R_A1"],

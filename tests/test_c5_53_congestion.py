@@ -115,3 +115,22 @@ def test_proxy_base_cycle_time_is_used_in_realized_cycle_time(config):
     assert float(event["base_cycle_time_min"]) == pytest.approx(expected, rel=1e-6)
     assert float(event["realized_cycle_time_min"]) == pytest.approx(expected, rel=1e-6)
     assert result.summary["avg_base_cycle_time_min"] > 0
+
+
+def test_soft_threshold_metrics_preserve_hard_tco_v3(config):
+    summary = run_policy_simulation(
+        config,
+        "H4",
+        seed=101,
+        days=3,
+        congestion_alpha=1.0,
+        congestion_beta=2.0,
+    ).summary
+    assert summary["total_tco_v3_hard"] == summary["total_tco_v3"]
+    assert summary["congestion_delay_hours_hard"] == summary["congestion_delay_hours_total"]
+    assert summary["congestion_cost_hard"] == summary["congestion_cost"]
+    assert summary["total_tco_v4_soft_congestion"] >= summary["total_tco_v2"]
+    assert summary["congestion_delay_hours_soft"] >= summary["congestion_delay_hours_hard"]
+    assert "max_route_utilization" in summary
+    assert "max_shovel_utilization" in summary
+    assert "max_crusher_utilization" in summary

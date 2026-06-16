@@ -36,6 +36,15 @@ def test_congestion_block(config):
     assert congestion["congestion_cost_per_hour"]["base"] < congestion["congestion_cost_per_hour"]["high"]
 
 
+def test_soft_congestion_block(config):
+    soft = config["soft_congestion"]
+    assert soft["enabled"] is True
+    assert soft["soft_start"] == pytest.approx(0.85)
+    assert soft["alpha_soft"]["low"] < soft["alpha_soft"]["base"]
+    assert soft["alpha_soft"]["base"] < soft["alpha_soft"]["high"]
+    assert soft["cost_per_hour"] > 0
+
+
 def test_cycle_time_proxy_blocks_load(config):
     assert config["truck_motion"]["loaded_speed_kmh"]["base"] < config["truck_motion"]["empty_speed_kmh"]["base"]
     assert set(config["route_distances"]) == set(config["routes"])

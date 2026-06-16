@@ -1,0 +1,13 @@
+regime,policy,soft_tco_v4,rank,effective_fulfillment_rate,failure_count,cm_count,downtime_hours,hard_congestion_hours,soft_congestion_hours,fallback_per_completed_load,dominant_guard,interpretation
+heterogeneous_condition,H5,5454.485034,1,0.990347,0.0,0.0,2455.5,2.2e-05,0.636231,0.360476,risk,Default official H5; best overall unless aggressive stress setting is isolated.
+heterogeneous_condition,H5_AGGRESSIVE,5478.62247,2,0.990915,0.0,0.0,2477.4,2.2e-05,0.44869,0.729688,risk,Aggressive sensitivity comparator; useful under high-demand stress but higher fallback dependence.
+heterogeneous_condition,BALANCED_RR_H4_PM,5570.925434,3,1.000195,0.0,0.0,2691.7,0.100146,5.035408,0.0,none,Audit-only comparator; not an official policy.
+heterogeneous_condition,H4,5774.972139,4,0.992857,0.0,0.0,2659.5,0.0,0.35052,0.0,none,Official H4 baseline; improved by H5 in C5.55.
+high_stress,H5,7616.73433,1,0.990538,0.0,0.0,3501.8,1.9e-05,0.621777,0.353069,risk,Default official H5; best overall unless aggressive stress setting is isolated.
+high_stress,H5_AGGRESSIVE,7623.884262,2,0.990948,0.0,0.0,3511.9,0.0,0.444834,0.714085,risk,Aggressive sensitivity comparator; useful under high-demand stress but higher fallback dependence.
+high_stress,BALANCED_RR_H4_PM,7767.351711,3,0.999753,0.4,0.4,3736.7,0.1056,5.085145,0.0,none,Audit-only comparator; not an official policy.
+high_stress,H4,7964.345458,4,0.992854,0.4,0.4,3709.3,0.0,0.350668,0.0,none,Official H4 baseline; improved by H5 in C5.55.
+high_demand_high_stress,H5_AGGRESSIVE,8817.600987,1,0.99292,14.1,14.1,4069.3,0.069488,8.327104,0.843089,shovel,Aggressive sensitivity comparator; useful under high-demand stress but higher fallback dependence.
+high_demand_high_stress,H5,8883.447603,2,0.991805,15.3,15.3,4075.3,0.122168,9.17073,0.565698,shovel,Default official H5; best overall unless aggressive stress setting is isolated.
+high_demand_high_stress,BALANCED_RR_H4_PM,8905.033721,3,0.999999,20.4,20.4,4242.3,1.218585,24.267478,0.0,none,Audit-only comparator; not an official policy.
+high_demand_high_stress,H4,9069.153105,4,0.993804,17.6,17.6,4201.7,0.023417,7.346056,0.0,none,Official H4 baseline; improved by H5 in C5.55.

@@ -1,0 +1,10 @@
+regime,comparison,tco_margin,effective_fulfillment_diff,failure_diff,cm_diff,downtime_diff,soft_congestion_diff,fallback_diff,interpretation
+heterogeneous_condition,H5 vs H4,320.487105,-0.00251,0.0,0.0,-204.0,0.285711,0.360476,H5 is lower TCO than H4; fallback behavior should still be disclosed.
+heterogeneous_condition,H5 vs BALANCED_RR_H4_PM,116.4404,-0.009848,0.0,0.0,-236.2,-4.399177,0.360476,H5 converts the audit comparator signal into an official guarded policy.
+heterogeneous_condition,H5 vs H5_AGGRESSIVE,24.137436,-0.000568,0.0,0.0,-21.9,0.187541,-0.369212,H5 is lower TCO than the aggressive variant in this regime.
+high_stress,H5 vs H4,347.611128,-0.002316,-0.4,-0.4,-207.5,0.271109,0.353069,H5 is lower TCO than H4; fallback behavior should still be disclosed.
+high_stress,H5 vs BALANCED_RR_H4_PM,150.617381,-0.009215,-0.4,-0.4,-234.9,-4.463368,0.353069,H5 converts the audit comparator signal into an official guarded policy.
+high_stress,H5 vs H5_AGGRESSIVE,7.149932,-0.00041,0.0,0.0,-10.1,0.176943,-0.361016,H5 is lower TCO than the aggressive variant in this regime.
+high_demand_high_stress,H5 vs H4,185.705502,-0.001999,-2.3,-2.3,-126.4,1.824674,0.565698,H5 is lower TCO than H4; fallback behavior should still be disclosed.
+high_demand_high_stress,H5 vs BALANCED_RR_H4_PM,21.586118,-0.008194,-5.1,-5.1,-167.0,-15.096748,0.565698,H5 converts the audit comparator signal into an official guarded policy.
+high_demand_high_stress,H5 vs H5_AGGRESSIVE,-65.846616,-0.001115,1.2,1.2,6.0,0.843626,-0.277391,"H5_AGGRESSIVE is lower TCO here, but it is not default because fallback dependence is higher."

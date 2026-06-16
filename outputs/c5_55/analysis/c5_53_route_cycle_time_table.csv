@@ -1,0 +1,7 @@
+route_id,shovel_id,crusher_id,empty_distance_km,loaded_distance_km,empty_speed_kmh_effective,loaded_speed_kmh_effective,empty_travel_min,loaded_travel_min,passes,loading_time_min,crusher_service_time_min,base_cycle_time_min,expected_loads_per_truck_hour
+R_A1,SHOVEL_A,CRUSHER_1,3.5,4.5,27.2,19.2,7.720588,14.0625,4,3.7,3.6,29.083088,2.063055
+R_A2,SHOVEL_A,CRUSHER_2,3.5,6.0,27.2,18.24,7.720588,19.736842,4,3.7,3.1,34.25743,1.751445
+R_B1,SHOVEL_B,CRUSHER_1,2.5,3.5,32.0,24.0,4.6875,8.75,4,3.333333,3.6,20.370833,2.945388
+R_B2,SHOVEL_B,CRUSHER_2,2.5,5.0,32.0,22.8,4.6875,13.157895,4,3.333333,3.1,24.278728,2.471299
+R_C1,SHOVEL_C,CRUSHER_1,1.5,2.5,36.8,26.4,2.445652,5.681818,4,3.033333,3.6,14.760804,4.064819
+R_C2,SHOVEL_C,CRUSHER_2,1.5,4.0,36.8,25.08,2.445652,9.569378,4,3.033333,3.1,18.148363,3.306083
