@@ -158,3 +158,69 @@ This changelog tracks the official direction changes for C5.1.
 | Deferred | Tier-4 presentation plots; UI `version_results.json` C5.4 wiring; PPO *training* (RL Lab); Drop Zone |
 
 (C5.3 remains the prior run-complete version: condition-aware routing > condition-blind on TCO in all 3 regimes, dispatch-only under fixed rule-based PM. C5.2: state-aware PM beats blind periodic PM, H3 recommended.)
+
+## 2026-06-15 / RSW C5.4 Level 2 Synthetic Transfer Mini-Test
+
+- Added the self-contained `transfer_tests/rsw_c5_4_level2` synthetic manufacturing transfer
+  mini-test. The mining C5.4 experiment remains the main project; the RSW work is explicitly not a
+  real factory validation or calibrated automotive-factory model.
+- Reconstructed the C5.4 joint PM-scheduling + dispatch structure for 10 RSW welding guns with
+  electrode-tip, cooling, and actuator/clamp HI; Gamma frailty; noisy observed HI; partial PM/CM
+  restoration; synthetic defect/failure risk; three job families; and limited maintenance slots.
+- Implemented the common `JointPolicy` contract and H0/H_TIME/H1/H2/H3/H4 as joint PM and
+  production-assignment policies. Blind policies perform full gun service; H1-H4 can perform
+  targeted component PM. No PPO/RL training, operator dashboard, PM app, or Drop Zone scenario was
+  added.
+- Executed the reduced default comparison at **10 seeds x 30 days x 3 regimes x 6 policies** under
+  identical seeds, demand, environment, cost model, and KPI definitions. Generated policy summary,
+  event log, failure log, mechanism, sensitivity, Excel, Markdown, and PNG artifacts.
+- Honest result: the mini-test does not reproduce the mining C5.4 H1/H2-best ordering. H3 is
+  lowest-TCO under heterogeneous condition and high stress; H4 is lowest under high demand + high
+  stress. H0 is consistently worst because frequent full-service PM dominates cost and downtime.
+- Sensitivity findings: the best policy changes with frailty CV; H1 CBM threshold perturbations
+  produce modest TCO changes; additional maintenance slots do not change the ranking and increase
+  blind full-service activity. Failures are sparse and occur only for H_TIME in the base sweep,
+  mostly in the final campaign third.
+- Added focused RSW regression tests covering six-policy execution, reproducibility, PM-slot
+  capacity, TCO decomposition, blind full-service accounting, targeted PM, and required KPI
+  summary fields.
+- Added explicit runtime dependencies for NumPy, pandas, Matplotlib, and openpyxl, which are used by
+  the RSW simulator and deliverable-generation scripts.
+
+## 2026-06-15 / RSW Mini-Test Sanity Improvement Pack
+
+- Preserved the original 30-day, 10-seed base outputs and added config-defined, separately stored
+  optional sanity scenarios: a 30-day demand pressure stress run and a 90-day horizon run.
+- Added `--demand-stress` and `--horizon-sanity-90` CLI modes. Sanity modes use fixed scenario
+  contracts for policies, seeds, regimes, horizon, demand, and output paths so they cannot silently
+  overwrite or inherit base outputs.
+- Demand stress actual result: H3 had the lowest TCO; H_TIME alone produced mean unmet demand
+  (`1.5` welds/run, fulfillment `0.999971`). Most policies still achieved fulfillment `1.000`, so
+  the higher-demand run exposed only a limited PM-production trade-off.
+- 90-day actual result: failure/CM mean totals increased from `1.2` in the base summary to `2.8`
+  and remained concentrated in H_TIME. H4 was lowest-TCO under heterogeneous condition and high
+  demand + high stress; H3 was lowest under high stress. H1-H4 retained component-targeted PM.
+- Added `rsw_sanity_outputs.py`, scenario-specific Markdown reports and plots, and the integrated
+  `rsw_c5_4_sanity_improvement_report.md`. Reports explicitly preserve the synthetic transfer-test,
+  not-real-factory-validation, and no-post-hoc-tuning limitations.
+- Added regression coverage for scenario contracts, CLI modes, base-output preservation, required
+  sanity KPI columns, report disclaimers, and generated plots.
+
+## 2026-06-15 / KAMP Welding Dataset Partial Defect-Risk Recheck
+
+- Added a separate `kamp_validation` workflow for auditing the provided KAMP welding dataset and
+  partially rechecking only the RSW mini-test's synthetic defect-risk proxy.
+- Audited `Welding Data Set_01.xlsx`: 11,939 per-weld process rows, 23 result rows, and 10 data
+  dictionary rows. The result sheet contains daily/defect-type aggregate counts, not reliable
+  per-weld labels; per-weld supervised defect prediction was therefore explicitly excluded.
+- Generated a daily quality summary for 9 raw-data dates. Eight dates have matched defect counts;
+  the unmatched raw date was left unlabeled rather than assumed to have zero defects.
+- The matched-day weighted defect rate is `0.00378972` (39 defects / 10,291 welds). The
+  suggested-only calibration retains the existing `p_max=0.06`, center HI, and slope because the
+  aggregate proxy does not justify a stronger defect hazard.
+- Executed a separate 30-day x 10-seed x 3-regime KAMP-calibrated defect-hazard recheck. Because
+  the recommended hazard equals the existing hazard, policy rankings, TCO, and defect results are
+  unchanged from base. This is reported as evidence that ranking is dominated by the synthetic
+  PM/downtime structure, not as a failure or as real factory validation.
+- Added explicit limitations and tests confirming that KAMP data does not validate PM scheduling,
+  tip dressing timing, maintenance slots, downtime, or electrode wear/HI.

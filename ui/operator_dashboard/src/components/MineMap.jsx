@@ -4,8 +4,8 @@ import { facilities, routes, truckMarkers } from '../data/mineMap';
 import C5OperationMap3D from './map3d/C5OperationMap3D';
 
 /* ── Colors matching 3D map ── */
-const TERRAIN_BG = '#B35F44';
-const ROAD_COLOR = '#36454F';
+const TERRAIN_BG = '#C2B280';   // sandy khaki
+const ROAD_COLOR = '#46331F';   // dark brown
 const GRID_COLOR = '#ffffff18';
 
 const statusColors = {
@@ -16,6 +16,47 @@ const statusColors = {
 const facilityHeaderColors = {
   shovel: '#16A34A', crusher: '#2563EB', pm_bay: '#7C3AED',
   standby: '#6B7280', dispatch: '#8A4931',
+};
+
+/* ── Load state visuals + per-truck destination/HI (2D) ── */
+const CARGO_2D = {
+  loaded:  { label: '적재', fill: '#3A2E25', text: '#fff' },
+  empty:   { label: '공차', fill: '#FFFFFF', text: '#334155' },
+  pm:      { label: 'PM',  fill: '#7C3AED', text: '#fff' },
+  standby: { label: '대기', fill: '#3B82F6', text: '#fff' },
+};
+const TRUCK_META = {
+  T01: { destId: 'crusher_1', cargo: 'loaded',  hi: 88 },
+  T02: { destId: 'crusher_2', cargo: 'loaded',  hi: 79 },
+  T03: { destId: 'shovel_a',  cargo: 'empty',   hi: 58 },
+  T04: { destId: 'crusher_2', cargo: 'loaded',  hi: 82 },
+  T05: { destId: 'crusher_2', cargo: 'loaded',  hi: 72 },
+  T06: { destId: 'crusher_1', cargo: 'loaded',  hi: 77 },
+  T07: { destId: 'pm_bay',    cargo: 'pm',      hi: 41 },
+  T08: { destId: 'crusher_1', cargo: 'empty',   hi: 85 },
+  T09: { destId: 'pm_bay',    cargo: 'pm',      hi: 66 },
+  T10: { destId: 'crusher_1', cargo: 'loaded',  hi: 91 },
+  T11: { destId: 'crusher_2', cargo: 'empty',   hi: 75 },
+  T12: { destId: 'standby',   cargo: 'standby', hi: 69 },
+  T13: { destId: 'crusher_1', cargo: 'loaded',  hi: 74 },
+  T14: { destId: 'pm_bay',    cargo: 'pm',      hi: 53 },
+  T15: { destId: 'pm_bay',    cargo: 'pm',      hi: 63 },
+  T16: { destId: 'crusher_2', cargo: 'loaded',  hi: 80 },
+  T17: { destId: 'crusher_1', cargo: 'empty',   hi: 86 },
+  T18: { destId: 'crusher_1', cargo: 'loaded',  hi: 71 },
+  T19: { destId: 'pm_bay',    cargo: 'pm',      hi: 48 },
+  T20: { destId: 'crusher_2', cargo: 'loaded',  hi: 83 },
+  T21: { destId: 'crusher_1', cargo: 'loaded',  hi: 90 },
+  T22: { destId: 'crusher_1', cargo: 'empty',   hi: 95 },
+  T23: { destId: 'crusher_1', cargo: 'loaded',  hi: 78 },
+  T24: { destId: 'pm_bay',    cargo: 'pm',      hi: 55 },
+  T25: { destId: 'pm_bay',    cargo: 'pm',      hi: 61 },
+};
+const FAC_BY_ID = Object.fromEntries(facilities.map(f => [f.id, f]));
+const DEST_LABEL = {
+  crusher_1: 'Crusher 1', crusher_2: 'Crusher 2',
+  shovel_a: 'Shovel A', shovel_b: 'Shovel B', shovel_c: 'Shovel C',
+  pm_bay: 'PM Bay', standby: 'Standby', cooldown: 'Cooldown',
 };
 
 /* ── 2D route interpolation ── */
@@ -80,20 +121,21 @@ const COMPOUND_ROUTES = {
   ],
 };
 
-// All running trucks now traverse full compound routes (shovel→crusher/PM)
+// All 25 trucks traverse full compound routes (shovel→crusher/PM); T12/T15 are static
 const TRUCK_ROUTE_MAP = {
-  T01: 'full_sa_c1',
-  T02: 'full_sb_c2',
-  T03: 'full_sc_c1',
-  T05: 'full_sa_c2',
-  T07: 'full_sa_pm',
-  T09: 'full_sc_pm',
-  T13: 'full_sb_c1',
+  T01: 'full_sa_c1', T02: 'full_sb_c2', T03: 'full_sc_c1',
+  T04: 'full_sa_c2', T05: 'full_sa_c2', T06: 'full_sb_c1',
+  T07: 'full_sa_pm', T08: 'full_sc_c1', T09: 'full_sc_pm',
+  T10: 'full_sa_c1', T11: 'full_sb_c2', T13: 'full_sb_c1',
+  T14: 'full_sc_pm', T16: 'full_sa_c2', T17: 'full_sb_c1',
+  T18: 'full_sc_c1', T19: 'full_sa_pm', T20: 'full_sb_c2',
+  T21: 'full_sc_c1', T22: 'full_sa_c1', T23: 'full_sb_c1',
+  T24: 'full_sc_pm', T25: 'full_sa_pm',
 };
 
 /* ── Virtual weather data for satellite view ── */
 const WEATHER_DATA = {
-  location: 'C5 Escondida Mine, Chile',
+  location: 'Escondida Mine, Chile',
   lat: '-24.27°S', lon: '-69.07°W', alt: '3,100m',
   temperature: 34, tempUnit: '°C',
   humidity: 18,
@@ -105,9 +147,9 @@ const WEATHER_DATA = {
 };
 
 /* ── 2D SVG map content (shared between 2d and satellite modes) ── */
-function Map2DSVG({ truckPositions }) {
+function Map2DSVG({ truckPositions, showLabels = true }) {
   return (
-    <svg viewBox="0 0 660 280" style={{ width: '100%', height: 'auto', borderRadius: 8 }}>
+    <svg viewBox="0 0 660 280" style={{ width: '100%', height: 388, display: 'block', borderRadius: 8, background: TERRAIN_BG }}>
       <defs>
         <pattern id="grid2d" width="20" height="20" patternUnits="userSpaceOnUse">
           <path d="M 20 0 L 0 0 0 20" fill="none" stroke={GRID_COLOR} strokeWidth="0.5" />
@@ -156,15 +198,52 @@ function Map2DSVG({ truckPositions }) {
         );
       })}
 
+      {/* PM Decision Gate on the PM Bay access road */}
+      <g>
+        <line x1={494} y1={92} x2={506} y2={78} stroke="#7C3AED" strokeWidth={3} strokeLinecap="round" />
+        <circle cx={494} cy={92} r={2.6} fill="#7C3AED" />
+        <circle cx={506} cy={78} r={2.6} fill="#7C3AED" />
+        <rect x={476} y={62} width={56} height={11} rx={3} fill="#7C3AED" />
+        <text x={504} y={70.5} textAnchor="middle" fontSize={7} fill="#fff" fontWeight={700}>PM Gate</text>
+      </g>
+
       {truckPositions.map(t => {
         const col = statusColors[t.status] || '#6B7280';
+        const meta = TRUCK_META[t.truckId] || { destId: 'standby', cargo: 'empty', hi: null };
+        const cargo = CARGO_2D[meta.cargo] || CARGO_2D.empty;
+        const dest = FAC_BY_ID[meta.destId];
+        const destName = DEST_LABEL[meta.destId] || '';
+        // Direction arrow: point from truck toward its destination facility
+        const angleDeg = dest ? (Math.atan2(dest.y - t.y, dest.x - t.x) * 180) / Math.PI : 0;
         return (
           <g key={t.truckId}>
-            <circle cx={t.x} cy={t.y} r={10} fill="rgba(255,255,255,0.9)" stroke={col} strokeWidth={2.5} />
-            <circle cx={t.x + 5} cy={t.y - 5} r={3} fill={col} />
-            <text x={t.x} y={t.y + 3} textAnchor="middle" fontSize={6} fill={col} fontWeight={700}>
+            {/* destination label above — hidden when showLabels=false */}
+            {showLabels && (
+              <g transform={`translate(${t.x}, ${t.y - 15})`}>
+                <rect x={-26} y={-9} width={52} height={12} rx={3} fill="rgba(15,23,42,0.82)" />
+                <text x={0} y={0} textAnchor="middle" fontSize={7} fill="#fff" fontWeight={700}>
+                  {t.truckId} →{destName.replace('Crusher', 'C').replace('Shovel', 'S')}
+                </text>
+              </g>
+            )}
+            {/* direction arrow toward destination */}
+            {meta.cargo !== 'standby' && (
+              <g transform={`rotate(${angleDeg} ${t.x} ${t.y})`}>
+                <polygon points={`${t.x + 13},${t.y - 3} ${t.x + 19},${t.y} ${t.x + 13},${t.y + 3}`} fill={col} />
+              </g>
+            )}
+            {/* truck marker: outer ring = health, inner fill = load state */}
+            <circle cx={t.x} cy={t.y} r={9} fill={cargo.fill} stroke={col} strokeWidth={2.5} />
+            <text x={t.x} y={t.y + 2.5} textAnchor="middle" fontSize={6.5} fill={cargo.text} fontWeight={700}>
               {t.truckId}
             </text>
+            {/* HI badge */}
+            {meta.hi != null && (
+              <g transform={`translate(${t.x + 11}, ${t.y + 9})`}>
+                <rect x={-2} y={-6} width={24} height={11} rx={3} fill="#fff" stroke={col} strokeWidth={0.7} />
+                <text x={10} y={2} textAnchor="middle" fontSize={7} fill={col} fontWeight={700}>{meta.hi}%</text>
+              </g>
+            )}
           </g>
         );
       })}
@@ -187,7 +266,7 @@ function WeatherPanel({ onClose }) {
       boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-        <div style={{ fontSize: 12, fontWeight: 700 }}>C5 Mine Weather</div>
+        <div style={{ fontSize: 12, fontWeight: 700 }}>Mine Weather</div>
         <button onClick={onClose} style={{
           background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: 4,
           color: '#fff', fontSize: 10, padding: '2px 6px', cursor: 'pointer',
@@ -248,16 +327,17 @@ function WeatherPanel({ onClose }) {
           top: '50%', left: '45%', transform: 'translate(-50%,-50%)',
         }} />
         <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', textShadow: '0 1px 3px rgba(0,0,0,0.5)', zIndex: 1 }}>
-          기압 분포도 (C5 Mine)
+          기압 분포도
         </span>
       </div>
     </div>
   );
 }
 
-export default function MineMap({ timeSpeed = 1 }) {
+export default function MineMap({ timeSpeed = 1, fill = false }) {
   const [mapMode, setMapMode] = useState('3d');
   const [showWeather, setShowWeather] = useState(false);
+  const [showLabels, setShowLabels] = useState(true);
   const [truckPositions, setTruckPositions] = useState(() =>
     truckMarkers.map(t => ({ ...t, progress: Math.random() * 0.8 + 0.1, dir: 1 }))
   );
@@ -312,7 +392,7 @@ export default function MineMap({ timeSpeed = 1 }) {
   ];
 
   return (
-    <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 12, boxShadow: 'var(--shadow)', padding: 16, overflow: 'hidden', position: 'relative' }}>
+    <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 12, boxShadow: 'var(--shadow)', padding: 16, overflow: 'hidden', position: 'relative', ...(fill ? { height: '100%', display: 'flex', flexDirection: 'column' } : null) }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-main)' }}>Mine Operation Map</h3>
@@ -320,33 +400,49 @@ export default function MineMap({ timeSpeed = 1 }) {
             Policy: H3 Cost-weighted
           </span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', padding: 2, border: '1px solid var(--border)', borderRadius: 7, background: 'var(--divider)' }}>
-          {MAP_MODES.map(mode => {
-            const active = mapMode === mode.key;
-            return (
-              <button
-                key={mode.key}
-                type="button"
-                onClick={() => { setMapMode(mode.key); setShowWeather(false); }}
-                style={{
-                  border: 0, borderRadius: 5,
-                  background: active ? '#8A4931' : 'transparent',
-                  color: active ? '#fff' : 'var(--text-sub)',
-                  padding: '4px 9px', fontSize: 11, fontWeight: 700, cursor: 'pointer',
-                }}
-              >
-                {mode.label}
-              </button>
-            );
-          })}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {mapMode !== '3d' && (
+            <button
+              type="button"
+              onClick={() => setShowLabels(v => !v)}
+              style={{
+                border: '1px solid var(--border)', borderRadius: 6,
+                background: showLabels ? '#8A4931' : 'var(--bg-card)',
+                color: showLabels ? '#fff' : 'var(--text-sub)',
+                padding: '4px 9px', fontSize: 11, fontWeight: 700, cursor: 'pointer',
+              }}
+            >
+              Labels {showLabels ? 'On' : 'Off'}
+            </button>
+          )}
+          <div style={{ display: 'flex', alignItems: 'center', padding: 2, border: '1px solid var(--border)', borderRadius: 7, background: 'var(--divider)' }}>
+            {MAP_MODES.map(mode => {
+              const active = mapMode === mode.key;
+              return (
+                <button
+                  key={mode.key}
+                  type="button"
+                  onClick={() => { setMapMode(mode.key); setShowWeather(false); }}
+                  style={{
+                    border: 0, borderRadius: 5,
+                    background: active ? '#8A4931' : 'transparent',
+                    color: active ? '#fff' : 'var(--text-sub)',
+                    padding: '4px 9px', fontSize: 11, fontWeight: 700, cursor: 'pointer',
+                  }}
+                >
+                  {mode.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       {mapMode === '3d' ? (
-        <C5OperationMap3D timeSpeed={timeSpeed} />
+        <C5OperationMap3D timeSpeed={timeSpeed} fill={fill} />
       ) : (
-        <div style={{ position: 'relative' }}>
-          <Map2DSVG truckPositions={truckPositions} />
+        <div style={{ position: 'relative', ...(fill ? { flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' } : null) }}>
+          <Map2DSVG truckPositions={truckPositions} showLabels={showLabels} />
 
           {/* Satellite mode: weather button */}
           {mapMode === 'satellite' && (
@@ -370,10 +466,16 @@ export default function MineMap({ timeSpeed = 1 }) {
             <WeatherPanel onClose={() => setShowWeather(false)} />
           )}
 
-          <div style={{ display: 'flex', gap: 16, marginTop: 10, justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: 16, marginTop: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
             {[['Running','#22C55E'],['Warning','#F97316'],['Critical','#EF4444'],['PM','#7C3AED'],['Standby','#3B82F6']].map(([label, color]) => (
               <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--text-sub)' }}>
                 <span style={{ width: 8, height: 8, borderRadius: '50%', background: color }} /> {label}
+              </div>
+            ))}
+            <span style={{ width: 1, height: 12, background: 'var(--border)' }} />
+            {[['적재(loaded)','#3A2E25', true],['공차(empty)','#FFFFFF', false],['→ 목적지','transparent', false]].map(([label, fill, dark]) => (
+              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--text-sub)' }}>
+                <span style={{ width: 8, height: 8, borderRadius: 2, background: fill, border: dark ? 'none' : '1.5px solid #94A3B8' }} /> {label}
               </div>
             ))}
           </div>

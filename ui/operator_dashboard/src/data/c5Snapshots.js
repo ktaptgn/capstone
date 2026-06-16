@@ -1,3 +1,5 @@
+import dashboardAnalysisSnapshot from './dashboardAnalysisSnapshot.json';
+
 export async function loadJson(path) {
   try {
     const response = await fetch(path, { cache: 'no-store' });
@@ -16,7 +18,12 @@ export async function loadDashboardSnapshots() {
     loadJson('/c5_1/dashboard_analysis.json'),
   ]);
 
-  return { policyComparison, sampleLog, workOrders, dashboardAnalysis };
+  return {
+    policyComparison,
+    sampleLog,
+    workOrders,
+    dashboardAnalysis: dashboardAnalysis || dashboardAnalysisSnapshot,
+  };
 }
 
 function average(values) {
