@@ -1,0 +1,193 @@
+{
+  "generated_at": "2026-06-10T12:44:06",
+  "baseline_policy": "H0",
+  "seed_count": 3,
+  "recommended_policy": {
+    "policy_id": "H3",
+    "weighted_rank_score": 0.825,
+    "basis": "current weighted KPI rank score",
+    "basis_ko": "현재 KPI 가중 순위 점수",
+    "warning": "This is not a global optimum.",
+    "warning_ko": "수학적으로 모든 경우의 최선임을 보장하지 않습니다."
+  },
+  "best_by_kpi": [
+    {
+      "kpi": "total_cost",
+      "label_ko": "총 운영비용",
+      "best_policy": "H3",
+      "best_policies": [
+        "H3"
+      ],
+      "is_tie": false,
+      "value": 1724.748667,
+      "direction": "lower_is_better"
+    },
+    {
+      "kpi": "demand_fulfillment_rate",
+      "label_ko": "수요 충족률",
+      "best_policy": "H3",
+      "best_policies": [
+        "H3"
+      ],
+      "is_tie": false,
+      "value": 0.970774,
+      "direction": "higher_is_better"
+    },
+    {
+      "kpi": "unmet_demand",
+      "label_ko": "미충족 수요",
+      "best_policy": "H3",
+      "best_policies": [
+        "H3"
+      ],
+      "is_tie": false,
+      "value": 192.666667,
+      "direction": "lower_is_better"
+    },
+    {
+      "kpi": "queue_time",
+      "label_ko": "대기시간",
+      "best_policy": "H0",
+      "best_policies": [
+        "H0"
+      ],
+      "is_tie": false,
+      "value": 1.786884,
+      "direction": "lower_is_better"
+    },
+    {
+      "kpi": "average_available_trucks",
+      "label_ko": "가용 트럭 수",
+      "best_policy": "H0 / H1 / H2 / H3 / H4",
+      "best_policies": [
+        "H0",
+        "H1",
+        "H2",
+        "H3",
+        "H4"
+      ],
+      "is_tie": true,
+      "value": 3.5,
+      "direction": "higher_is_better"
+    },
+    {
+      "kpi": "pm_cost",
+      "label_ko": "PM 비용",
+      "best_policy": "H4",
+      "best_policies": [
+        "H4"
+      ],
+      "is_tie": false,
+      "value": 200.666667,
+      "direction": "lower_is_better"
+    },
+    {
+      "kpi": "total_downtime",
+      "label_ko": "총 다운타임",
+      "best_policy": "H4",
+      "best_policies": [
+        "H4"
+      ],
+      "is_tie": false,
+      "value": 481.333333,
+      "direction": "lower_is_better"
+    }
+  ],
+  "h0_improvement": [
+    {
+      "policy_id": "H1",
+      "total_cost_improvement_pct": 56.60465,
+      "demand_fulfillment_delta": 0.077129,
+      "queue_time_reduction_pct": -27.417828,
+      "downtime_reduction_pct": 57.191781
+    },
+    {
+      "policy_id": "H2",
+      "total_cost_improvement_pct": 22.032949,
+      "demand_fulfillment_delta": -0.055139,
+      "queue_time_reduction_pct": -30.068421,
+      "downtime_reduction_pct": 66.917808
+    },
+    {
+      "policy_id": "H3",
+      "total_cost_improvement_pct": 59.730906,
+      "demand_fulfillment_delta": 0.100643,
+      "queue_time_reduction_pct": -52.55649,
+      "downtime_reduction_pct": 50.981735
+    },
+    {
+      "policy_id": "H4",
+      "total_cost_improvement_pct": -64.894599,
+      "demand_fulfillment_delta": -0.371716,
+      "queue_time_reduction_pct": -23.958832,
+      "downtime_reduction_pct": 83.515982
+    }
+  ],
+  "stability": [
+    {
+      "policy_id": "H2",
+      "total_cost_mean": 3339.374,
+      "total_cost_std": 15.089415,
+      "demand_fulfillment_rate_mean": 0.814993,
+      "demand_fulfillment_rate_std": 0.002205,
+      "stability_label": "strong_and_stable",
+      "stability_label_ko": "총 운영비용 기준 가장 안정적"
+    },
+    {
+      "policy_id": "H3",
+      "total_cost_mean": 1724.748667,
+      "total_cost_std": 33.626052,
+      "demand_fulfillment_rate_mean": 0.970774,
+      "demand_fulfillment_rate_std": 0.002617,
+      "stability_label": "strong_and_stable",
+      "stability_label_ko": "강하고 안정적"
+    },
+    {
+      "policy_id": "H1",
+      "total_cost_mean": 1858.648,
+      "total_cost_std": 46.343086,
+      "demand_fulfillment_rate_mean": 0.94726,
+      "demand_fulfillment_rate_std": 0.002784,
+      "stability_label": "strong_and_stable",
+      "stability_label_ko": "강하고 안정적"
+    },
+    {
+      "policy_id": "H4",
+      "total_cost_mean": 7062.531333,
+      "total_cost_std": 54.088662,
+      "demand_fulfillment_rate_mean": 0.498415,
+      "demand_fulfillment_rate_std": 0.002506,
+      "stability_label": "weak_and_variable",
+      "stability_label_ko": "성과 약하고 변동성 있음"
+    },
+    {
+      "policy_id": "H0",
+      "total_cost_mean": 4283.058,
+      "total_cost_std": 55.401429,
+      "demand_fulfillment_rate_mean": 0.870132,
+      "demand_fulfillment_rate_std": 0.003857,
+      "stability_label": "weak_and_variable",
+      "stability_label_ko": "성과 약하고 변동성 있음"
+    }
+  ],
+  "tradeoff_notes_ko": [
+    "현재 C5.1 KPI 가중치 기준 추천 정책은 H3입니다.",
+    "H0는 대기시간 기준에서 가장 우수하거나 공동 1위입니다.",
+    "H2는 총 운영비용 표준편차 기준으로 가장 안정적입니다.",
+    "추천 정책은 현재 C5.1 가정과 가중치 기준의 표시용 판단이며 모든 상황의 최선임을 보장하지 않습니다."
+  ],
+  "missing_kpis": [
+    {
+      "kpi": "failure_count",
+      "label_ko": "고장 횟수",
+      "reason_ko": "현재 생성된 C5.1 결과 데이터에 포함되지 않았습니다."
+    }
+  ],
+  "limitations_ko": [
+    "현재 비교는 3개 seed 기준의 1차 비교입니다.",
+    "비용 값은 정규화된 값입니다.",
+    "현재 C5.1 가정과 설정에 의존합니다.",
+    "강화학습 비교는 별도 RL Lab에서 후속 진행됩니다.",
+    "Drop Zone은 H0~H4 비교에 포함되지 않습니다."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dashboard",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "ui/operator_dashboard", "--", "--port", "5180", "--strictPort"],
+      "port": 5180
+    },
+    {
+      "name": "pm-app",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "ui/pm_worker_app", "--", "--port", "5181", "--strictPort"],
+      "port": 5181
+    }
+  ]
+}
